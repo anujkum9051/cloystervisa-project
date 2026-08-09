@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser'
 // Custom SVG Icons Components
 const ShieldIcon = () => (
   <svg className="logo-icon" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '28px', height: '28px' }}>
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#0f172a" />
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#1e3a8a" />
   </svg>
 )
 
@@ -35,10 +35,7 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
-
-// Responsive/mobile layout fixes.
-// This keeps the desktop design intact while preventing horizontal overflow
-// and converting dense sections into a single-column mobile layout.
+// Responsive & Customized Styles
 const MobileResponsiveStyles = () => (
   <style>{`
     html {
@@ -73,38 +70,11 @@ const MobileResponsiveStyles = () => (
 
     .hero-sec {
       overflow: hidden;
+      padding-top: 30px !important;
     }
 
     .hero-grid {
       min-width: 0;
-    }
-
-    .hero-content,
-    .hero-visual,
-    .country-info-box,
-    .country-image-wrapper,
-    .service-card,
-    .calculator-box {
-      min-width: 0;
-    }
-
-    .hero-title {
-      overflow-wrap: anywhere;
-    }
-
-    .hero-desc,
-    .section-desc,
-    .country-desc,
-    .service-desc,
-    .pathway-name {
-      overflow-wrap: anywhere;
-    }
-
-    .country-img {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      object-fit: cover;
     }
 
     .select-control,
@@ -116,11 +86,8 @@ const MobileResponsiveStyles = () => (
 
     .announcement-bar {
       width: 100%;
-      overflow: hidden;
-    }
-
-    .announcement-bar a {
-      white-space: nowrap;
+      position: relative;
+      z-index: 101;
     }
 
     @media (max-width: 900px) {
@@ -128,61 +95,13 @@ const MobileResponsiveStyles = () => (
         width: min(100% - 28px, 720px) !important;
       }
 
-      .navbar {
-        width: 100%;
-      }
-
-      .nav-container {
-        min-height: 64px;
-        gap: 10px;
-      }
-
-      .logo-link {
-        min-width: 0;
-        flex: 1 1 auto;
-      }
-
-      .logo-link > span {
-        font-size: 1.15rem !important;
-        white-space: nowrap;
-      }
-
-      .nav-actions {
-        gap: 8px;
-        flex: 0 0 auto;
-      }
-
-      .nav-actions .theme-toggle,
-      .nav-actions > .btn {
-        display: none !important;
-      }
-
-      .hamburger {
-        display: flex !important;
-        flex-direction: column;
-        justify-content: center;
-        gap: 5px;
-        width: 42px;
-        height: 42px;
-        padding: 8px;
-        cursor: pointer;
-        flex: 0 0 42px;
-      }
-
-      .hamburger span {
-        display: block;
-        width: 100%;
-        height: 3px;
-        border-radius: 99px;
-      }
-
       .nav-menu {
         position: fixed !important;
-        top: var(--mobile-menu-top, 124px);
+        top: 110px;
         left: 14px !important;
         right: 14px !important;
         width: auto !important;
-        max-height: calc(100vh - 140px);
+        max-height: calc(100vh - 130px);
         overflow-y: auto;
         padding: 14px !important;
         display: none !important;
@@ -201,18 +120,6 @@ const MobileResponsiveStyles = () => (
         display: flex !important;
       }
 
-      .nav-menu .nav-link {
-        display: block;
-        width: 100%;
-        padding: 13px 14px !important;
-        border-radius: 10px;
-      }
-
-      .nav-menu .highlight-consult-link {
-        text-align: center;
-        margin-top: 4px;
-      }
-
       .hero-grid {
         grid-template-columns: minmax(0, 1fr) !important;
         gap: 24px !important;
@@ -220,35 +127,7 @@ const MobileResponsiveStyles = () => (
 
       .hero-content {
         width: 100%;
-        max-width: 100%;
         text-align: center;
-      }
-
-      .hero-badge {
-        width: 100%;
-        max-width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 8px 10px !important;
-        font-size: .88rem !important;
-        line-height: 1.25;
-      }
-
-      .hero-title {
-        font-size: clamp(2.15rem, 9vw, 3.25rem) !important;
-        line-height: 1.08 !important;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 680px;
-      }
-
-      .hero-desc {
-        font-size: 1rem !important;
-        line-height: 1.65 !important;
-        max-width: 620px;
-        margin-left: auto !important;
-        margin-right: auto !important;
       }
 
       .hero-buttons {
@@ -259,346 +138,42 @@ const MobileResponsiveStyles = () => (
         gap: 12px !important;
       }
 
-      .hero-buttons .btn {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .hero-content > div:last-child {
-        margin-top: 24px !important;
-      }
-
-      .hero-content > div:last-child > div {
-        justify-content: center;
-      }
-
       .hero-visual {
         width: 100%;
         min-height: 0 !important;
-      }
-
-      .globe-placeholder {
-        min-height: 330px !important;
-        width: 100%;
-        overflow: hidden;
-      }
-
-      .hero-card-floating {
-        max-width: calc(100% - 20px);
-      }
-
-      .hero-card-1 {
-        top: 20px !important;
-        left: 10px !important;
-      }
-
-      .hero-card-2 {
-        top: 145px !important;
-        right: 10px !important;
-      }
-
-      .globe-placeholder > .glass-panel {
-        left: 10px !important;
-        right: 10px;
-        width: auto;
-        bottom: 8px !important;
-      }
-
-      .flight-path {
-        max-width: 100%;
-      }
-
-      .section-padding {
-        padding-top: 58px !important;
-        padding-bottom: 58px !important;
-      }
-
-      .section-header {
-        margin-bottom: 28px !important;
-      }
-
-      .section-title {
-        font-size: clamp(1.85rem, 7vw, 2.5rem) !important;
-        line-height: 1.15 !important;
-      }
-
-      .section-desc {
-        font-size: .98rem !important;
-        line-height: 1.6;
       }
 
       .services-grid {
         grid-template-columns: 1fr !important;
       }
 
-      .services-grid > * {
-        width: 100%;
-      }
-
-      .explorer-tabs {
-        display: flex !important;
-        overflow-x: auto;
-        overflow-y: hidden;
-        justify-content: flex-start !important;
-        flex-wrap: nowrap !important;
-        gap: 8px !important;
-        padding: 4px 2px 12px;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .explorer-tabs::-webkit-scrollbar {
-        display: none;
-      }
-
-      .tab-btn {
-        flex: 0 0 auto;
-        white-space: nowrap;
-      }
-
-      #destinations .glass-panel {
-        padding: 16px !important;
-      }
-
       .country-display-grid {
         grid-template-columns: 1fr !important;
         gap: 22px !important;
       }
-
-      .country-image-wrapper {
-        min-height: 220px;
-      }
-
-      .country-img {
-        height: 220px !important;
-        min-height: 220px;
-      }
-
-      .country-flag-badge {
-        left: 12px !important;
-        right: 12px;
-        width: auto !important;
-        max-width: calc(100% - 24px);
-      }
-
-      .country-title {
-        font-size: 1.45rem !important;
-        line-height: 1.25;
-      }
-
-      .country-stats-row {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
-      }
-
-      .c-stat-card {
-        min-width: 0;
-      }
-
-      .pathway-item {
-        display: grid !important;
-        grid-template-columns: 22px minmax(0, 1fr);
-        gap: 8px !important;
-        align-items: start;
-      }
-
-      .pathway-item .pathway-tag {
-        grid-column: 2;
-        justify-self: start;
-        margin-top: -2px;
-      }
-
-      .calculator-box {
-        padding: 20px !important;
-      }
-
-      .calc-grid {
-        grid-template-columns: 1fr !important;
-      }
-
-      .calc-step-content .btn {
-        min-height: 46px;
-      }
-
-      #contact .glass-panel {
-        padding: 22px !important;
-      }
-
-      #contact form {
-        gap: 16px !important;
-      }
-
-      #contact .calc-grid {
-        gap: 16px !important;
-      }
-
-      footer .container {
-        grid-template-columns: 1fr !important;
-        gap: 28px !important;
-      }
-
-      footer {
-        padding-top: 40px !important;
-      }
-
-      .whatsapp-float {
-        right: 16px !important;
-        bottom: 16px !important;
-        width: 54px !important;
-        height: 54px !important;
-      }
     }
 
-    @media (max-width: 520px) {
-      .container {
-        width: calc(100% - 24px) !important;
+    @media (max-width: 640px) {
+      .roadmap-success-grid {
+        grid-template-columns: 1fr !important;
       }
 
-      .announcement-bar {
-        padding: 8px 10px !important;
-        font-size: .76rem !important;
-        line-height: 1.35;
+      .profile-score-preview {
+        padding: 16px !important;
       }
 
-      .navbar {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+      .profile-score-preview > div:last-child {
+        width: 100%;
+        display: grid !important;
+        grid-template-columns: 1fr;
       }
 
-      .nav-container {
-        width: calc(100% - 20px) !important;
-      }
-
-      .logo-icon {
-        width: 25px !important;
-        height: 25px !important;
-      }
-
-      .hero-sec {
-        padding-top: 52px !important;
-      }
-
-      .hero-badge-tag {
-        padding: 6px 11px !important;
-      }
-
-      .hero-title {
-        font-size: clamp(2rem, 12vw, 2.65rem) !important;
-      }
-
-      .hero-desc {
-        font-size: .96rem !important;
-      }
-
-      .glass-panel {
-        max-width: 100%;
-      }
-
-      .hero-card-floating {
-        padding: 10px !important;
-        gap: 8px !important;
-      }
-
-      .hero-card-floating h4 {
-        font-size: .78rem !important;
-      }
-
-      .hero-card-floating p {
-        font-size: .68rem !important;
-      }
-
-      .globe-placeholder {
-        min-height: 300px !important;
-      }
-
-      .hero-card-1 {
-        top: 10px !important;
-        left: 4px !important;
-      }
-
-      .hero-card-2 {
-        top: 125px !important;
-        right: 4px !important;
-      }
-
-      .globe-placeholder > .glass-panel {
-        left: 4px !important;
-        right: 4px !important;
-        padding: 10px 12px !important;
-      }
-
-      .globe-placeholder > .glass-panel h5 {
-        font-size: .78rem !important;
-      }
-
-      .globe-placeholder > .glass-panel p {
-        font-size: .68rem !important;
-      }
-
-      .country-image-wrapper,
-      .country-img {
-        height: 190px !important;
-        min-height: 190px !important;
-      }
-
-      .country-info-box {
-        padding: 0 !important;
-      }
-
-      .country-title {
-        font-size: 1.25rem !important;
-      }
-
-      .country-desc {
-        font-size: .9rem !important;
-        line-height: 1.55;
-      }
-
-      .pathway-item {
-        padding: 10px 0 !important;
-      }
-
-      .pathway-name {
-        font-size: .86rem !important;
-      }
-
-      .pathway-tag {
-        font-size: .72rem !important;
-      }
-
-      .calc-progress {
-        transform: scale(.9);
-        transform-origin: left center;
-        width: 111%;
-      }
-
-      .calc-step-title {
-        font-size: 1.15rem !important;
-      }
-
-      .calc-step-content > div[style*="display: flex"] {
-        flex-wrap: wrap;
-      }
-
-      .calc-step-content > div[style*="display: flex"] .btn {
-        flex: 1 1 140px;
-      }
-
-      .service-card {
-        padding: 24px !important;
-      }
-
-      #contact .section-desc {
-        font-size: .92rem !important;
-      }
-
-      .nav-menu {
-        top: 116px !important;
+      .phone-input-row {
+        grid-template-columns: 92px minmax(0, 1fr) !important;
       }
     }
   `}</style>
 )
-
 
 // Destination Countries Data
 const staticCountriesData = [
@@ -607,7 +182,7 @@ const staticCountriesData = [
     name: 'Canada',
     flag: '🇨🇦',
     title: 'Immigrate to Canada via Express Entry & PNPs',
-    desc: 'Canada offers some of the world\'s most welcoming immigration programs. Whether you want to apply for Permanent Residency (PR), study at top universities, or obtain a work permit, Canada provides stable career pathways and an exceptional quality of life.',
+    desc: 'Canada offers some of the world\'s most welcoming immigration programs. Whether you want to apply for Permanent Residency (PR), study at top universities, or obtain a work permit, Canada provides stable career pathways.',
     successRate: '94%',
     processingTime: '6-8 Months',
     minPoints: '67/100',
@@ -623,7 +198,7 @@ const staticCountriesData = [
     name: 'Australia',
     flag: '🇦🇺',
     title: 'Explore General Skilled Migration in Australia',
-    desc: 'With a booming economy and a demand for skilled professionals, Australia offers competitive visa pathways. The General Skilled Migration (GSM) program allows eligible workers to live and work permanently without needing a sponsor.',
+    desc: 'With a booming economy and high demand for skilled professionals, Australia offers competitive visa pathways through General Skilled Migration (GSM).',
     successRate: '91%',
     processingTime: '8-10 Months',
     minPoints: '65 Points',
@@ -639,7 +214,7 @@ const staticCountriesData = [
     name: 'Germany',
     flag: '🇩🇪',
     title: 'Work & Live in Germany with Opportunity Card',
-    desc: 'Germany\'s new Opportunity Card (Chancenkarte) makes job hunting in Europe easier than ever. Skilled professionals can relocate to Germany to secure employment in engineering, IT, healthcare, and other highly demanded fields.',
+    desc: 'Germany\'s Opportunity Card (Chancenkarte) enables skilled professionals to relocate to Germany to secure employment in IT, engineering, healthcare, and trade.',
     successRate: '88%',
     processingTime: '3-5 Months',
     minPoints: '6/10 Points',
@@ -655,7 +230,7 @@ const staticCountriesData = [
     name: 'United Kingdom',
     flag: '🇬🇧',
     title: 'UK Skilled Worker & Expansion Visas',
-    desc: 'The UK\'s points-based system offers attractive visas for global talent. Relocate quickly as a skilled worker or establish a branch of your business using the UK Expansion Worker pathway.',
+    desc: 'The UK points-based system offers attractive visas for global talent, skilled workers, and international students looking to transition into full-time roles.',
     successRate: '92%',
     processingTime: '2-4 Months',
     minPoints: '70 Points',
@@ -671,7 +246,7 @@ const staticCountriesData = [
     name: 'New Zealand',
     flag: '🇳🇿',
     title: 'New Zealand Skilled Migrant Category',
-    desc: 'Experience exceptional work-life balance in New Zealand. The Skilled Migrant Category Resident Visa allows skilled specialists to work and live in New Zealand permanently.',
+    desc: 'Experience exceptional work-life balance in New Zealand with Permanent Residency pathways under the Skilled Migrant Category.',
     successRate: '89%',
     processingTime: '6-9 Months',
     minPoints: '6 Points',
@@ -684,711 +259,16 @@ const staticCountriesData = [
   }
 ]
 
-const mobileResponsiveStyles = `
-/* =========================================================
-   CLOYSTERVISA — MOBILE-FIRST RESPONSIVE PATCH
-   Keeps desktop layout, but gives phones their own layout.
-   ========================================================= */
-
-html, body, #root {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden !important;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-img, svg, video {
-  max-width: 100%;
-}
-
-button,
-input,
-select,
-textarea {
-  max-width: 100%;
-  font: inherit;
-}
-
-.container {
-  width: min(1180px, calc(100% - 40px));
-  margin-inline: auto;
-}
-
-.navbar {
-  width: 100%;
-}
-
-.nav-container {
-  min-width: 0;
-}
-
-.nav-menu {
-  min-width: 0;
-}
-
-.hero-sec,
-.section-padding,
-footer {
-  overflow: hidden;
-}
-
-.hero-grid,
-.country-display-grid,
-.calc-grid,
-.services-grid {
-  min-width: 0;
-}
-
-.hero-content,
-.hero-visual,
-.country-info-box,
-.country-image-wrapper,
-.calc-step-content,
-.service-card {
-  min-width: 0;
-}
-
-.hero-title {
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-
-.hero-desc,
-.section-desc,
-.country-desc,
-.service-desc {
-  overflow-wrap: anywhere;
-}
-
-/* ---------- TABLET ---------- */
-@media (max-width: 900px) {
-  .container {
-    width: min(100% - 32px, 760px);
-  }
-
-  .nav-container {
-    min-height: 68px;
-  }
-
-  .nav-actions > .btn {
-    display: none !important;
-  }
-
-  .nav-menu {
-    gap: 10px;
-  }
-
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .hero-content {
-    max-width: 720px;
-    margin-inline: auto;
-    text-align: center;
-  }
-
-  .hero-visual {
-    min-height: 340px;
-    max-width: 720px;
-    width: 100%;
-    margin-inline: auto;
-  }
-
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .country-display-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .services-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .calc-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-/* ---------- PHONE ---------- */
-@media (max-width: 640px) {
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    min-width: 0 !important;
-  }
-
-  .container {
-    width: calc(100% - 28px) !important;
-    max-width: none !important;
-    margin-inline: auto !important;
-  }
-
-  /* Announcement */
-  .announcement-bar {
-    padding: 9px 12px !important;
-    min-height: 40px;
-    font-size: 12px !important;
-    line-height: 1.35 !important;
-    white-space: normal !important;
-  }
-
-  .announcement-bar a {
-    white-space: nowrap;
-  }
-
-  /* Header */
-  .navbar {
-    position: relative;
-    z-index: 100;
-  }
-
-  .nav-container {
-    min-height: 62px !important;
-    padding-block: 8px;
-  }
-
-  .logo-link {
-    gap: 6px !important;
-    flex: 0 0 auto;
-  }
-
-  .logo-link .logo-icon {
-    width: 25px !important;
-    height: 25px !important;
-  }
-
-  .logo-link span {
-    font-size: 1.08rem !important;
-  }
-
-  .nav-actions {
-    margin-left: auto;
-    gap: 7px !important;
-  }
-
-  .theme-toggle {
-    width: 36px;
-    height: 36px;
-    padding: 0 !important;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hamburger {
-    width: 38px !important;
-    height: 38px !important;
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    cursor: pointer;
-    flex: 0 0 auto;
-  }
-
-  .hamburger span {
-    width: 23px !important;
-    height: 2.5px !important;
-    border-radius: 999px;
-  }
-
-  /* Mobile dropdown */
-  .nav-menu {
-    position: absolute !important;
-    top: calc(100% + 6px);
-    left: 14px;
-    right: 14px;
-    width: auto !important;
-    display: none !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 4px !important;
-    padding: 10px !important;
-    border-radius: 16px;
-    background: rgba(7, 10, 18, 0.98);
-    border: 1px solid #1e293b;
-    box-shadow: 0 18px 45px rgba(0,0,0,.35);
-    backdrop-filter: blur(18px);
-  }
-
-  .nav-menu.open {
-    display: flex !important;
-  }
-
-  .nav-menu .nav-link {
-    display: flex !important;
-    align-items: center;
-    min-height: 44px;
-    padding: 10px 12px !important;
-    border-radius: 10px !important;
-    font-size: 14px !important;
-  }
-
-  .nav-menu .highlight-consult-link {
-    justify-content: center;
-    margin-top: 4px;
-  }
-
-  /* Hero */
-  .hero-sec {
-    min-height: auto !important;
-    padding: 26px 0 48px !important;
-  }
-
-  .hero-grid {
-    display: block !important;
-    width: 100% !important;
-  }
-
-  .hero-content {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 0 !important;
-    text-align: center !important;
-  }
-
-  .hero-badge {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height: 46px;
-    padding: 5px 7px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 7px !important;
-    border-radius: 999px !important;
-    font-size: 11px !important;
-    line-height: 1.15;
-  }
-
-  .hero-badge-tag {
-    flex: 0 0 auto;
-    padding: 8px 10px !important;
-    border-radius: 999px !important;
-    font-size: 11px !important;
-  }
-
-  .hero-title {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 24px 0 14px !important;
-    font-size: clamp(2.05rem, 10.5vw, 3.1rem) !important;
-    line-height: 1.02 !important;
-    letter-spacing: -1.7px !important;
-    overflow-wrap: normal !important;
-    word-break: normal !important;
-  }
-
-  .hero-desc {
-    width: 100% !important;
-    max-width: 430px !important;
-    margin: 0 auto 24px !important;
-    padding-inline: 3px;
-    font-size: 15px !important;
-    line-height: 1.7 !important;
-    text-align: center !important;
-  }
-
-  .hero-buttons {
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-    align-items: stretch !important;
-  }
-
-  .hero-buttons .btn {
-    width: 100% !important;
-    min-height: 54px;
-    justify-content: center !important;
-    padding: 14px 18px !important;
-    font-size: 15px !important;
-  }
-
-  .hero-content > div:last-child {
-    margin-top: 28px !important;
-  }
-
-  .hero-content > div:last-child > p {
-    font-size: 11px !important;
-    letter-spacing: .8px !important;
-    margin-bottom: 9px !important;
-  }
-
-  .hero-content > div:last-child > div {
-    justify-content: center !important;
-    gap: 7px !important;
-  }
-
-  .hero-content .glass-panel {
-    padding: 6px 10px !important;
-    font-size: 12px !important;
-  }
-
-  /* The decorative desktop globe/card area is hidden on small phones.
-     This prevents overlap and gives the CTA/content the full screen width. */
-  .hero-visual {
-    display: none !important;
-  }
-
-  /* Sections */
-  .section-padding {
-    padding: 54px 0 !important;
-  }
-
-  .section-header {
-    margin-bottom: 26px !important;
-  }
-
-  .section-tag {
-    font-size: 11px !important;
-  }
-
-  .section-title {
-    font-size: clamp(1.75rem, 8vw, 2.3rem) !important;
-    line-height: 1.12 !important;
-    margin-top: 10px !important;
-  }
-
-  .section-desc {
-    font-size: 14px !important;
-    line-height: 1.65 !important;
-  }
-
-  /* Feature/service grids */
-  .services-grid {
-    grid-template-columns: 1fr !important;
-    gap: 14px !important;
-  }
-
-  .services-grid > * {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .glass-panel {
-    max-width: 100%;
-  }
-
-  .services-grid .glass-panel {
-    padding: 22px !important;
-  }
-
-  .service-card {
-    padding: 22px !important;
-  }
-
-  .service-title {
-    font-size: 17px !important;
-  }
-
-  .service-desc {
-    font-size: 14px !important;
-    line-height: 1.65 !important;
-  }
-
-  /* Destination tabs */
-  .explorer-tabs {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 8px !important;
-    padding: 3px 2px 10px !important;
-    margin-inline: -2px;
-  }
-
-  .explorer-tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tab-btn {
-    flex: 0 0 auto !important;
-    min-height: 42px;
-    white-space: nowrap !important;
-    padding: 9px 13px !important;
-    font-size: 13px !important;
-  }
-
-  .country-display-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 20px !important;
-  }
-
-  .country-display-grid > * {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .country-image-wrapper {
-    height: 210px !important;
-    min-height: 210px !important;
-  }
-
-  .country-img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-  }
-
-  .country-info-box {
-    padding: 0 !important;
-  }
-
-  .country-title {
-    font-size: 21px !important;
-    line-height: 1.2 !important;
-  }
-
-  .country-desc {
-    font-size: 14px !important;
-    line-height: 1.65 !important;
-  }
-
-  .country-stats-row {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 8px !important;
-  }
-
-  .c-stat-card {
-    width: 100% !important;
-    padding: 12px !important;
-  }
-
-  .c-stat-value {
-    font-size: 18px !important;
-  }
-
-  .pathway-item {
-    display: grid !important;
-    grid-template-columns: 20px minmax(0, 1fr) auto !important;
-    gap: 8px !important;
-    align-items: center !important;
-    padding: 10px 0 !important;
-  }
-
-  .pathway-name {
-    min-width: 0 !important;
-    font-size: 13px !important;
-    line-height: 1.4 !important;
-  }
-
-  .pathway-tag {
-    white-space: nowrap !important;
-    font-size: 10px !important;
-  }
-
-  /* Calculator */
-  .calculator-box {
-    padding: 20px 15px !important;
-    border-radius: 16px !important;
-  }
-
-  .calc-progress {
-    margin-bottom: 28px !important;
-  }
-
-  .calc-step-content {
-    width: 100% !important;
-  }
-
-  .calc-step-title {
-    font-size: 19px !important;
-    line-height: 1.3 !important;
-  }
-
-  .calc-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 15px !important;
-  }
-
-  .form-group {
-    min-width: 0 !important;
-  }
-
-  .form-label {
-    font-size: 13px !important;
-  }
-
-  .select-control {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 48px;
-    font-size: 14px !important;
-  }
-
-  .calc-step-content > div[style*="display: flex"] {
-    flex-wrap: wrap !important;
-  }
-
-  .calc-step-content .btn {
-    min-height: 48px;
-  }
-
-  /* Contact form */
-  #contact .glass-panel {
-    padding: 22px 16px !important;
-    border-radius: 16px !important;
-  }
-
-  #contact form {
-    gap: 15px !important;
-  }
-
-  #contact .calc-grid {
-    gap: 15px !important;
-  }
-
-  #contact textarea {
-    min-height: 120px;
-    resize: vertical;
-  }
-
-  /* Modal */
-  [style*="position: fixed"][style*="z-index: 1000"] {
-    align-items: flex-end !important;
-    padding: 10px !important;
-  }
-
-  [style*="position: fixed"][style*="z-index: 1000"] > .glass-panel {
-    max-height: 88vh !important;
-    overflow-y: auto !important;
-    padding: 24px 18px !important;
-    border-radius: 18px 18px 12px 12px !important;
-  }
-
-  /* WhatsApp */
-  .whatsapp-float {
-    width: 54px !important;
-    height: 54px !important;
-    right: 14px !important;
-    bottom: 14px !important;
-  }
-
-  .whatsapp-float svg {
-    width: 26px !important;
-    height: 26px !important;
-  }
-
-  /* Footer */
-  footer {
-    padding: 40px 0 20px !important;
-  }
-
-  footer .container {
-    grid-template-columns: 1fr !important;
-    gap: 26px !important;
-  }
-
-  footer p,
-  footer li,
-  footer a {
-    font-size: 13px !important;
-    line-height: 1.6;
-  }
-}
-
-/* ---------- VERY SMALL PHONES ---------- */
-@media (max-width: 380px) {
-  .container {
-    width: calc(100% - 22px) !important;
-  }
-
-  .logo-link span {
-    font-size: 1rem !important;
-  }
-
-  .hero-badge {
-    font-size: 10px !important;
-  }
-
-  .hero-badge-tag {
-    font-size: 10px !important;
-    padding-inline: 8px !important;
-  }
-
-  .hero-title {
-    font-size: 1.95rem !important;
-  }
-
-  .hero-desc {
-    font-size: 14px !important;
-  }
-
-  .hero-content .glass-panel {
-    font-size: 11px !important;
-    padding-inline: 8px !important;
-  }
-
-  .pathway-item {
-    grid-template-columns: 18px minmax(0, 1fr) !important;
-  }
-
-  .pathway-tag {
-    grid-column: 2;
-    justify-self: start;
-  }
-}
-
-
-@media (max-width: 640px) {
-  .roadmap-success-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .profile-score-preview {
-    padding: 16px !important;
-  }
-
-  .profile-score-preview > div:last-child {
-    width: 100%;
-    display: grid !important;
-    grid-template-columns: 1fr;
-  }
-
-  .profile-score-preview > div:last-child .btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .phone-input-row {
-    grid-template-columns: 92px minmax(0, 1fr) !important;
-  }
-}
-`
-
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [theme, setTheme] = useState('dark')
 
   const countries = staticCountriesData
-
-  // Destination Explorer State
   const [activeTab, setActiveTab] = useState('canada')
-
-  // Service Details Modal State
   const [activeModal, setActiveModal] = useState(null)
 
-  // Eligibility Calculator State
+  // Calculator State
   const [calcStep, setCalcStep] = useState(1)
   const [calcData, setCalcData] = useState({
     destination: 'canada',
@@ -1428,7 +308,6 @@ export default function App() {
     document.documentElement.setAttribute('data-theme', nextTheme)
   }
 
-  // Calculate Eligibility Score Client-Side
   const runCalculation = () => {
     let score = 30
     if (calcData.age === '18-24') score += 20
@@ -1453,7 +332,6 @@ export default function App() {
     setCalcStep(4)
   }
 
-  // Handle Submission using EmailJS
   const handleBookingSubmit = (e) => {
     e.preventDefault()
 
@@ -1480,12 +358,7 @@ export default function App() {
     }
 
     emailjs
-      .send(
-        'service_o0l0r0k',
-        'template_45hewnn',
-        templateParams,
-        'zmQ_nh-t65cKtN45G'
-      )
+      .send('service_o0l0r0k', 'template_45hewnn', templateParams, 'zmQ_nh-t65cKtN45G')
       .then((response) => {
         console.log('SUCCESS!', response.status, response.text)
         setBookingSubmitted(true)
@@ -1502,7 +375,6 @@ export default function App() {
 
   return (
     <>
-      <style dangerouslySetInnerHTML={{ __html: mobileResponsiveStyles }} />
       <MobileResponsiveStyles />
 
       {/* TOP ANNOUNCEMENT BAR */}
@@ -1544,12 +416,13 @@ export default function App() {
               className="nav-link highlight-consult-link" 
               onClick={() => setMobileMenuOpen(false)}
               style={{
-                background: 'rgba(37, 99, 235, 0.15)',
-                color: '#3b82f6',
-                padding: '6px 14px',
+                background: 'rgba(37, 99, 235, 0.2)',
+                color: '#60a5fa',
+                padding: '6px 16px',
                 borderRadius: '20px',
                 border: '1px solid #2563eb',
-                fontWeight: '600'
+                fontWeight: '700',
+                boxShadow: '0 0 12px rgba(37, 99, 235, 0.4)'
               }}
             >
               Book Consult 📅
@@ -1561,7 +434,7 @@ export default function App() {
               {theme === 'dark' ? '☀️' : '🌙'}
             </button>
             <a href="#calculator" className="btn btn-primary" style={{ padding: '10px 18px', borderRadius: '8px' }}>
-              Check Your Eligibility
+              Check Your Immigration Eligibility
             </a>
             <div className="hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               <span style={{ transform: mobileMenuOpen ? 'rotate(45deg) translate(6px, 6px)' : 'none' }}></span>
@@ -1582,38 +455,39 @@ export default function App() {
               <span>Immigration Made Simple</span>
             </div>
             
-            <h1 className="hero-title text-gradient" style={{ fontSize: '2.8rem', lineHeight: '1.2' }}>
+            <h1 className="hero-title text-gradient" style={{ fontSize: '2.8rem', lineHeight: '1.15', marginTop: '12px' }}>
               Immigration Made Simple.
             </h1>
-            <p className="hero-desc" style={{ fontSize: '1.15rem', color: '#94a3b8', margin: '15px 0 25px 0' }}>
-              Personalized Visa Solutions for Work, Study & Permanent Residency. Connect with trusted immigration consultants for global mobility.
+            <p className="hero-desc" style={{ fontSize: '1.1rem', color: '#94a3b8', margin: '12px 0 20px 0' }}>
+              Personalized Visa Solutions for Work, Study & Permanent Residency. Connect with trusted consultants for seamless global mobility.
             </p>
 
             <div className="hero-buttons">
               <a href="#calculator" className="btn btn-primary">
-                Check Your Eligibility <ArrowRightIcon />
+                Check Your Immigration Eligibility <ArrowRightIcon />
               </a>
               <a href="#contact" className="btn btn-secondary" style={{ background: '#0f172a', borderColor: '#334155' }}>
                 Talk to Consultant
               </a>
             </div>
 
-            <div style={{ marginTop: '30px' }}>
-              <p style={{ fontSize: '0.85rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px', fontWeight: '600' }}>
-                Supported Destination Programs
+            {/* Country Logos Below Hero */}
+            <div style={{ marginTop: '24px' }}>
+              <p style={{ fontSize: '0.82rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px', fontWeight: '600' }}>
+                Supported Destinations
               </p>
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇨🇦 Canada</span>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇦🇺 Australia</span>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇩🇪 Germany</span>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇬🇧 UK</span>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇳🇿 New Zealand</span>
+              <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                <span className="glass-panel" style={{ padding: '6px 12px', borderRadius: '16px', fontSize: '0.88rem' }}>🇨🇦 Canada</span>
+                <span className="glass-panel" style={{ padding: '6px 12px', borderRadius: '16px', fontSize: '0.88rem' }}>🇦🇺 Australia</span>
+                <span className="glass-panel" style={{ padding: '6px 12px', borderRadius: '16px', fontSize: '0.88rem' }}>🇩🇪 Germany</span>
+                <span className="glass-panel" style={{ padding: '6px 12px', borderRadius: '16px', fontSize: '0.88rem' }}>🇬🇧 UK</span>
+                <span className="glass-panel" style={{ padding: '6px 12px', borderRadius: '16px', fontSize: '0.88rem' }}>🇳🇿 New Zealand</span>
               </div>
             </div>
           </div>
 
           <div className="hero-visual">
-            <div className="globe-placeholder" style={{ minHeight: '380px', position: 'relative' }}>
+            <div className="globe-placeholder" style={{ minHeight: '340px', position: 'relative' }}>
               <div className="globe-circle-1" style={{ borderColor: '#1e293b' }}></div>
               <div className="globe-circle-2" style={{ borderColor: '#0f172a' }}></div>
               
@@ -1622,7 +496,7 @@ export default function App() {
                   <GlobeIcon />
                 </div>
                 <div className="floating-info">
-                  <h4>Passport & Global Mobility 🛂</h4>
+                  <h4>Global Mobility 🛂</h4>
                   <p>Express Entry & Skilled Worker Pathways</p>
                 </div>
               </div>
@@ -1636,113 +510,35 @@ export default function App() {
                   <p>128+ Successful Grants This Month</p>
                 </div>
               </div>
-
-              <div className="glass-panel" style={{
-                position: 'absolute',
-                bottom: '15px',
-                left: '20px',
-                padding: '12px 20px',
-                borderRadius: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                background: '#0f172a',
-                border: '1px solid #1e293b'
-              }}>
-                <span style={{ fontSize: '1.8rem' }}>🧳✈️</span>
-                <div>
-                  <h5 style={{ margin: 0, fontSize: '0.95rem', color: '#f8fafc' }}>Seamless Relocation</h5>
-                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>Dedicated Assistance Worldwide</p>
-                </div>
-              </div>
-
-              <svg className="flight-path" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 3">
-                <path d="M10,80 Q50,20 90,80" stroke="#3b82f6" />
-              </svg>
             </div>
           </div>
         </div>
       </header>
 
-      {/* VISA ROADMAP + CLIENT SUCCESS */}
-      <section className="section-padding" style={{ paddingTop: '34px', paddingBottom: '34px' }}>
+      {/* VISA ROADMAP + CLIENT SUCCESS BOX */}
+      <section className="section-padding" style={{ paddingTop: '28px', paddingBottom: '28px' }}>
         <div className="container">
           <div className="roadmap-success-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
             gap: '18px'
           }}>
-            <div className="glass-panel" style={{
-              padding: '24px',
-              background: '#0f172a',
-              border: '1px solid #1e293b',
-              borderRadius: '16px'
-            }}>
-              <div style={{ fontSize: '1.7rem', marginBottom: '8px' }}>🗺️</div>
-              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: '#f8fafc' }}>Visa Roadmap</h3>
-              <p style={{ margin: '0 0 14px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.6' }}>
+            <div className="glass-panel" style={{ padding: '22px', background: '#0f172a', border: '1px solid #1e293b', borderRadius: '16px' }}>
+              <div style={{ fontSize: '1.6rem', marginBottom: '6px' }}>🗺️</div>
+              <h3 style={{ margin: '0 0 8px', fontSize: '1.15rem', color: '#f8fafc' }}>Visa Roadmap</h3>
+              <p style={{ margin: '0 0 12px', color: '#94a3b8', fontSize: '0.88rem', lineHeight: '1.6' }}>
                 Profile evaluation → Pathway selection → Documentation → Application → Visa decision → Post-landing support.
               </p>
               <a href="#calculator" className="service-link">Start Your Roadmap <ArrowRightIcon /></a>
             </div>
 
-            <div className="glass-panel" style={{
-              padding: '24px',
-              background: '#0f172a',
-              border: '1px solid #1e293b',
-              borderRadius: '16px'
-            }}>
-              <div style={{ fontSize: '1.7rem', marginBottom: '8px' }}>🏆</div>
-              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: '#f8fafc' }}>Client Success</h3>
-              <p style={{ margin: '0 0 14px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.6' }}>
+            <div className="glass-panel" style={{ padding: '22px', background: '#0f172a', border: '1px solid #1e293b', borderRadius: '16px' }}>
+              <div style={{ fontSize: '1.6rem', marginBottom: '6px' }}>🏆</div>
+              <h3 style={{ margin: '0 0 8px', fontSize: '1.15rem', color: '#f8fafc' }}>Client Success</h3>
+              <p style={{ margin: '0 0 12px', color: '#94a3b8', fontSize: '0.88rem', lineHeight: '1.6' }}>
                 128+ successful grants this month with personalized support across work, study and permanent residency pathways.
               </p>
               <a href="#contact" className="service-link">Talk to a Consultant <ArrowRightIcon /></a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ABOUT / FEATURES */}
-      <section id="about" className="section-padding" style={{ background: '#0b1120' }}>
-        <div className="container">
-          <div className="section-header">
-            <span className="section-tag" style={{ background: '#0f172a', color: '#60a5fa' }}>Cloyster Visas Guarantee</span>
-            <h2 className="section-title text-gradient">Why Choose Cloyster Visas?</h2>
-            <p className="section-desc">
-              Navigating global migration standard procedures with clear guidance and customized advisory solutions.
-            </p>
-          </div>
-
-          <div className="services-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-            <div className="glass-panel" style={{ padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>⚖️</div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px' }}>
-                Legal Representation
-              </h3>
-              <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.6' }}>
-                We guide you through certified regulations, ensuring fully compliant documentation for IRCC, MARA, and EU immigration authorities.
-              </p>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>🎯</div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px' }}>
-                Tailored Strategy
-              </h3>
-              <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.6' }}>
-                We evaluate your career credentials to construct the optimum pathway—maximizing points for Express Entry or state sponsorships.
-              </p>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>💰</div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px' }}>
-                Transparent Pricing
-              </h3>
-              <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.6' }}>
-                No hidden costs or false promises. Clear milestone-based service fee quotes upfront with full evaluation reports.
-              </p>
             </div>
           </div>
         </div>
@@ -1773,7 +569,7 @@ export default function App() {
           </div>
 
           {currentCountry && (
-            <div className="glass-panel" style={{ padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
+            <div className="glass-panel" style={{ padding: '30px', background: '#0f172a', border: '1px solid #1e293b' }}>
               <div className="country-display-grid">
                 <div className="country-image-wrapper">
                   <img src={currentCountry.image} alt={currentCountry.name} className="country-img" />
@@ -1803,7 +599,7 @@ export default function App() {
                   </div>
 
                   <div className="country-pathways-list">
-                    <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-primary)', letterSpacing: '1px' }}>
+                    <h4 style={{ fontSize: '0.85rem', textTransform: 'uppercase', color: 'var(--text-primary)', letterSpacing: '1px' }}>
                       Primary Relocation Streams
                     </h4>
                     {currentCountry.pathways.map((pw, i) => (
@@ -1821,14 +617,14 @@ export default function App() {
         </div>
       </section>
 
-      {/* CORE SERVICES SECTION */}
+      {/* SERVICES SECTION */}
       <section id="services" className="section-padding" style={{ background: '#0b1120' }}>
         <div className="container">
           <div className="section-header">
             <span className="section-tag">End-to-End Solutions</span>
             <h2 className="section-title text-gradient">Our Advisory Services</h2>
             <p className="section-desc">
-              Comprehensive assistance through every stage of your immigration journey.
+              Comprehensive assistance through every stage of your visa journey.
             </p>
           </div>
 
@@ -1846,7 +642,7 @@ export default function App() {
             <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
               <h3 className="service-title">2. Profile Assessment</h3>
               <p className="service-desc">
-                Receive an extensive review of your academic history, age, skill-set, and language scores to compute your potential immigration points before application.
+                Receive an extensive review of your academic history, age, skill-set, and language scores to compute your potential points.
               </p>
               <a href="#calculator" className="service-link">
                 Check Your Immigration Eligibility <ArrowRightIcon />
@@ -1856,7 +652,7 @@ export default function App() {
             <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
               <h3 className="service-title">3. Documentation Support</h3>
               <p className="service-desc">
-                Ensure error-free submissions. We guide you in drafting letters of explanation, Educational Credential Assessment (ECA), proof of / financial documentation, and reference formats.
+                Ensure error-free submissions. We guide you in drafting letters of explanation, Educational Credential Assessment (ECA), and proof of / financial documentation.
               </p>
               <button 
                 onClick={() => setActiveModal('documentation')} 
@@ -1870,7 +666,7 @@ export default function App() {
             <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
               <h3 className="service-title">4. Post-Landing Support</h3>
               <p className="service-desc">
-                Settle down with absolute ease. Access orientation assistance, temporary housing leads, local health insurance guidance, and social security application updates.
+                Settle down with absolute ease. Access orientation assistance, temporary housing leads, local health insurance guidance, and social security setup.
               </p>
               <button 
                 onClick={() => setActiveModal('postlanding')} 
@@ -1884,7 +680,7 @@ export default function App() {
             <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
               <h3 className="service-title">5. Study Visa Services</h3>
               <p className="service-desc">
-                Get guidance for study visa applications, university and college documentation, statements of purpose, financial documentation, and post-study work pathways.
+                Get guidance for study visa applications, college admissions documentation, statements of purpose, financial documentation, and post-study work pathways.
               </p>
               <a href="#calculator" className="service-link">
                 Check Study Visa Eligibility <ArrowRightIcon />
@@ -1892,6 +688,7 @@ export default function App() {
             </div>
           </div>
 
+          {/* Profile Score Preview Card */}
           <div className="profile-score-preview glass-panel" style={{
             marginTop: '22px',
             padding: '18px 20px',
@@ -1906,7 +703,7 @@ export default function App() {
           }}>
             <div>
               <div style={{ color: '#94a3b8', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
-                Preliminary Profile Snapshot
+                Profile Score Overview
               </div>
               <div style={{ color: '#f8fafc', fontSize: '1.25rem', fontWeight: '800' }}>
                 Estimated Score: <span style={{ color: '#60a5fa' }}>472</span>
@@ -1920,17 +717,17 @@ export default function App() {
             </div>
             <div style={{ display: 'flex', gap: '9px', flexWrap: 'wrap' }}>
               <a href="#calculator" className="btn btn-secondary" style={{ padding: '10px 14px' }}>
-                Get Detailed Assessment <ArrowRightIcon />
+                Get Detailed Assessment →
               </a>
               <a href="#contact" className="btn btn-primary" style={{ padding: '10px 14px' }}>
-                Book Consultation <ArrowRightIcon />
+                Book Consultation →
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* DEDICATED MODALS FOR SERVICES 3 & 4 */}
+      {/* MODAL WINDOWS */}
       {activeModal && (
         <div style={{
           position: 'fixed',
@@ -1978,20 +775,12 @@ export default function App() {
                   Detailed Overview
                 </span>
                 <h3 style={{ fontSize: '1.6rem', marginTop: '10px', marginBottom: '15px' }}>📄 Documentation Support</h3>
-                <p style={{ color: '#94a3b8', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Immigration officers reject up to 30% of applications due to formatting errors or insufficient proofing. Our specialists assist you with:
-                </p>
                 <ul style={{ color: '#cbd5e1', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
-                  <li><strong>Educational Credential Assessment (ECA):</strong> Step-by-step guidance for WES, IQAS, or ICAS submissions.</li>
-                  <li><strong>Statement of Purpose & LOE:</strong> Customized Letters of Explanation for study permits or gap years.</li>
-                  <li><strong>Proof of / Financial Documentation:</strong> Reviewing bank certificates, GIC setups, and liquid asset statements.</li>
-                  <li><strong>Work Experience Reference Letters:</strong> Aligning job duties with exact NOC/ANZSCO codes.</li>
+                  <li><strong>Educational Credential Assessment (ECA):</strong> Step-by-step guidance for WES, IQAS, or ICAS.</li>
+                  <li><strong>Statement of Purpose & LOE:</strong> Customized Letters of Explanation for study permits.</li>
+                  <li><strong>Proof of / Financial Documentation:</strong> Reviewing bank statements and liquid assets.</li>
+                  <li><strong>Work Experience Reference Letters:</strong> Aligning duties with NOC codes.</li>
                 </ul>
-                <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-                  <a href="#contact" onClick={() => setActiveModal(null)} className="btn btn-primary" style={{ flex: 1, textAlign: 'center', justifyContent: 'center' }}>
-                    Request Document Review
-                  </a>
-                </div>
               </div>
             )}
 
@@ -2001,20 +790,11 @@ export default function App() {
                   Relocation Assistance
                 </span>
                 <h3 style={{ fontSize: '1.6rem', marginTop: '10px', marginBottom: '15px' }}>✈️ Post-Landing Support</h3>
-                <p style={{ color: '#94a3b8', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Moving to a new country shouldn't feel overwhelming. Cloyster Visas provides dedicated post-arrival assistance to ensure a smooth transition:
-                </p>
                 <ul style={{ color: '#cbd5e1', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
-                  <li><strong>Social Security / SIN Card Setup:</strong> Guided registration for work authorization and tax setup.</li>
-                  <li><strong>Temporary & Long-Term Housing:</strong> Verified rental options and short-term stay discounts.</li>
-                  <li><strong>Health Insurance & Banking:</strong> Setting up provincial health cards and local bank accounts upon landing.</li>
-                  <li><strong>Airport Pickup & Community Orientation:</strong> Welcome briefing to help you navigate your new city.</li>
+                  <li><strong>Social Security / SIN Card Setup:</strong> Guided registration.</li>
+                  <li><strong>Housing Assistance:</strong> Rental leads and short-term stay arrangements.</li>
+                  <li><strong>Health Insurance & Banking:</strong> Bank account setup upon landing.</li>
                 </ul>
-                <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-                  <a href="#contact" onClick={() => setActiveModal(null)} className="btn btn-primary" style={{ flex: 1, textAlign: 'center', justifyContent: 'center' }}>
-                    Inquire About Post-Landing Services
-                  </a>
-                </div>
               </div>
             )}
           </div>
@@ -2028,7 +808,7 @@ export default function App() {
             <span className="section-tag">Interactive Evaluation</span>
             <h2 className="section-title text-gradient">Check Your Immigration Eligibility</h2>
             <p className="section-desc">
-              Instant preliminary points assessment for Express Entry, GSM, and European job cards.
+              Instant preliminary points assessment for Express Entry, GSM, and Study Visas.
             </p>
           </div>
 
@@ -2041,7 +821,6 @@ export default function App() {
               <div className={`progress-step ${calcStep >= 4 ? 'active' : ''} ${calcStep > 4 ? 'completed' : ''}`}>📊</div>
             </div>
 
-            {/* STEP 1 */}
             {calcStep === 1 && (
               <div className="calc-step-content">
                 <h3 className="calc-step-title">Select Relocation Preferences</h3>
@@ -2053,8 +832,8 @@ export default function App() {
                       value={calcData.destination}
                       onChange={(e) => setCalcData({ ...calcData, destination: e.target.value })}
                     >
-                      <option value="canada">Canada (Express Entry)</option>
-                      <option value="australia">Australia (General Skilled Migration)</option>
+                      <option value="canada">Canada (Express Entry / PNP)</option>
+                      <option value="australia">Australia (GSM)</option>
                       <option value="germany">Germany (Opportunity Card)</option>
                       <option value="uk">United Kingdom (Skilled Worker)</option>
                       <option value="nz">New Zealand (SMC)</option>
@@ -2079,7 +858,6 @@ export default function App() {
               </div>
             )}
 
-            {/* STEP 2 */}
             {calcStep === 2 && (
               <div className="calc-step-content">
                 <h3 className="calc-step-title">Basic Profile Details</h3>
@@ -2113,14 +891,11 @@ export default function App() {
                 </div>
                 <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
                   <button className="btn btn-secondary" onClick={() => setCalcStep(1)}>Back</button>
-                  <button className="btn btn-primary" onClick={() => setCalcStep(3)}>
-                    Next Step <ArrowRightIcon />
-                  </button>
+                  <button className="btn btn-primary" onClick={() => setCalcStep(3)}>Next Step <ArrowRightIcon /></button>
                 </div>
               </div>
             )}
 
-            {/* STEP 3 */}
             {calcStep === 3 && (
               <div className="calc-step-content">
                 <h3 className="calc-step-title">Experience & Language Ability</h3>
@@ -2139,7 +914,7 @@ export default function App() {
                     </select>
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Language Proficiency Score</label>
+                    <label className="form-label">Language Proficiency</label>
                     <select
                       className="select-control"
                       value={calcData.englishScore}
@@ -2153,14 +928,11 @@ export default function App() {
                 </div>
                 <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
                   <button className="btn btn-secondary" onClick={() => setCalcStep(2)}>Back</button>
-                  <button className="btn btn-primary" onClick={runCalculation}>
-                    Calculate Points <ArrowRightIcon />
-                  </button>
+                  <button className="btn btn-primary" onClick={runCalculation}>Calculate Points <ArrowRightIcon /></button>
                 </div>
               </div>
             )}
 
-            {/* STEP 4: RESULTS */}
             {calcStep === 4 && (
               <div className="calc-step-content" style={{ textAlign: 'center' }}>
                 <h3 className="calc-step-title">Estimated Eligibility Score</h3>
@@ -2189,29 +961,25 @@ export default function App() {
             <span className="section-tag">Direct Legal Support</span>
             <h2 className="section-title text-gradient">Book Your Consultation</h2>
             <p className="section-desc">
-              Schedule a personalized 1-on-1 session with our certified immigration specialists to review your profile and explore your relocation options.
+              Schedule a personalized session with our certified specialists to explore your options.
             </p>
           </div>
 
-          <div className="glass-panel" style={{ maxWidth: '650px', margin: '0 auto', padding: '40px', background: '#0f172a', border: '1px solid #1e293b' }}>
+          <div className="glass-panel" style={{ maxWidth: '650px', margin: '0 auto', padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
             {bookingSubmitted ? (
               <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                <h3 style={{ color: '#22c55e', fontSize: '1.6rem', marginBottom: '10px' }}>
+                <h3 style={{ color: '#22c55e', fontSize: '1.5rem', marginBottom: '10px' }}>
                   🎉 Consultation Request Submitted!
                 </h3>
                 <p style={{ color: '#94a3b8' }}>
-                  Thank you, <strong>{bookingData.fullName}</strong>. Our immigration advisory team has received your request and will reach out to you within 24 hours.
+                  Thank you, <strong>{bookingData.fullName}</strong>. Our team will contact you within 24 hours.
                 </p>
-                <button
-                  className="btn btn-primary"
-                  style={{ marginTop: '20px' }}
-                  onClick={() => setBookingSubmitted(false)}
-                >
+                <button className="btn btn-primary" style={{ marginTop: '20px' }} onClick={() => setBookingSubmitted(false)}>
                   Submit Another Request
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 <div className="form-group">
                   <label className="form-label">Full Name</label>
                   <input
@@ -2238,13 +1006,12 @@ export default function App() {
                   </div>
                   <div className="form-group">
                     <label className="form-label">Phone Number</label>
-                    <div className="phone-input-row" style={{ display: 'grid', gridTemplateColumns: '105px minmax(0, 1fr)', gap: '8px' }}>
+                    <div className="phone-input-row" style={{ display: 'grid', gridTemplateColumns: '100px minmax(0, 1fr)', gap: '8px' }}>
                       <select
                         required
                         className="select-control"
                         value={bookingData.countryCode}
                         onChange={(e) => setBookingData({ ...bookingData, countryCode: e.target.value })}
-                        aria-label="Country code"
                       >
                         <option value="+91">🇮🇳 +91</option>
                         <option value="+1">🇺🇸 +1</option>
@@ -2253,7 +1020,6 @@ export default function App() {
                         <option value="+64">🇳🇿 +64</option>
                         <option value="+49">🇩🇪 +49</option>
                         <option value="+971">🇦🇪 +971</option>
-                        <option value="+65">🇸🇬 +65</option>
                       </select>
                       <input
                         type="tel"
@@ -2301,7 +1067,7 @@ export default function App() {
                 <div className="form-group">
                   <label className="form-label">Additional Message / Inquiries</label>
                   <textarea
-                    rows={4}
+                    rows={3}
                     className="select-control"
                     placeholder="Provide details regarding education, work experience, or specific visa queries..."
                     value={bookingData.message}
@@ -2309,21 +1075,13 @@ export default function App() {
                   ></textarea>
                 </div>
 
-                <label style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '10px',
-                  color: '#cbd5e1',
-                  fontSize: '0.86rem',
-                  lineHeight: '1.5',
-                  cursor: 'pointer'
-                }}>
+                <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', color: '#cbd5e1', fontSize: '0.86rem', lineHeight: '1.4', cursor: 'pointer' }}>
                   <input
                     type="checkbox"
                     required
                     checked={bookingData.consent}
                     onChange={(e) => setBookingData({ ...bookingData, consent: e.target.checked })}
-                    style={{ marginTop: '4px', accentColor: '#2563eb' }}
+                    style={{ marginTop: '3px', accentColor: '#2563eb' }}
                   />
                   <span>I agree to be contacted by Cloyster Visas regarding my enquiry and consultation request.</span>
                 </label>
@@ -2334,8 +1092,7 @@ export default function App() {
                   style={{ width: '100%', justifyContent: 'center' }}
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? 'Sending Request...' : 'Submit Booking Request'}{' '}
-                  {!isSubmitting && <ArrowRightIcon />}
+                  {isSubmitting ? 'Sending Request...' : 'Submit Booking Request'} {!isSubmitting && <ArrowRightIcon />}
                 </button>
               </form>
             )}
@@ -2346,11 +1103,10 @@ export default function App() {
       {/* FLOATING WHATSAPP BUTTON */}
       <a
         className="whatsapp-float"
-        href="https://wa.me/?text=Hello%20Cloyster Visas,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
+        href="https://wa.me/917027466559?text=Hello%20Cloyster%20Visas,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
-        className="whatsapp-float"
         style={{
           position: 'fixed',
           bottom: '25px',
@@ -2368,73 +1124,54 @@ export default function App() {
           cursor: 'pointer',
           transition: 'transform 0.2s ease-in-out'
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.1)')}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
       >
         <WhatsAppIcon />
       </a>
 
       {/* FOOTER */}
-      <footer style={{ background: '#070a12', borderTop: '1px solid #1e293b', padding: '50px 0 25px 0', color: '#94a3b8' }}>
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '30px', marginBottom: '40px' }}>
+      <footer style={{ background: '#070a12', borderTop: '1px solid #1e293b', padding: '45px 0 25px 0', color: '#94a3b8' }}>
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '30px', marginBottom: '35px' }}>
           
           <div>
-            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '15px' }}>
+            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '12px' }}>
               <ShieldIcon />
               <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#f8fafc' }}>
                 Cloyster <span style={{ color: '#2563eb' }}>Visas</span>
               </span>
             </a>
-            <p style={{ fontSize: '0.9rem', lineHeight: '1.6', color: '#64748b' }}>
+            <p style={{ fontSize: '0.88rem', lineHeight: '1.6', color: '#64748b' }}>
               Immigration Made Simple. Providing streamlined pathways for PR, work permits, and global education.
             </p>
           </div>
 
           <div>
-            <h4 style={{ color: '#f8fafc', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Quick Links</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem' }}>
+            <h4 style={{ color: '#f8fafc', fontSize: '0.98rem', fontWeight: '700', marginBottom: '12px' }}>Quick Links</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.88rem' }}>
               <li><a href="#about" style={{ color: '#94a3b8', textDecoration: 'none' }}>About Us</a></li>
               <li><a href="#destinations" style={{ color: '#94a3b8', textDecoration: 'none' }}>Destinations</a></li>
               <li><a href="#services" style={{ color: '#94a3b8', textDecoration: 'none' }}>Advisory Services</a></li>
-              <li><a href="#calculator" style={{ color: '#94a3b8', textDecoration: 'none' }}>Eligibility Points Check</a></li>
+              <li><a href="#calculator" style={{ color: '#94a3b8', textDecoration: 'none' }}>Eligibility Check</a></li>
               <li><a href="#contact" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '600' }}>Book Consultation</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 style={{ color: '#f8fafc', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Popular Destinations</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem' }}>
-              <li><a href="#destinations" onClick={() => setActiveTab('canada')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇨🇦 Canada Express Entry</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('germany')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇩🇪 Germany Opportunity Card</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('australia')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇦🇺 Australia GSM</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('uk')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇬🇧 UK Skilled Worker</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('nz')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇳🇿 New Zealand SMC</a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 style={{ color: '#f8fafc', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Office Support</h4>
-            <p style={{ fontSize: '0.88rem', lineHeight: '1.55', marginBottom: '10px', color: '#94a3b8' }}>
-              📍 Room No. 2, 3rd Floor, A-66, Block A, Sector 7 Dwarka, Dwarka, New Delhi, Delhi-110077
+            <h4 style={{ color: '#f8fafc', fontSize: '0.98rem', fontWeight: '700', marginBottom: '12px' }}>Office Support Section</h4>
+            <p style={{ fontSize: '0.86rem', lineHeight: '1.5', marginBottom: '8px', color: '#94a3b8' }}>
+              📍 <strong>Address:</strong> Room no. 2, 3rd Floor, A-66, Block A, Sector 7 Dwarka, Dwarka, New Delhi, Delhi-110077
             </p>
-            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              📞 <a href="tel:+917027466559" style={{ color: '#94a3b8', textDecoration: 'none' }}>7027466559</a>
+            <p style={{ fontSize: '0.88rem', marginBottom: '6px' }}>
+              📞 <strong>Ph no:</strong> <a href="tel:7027466559" style={{ color: '#94a3b8', textDecoration: 'none' }}>7027466559</a>
             </p>
-            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              💬 WhatsApp: <a href="https://wa.me/917027466559?text=Hello%20Cloyster%20Visas" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
-            </p>
-            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              ✉️ Email: <span style={{ color: '#94a3b8' }}>[Add company email address]</span>
-            </p>
-            <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '12px' }}>
-              Available Monday – Saturday (9:00 AM – 6:00 PM)
+            <p style={{ fontSize: '0.88rem', marginBottom: '6px' }}>
+              ✉️ <strong>Email:</strong> <a href="mailto:ak9362351@gmail.com" style={{ color: '#94a3b8', textDecoration: 'none' }}>ak9362351@gmail.com</a>
             </p>
           </div>
 
         </div>
 
-        <div className="container" style={{ borderTop: '1px solid #1e293b', paddingTop: '20px', textAlign: 'center', fontSize: '0.85rem', color: '#64748b' }}>
-          <p>© {new Date().getFullYear()} Cloyster Visas Advisory Services. All Rights Reserved.</p>
+        <div className="container" style={{ borderTop: '1px solid #1e293b', paddingTop: '18px', textAlign: 'center', fontSize: '0.82rem', color: '#64748b' }}>
+          <p>© {new Date().getFullYear()} Cloyster Visas. All Rights Reserved.</p>
         </div>
       </footer>
     </>
