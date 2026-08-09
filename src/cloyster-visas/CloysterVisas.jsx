@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser'
 // Custom SVG Icons Components
 const ShieldIcon = () => (
   <svg className="logo-icon" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '28px', height: '28px' }}>
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#1e3a8a" />
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#0f172a" />
   </svg>
 )
 
@@ -35,7 +35,6 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
-// Responsive & Customized Styles
 const MobileResponsiveStyles = () => (
   <style>{`
     html {
@@ -167,15 +166,10 @@ const MobileResponsiveStyles = () => (
         display: grid !important;
         grid-template-columns: 1fr;
       }
-
-      .phone-input-row {
-        grid-template-columns: 92px minmax(0, 1fr) !important;
-      }
     }
   `}</style>
 )
 
-// Destination Countries Data
 const staticCountriesData = [
   {
     id: 'canada',
@@ -697,7 +691,7 @@ export default function App() {
             borderRadius: '14px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifySpace: 'space-between',
             gap: '18px',
             flexWrap: 'wrap'
           }}>
@@ -723,6 +717,285 @@ export default function App() {
                 Book Consultation →
               </a>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CALCULATOR / ASSESSMENT SECTION */}
+      <section id="calculator" className="section-padding">
+        <div className="container">
+          <div className="section-header">
+            <span className="section-tag">Instant Eligibility Check</span>
+            <h2 className="section-title text-gradient">Check Your Point Score</h2>
+            <p className="section-desc">
+              Select your parameters to estimate your immigration selection score instantly.
+            </p>
+          </div>
+
+          <div className="glass-panel calculator-box" style={{ background: '#0f172a', border: '1px solid #1e293b', padding: '30px', borderRadius: '16px' }}>
+            {calcStep === 1 && (
+              <div className="calc-step-content">
+                <h3 className="calc-step-title" style={{ fontSize: '1.3rem', color: '#f8fafc', marginBottom: '16px' }}>Step 1: Primary Target & Visa Goal</h3>
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.9rem', display: 'block', marginBottom: '6px' }}>Target Country</label>
+                    <select 
+                      className="select-control" 
+                      value={calcData.destination} 
+                      onChange={(e) => setCalcData({ ...calcData, destination: e.target.value })}
+                      style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                    >
+                      <option value="canada">Canada 🇨🇦</option>
+                      <option value="australia">Australia 🇦🇺</option>
+                      <option value="germany">Germany 🇩🇪</option>
+                      <option value="uk">United Kingdom 🇬🇧</option>
+                      <option value="nz">New Zealand 🇳🇿</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.9rem', display: 'block', marginBottom: '6px' }}>Pathway Type</label>
+                    <select 
+                      className="select-control" 
+                      value={calcData.visaType} 
+                      onChange={(e) => setCalcData({ ...calcData, visaType: e.target.value })}
+                      style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                    >
+                      <option value="pr">Permanent Residency (PR)</option>
+                      <option value="work">Work Permit / Opportunity Card</option>
+                      <option value="study">Study Visa</option>
+                    </select>
+                  </div>
+                </div>
+                <button className="btn btn-primary" style={{ marginTop: '20px' }} onClick={() => setCalcStep(2)}>
+                  Next Step →
+                </button>
+              </div>
+            )}
+
+            {calcStep === 2 && (
+              <div className="calc-step-content">
+                <h3 className="calc-step-title" style={{ fontSize: '1.3rem', color: '#f8fafc', marginBottom: '16px' }}>Step 2: Age & Educational Qualification</h3>
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.9rem', display: 'block', marginBottom: '6px' }}>Age Bracket</label>
+                    <select 
+                      className="select-control" 
+                      value={calcData.age} 
+                      onChange={(e) => setCalcData({ ...calcData, age: e.target.value })}
+                      style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                    >
+                      <option value="18-24">18 - 24 Years</option>
+                      <option value="25-32">25 - 32 Years</option>
+                      <option value="33-39">33 - 39 Years</option>
+                      <option value="40+">40+ Years</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.9rem', display: 'block', marginBottom: '6px' }}>Highest Level of Education</label>
+                    <select 
+                      className="select-control" 
+                      value={calcData.education} 
+                      onChange={(e) => setCalcData({ ...calcData, education: e.target.value })}
+                      style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                    >
+                      <option value="phd">Doctorate / Ph.D.</option>
+                      <option value="masters">Master's Degree</option>
+                      <option value="bachelors">Bachelor's Degree</option>
+                      <option value="diploma">Diploma / Trade Certificate</option>
+                    </select>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)}>← Back</button>
+                  <button className="btn btn-primary" onClick={() => setCalcStep(3)}>Next Step →</button>
+                </div>
+              </div>
+            )}
+
+            {calcStep === 3 && (
+              <div className="calc-step-content">
+                <h3 className="calc-step-title" style={{ fontSize: '1.3rem', color: '#f8fafc', marginBottom: '16px' }}>Step 3: Work Experience & English Proficiency</h3>
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.9rem', display: 'block', marginBottom: '6px' }}>Skilled Work Experience</label>
+                    <select 
+                      className="select-control" 
+                      value={calcData.experience} 
+                      onChange={(e) => setCalcData({ ...calcData, experience: e.target.value })}
+                      style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                    >
+                      <option value="1-2">1 - 2 Years</option>
+                      <option value="3-5">3 - 5 Years</option>
+                      <option value="6+">6+ Years</option>
+                    </select>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.9rem', display: 'block', marginBottom: '6px' }}>Language Score (IELTS / PTE equivalent)</label>
+                    <select 
+                      className="select-control" 
+                      value={calcData.englishScore} 
+                      onChange={(e) => setCalcData({ ...calcData, englishScore: e.target.value })}
+                      style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                    >
+                      <option value="clb9">CLB 9+ (IELTS 8,7,7,7)</option>
+                      <option value="clb8">CLB 8 (IELTS 7.5,6.5,6.5,6.5)</option>
+                      <option value="clb7">CLB 7 (IELTS 6.0 each)</option>
+                    </select>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+                  <button className="btn btn-secondary" onClick={() => setCalcStep(2)}>← Back</button>
+                  <button className="btn btn-primary" onClick={runCalculation}>Calculate Score 🎉</button>
+                </div>
+              </div>
+            )}
+
+            {calcStep === 4 && (
+              <div className="calc-step-content" style={{ textAlign: 'center' }}>
+                <h3 className="calc-step-title" style={{ fontSize: '1.5rem', color: '#f8fafc', marginBottom: '8px' }}>Your Estimated Points Score</h3>
+                <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#60a5fa', margin: '10px 0' }}>{calcScore} Points</div>
+                <p style={{ color: '#94a3b8', fontSize: '0.95rem', maxWidth: '450px', margin: '0 auto 20px' }}>
+                  Based on your age, qualifications, experience, and language proficiency level.
+                </p>
+                <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
+                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)}>Recalculate</button>
+                  <a href="#contact" className="btn btn-primary">Book Full Consultation →</a>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* CONTACT / BOOKING SECTION */}
+      <section id="contact" className="section-padding" style={{ background: '#0b1120' }}>
+        <div className="container">
+          <div className="section-header">
+            <span className="section-tag">Direct Legal Guidance</span>
+            <h2 className="section-title text-gradient">Book Your Strategy Session</h2>
+            <p className="section-desc">
+              Schedule a meeting with our licensed immigration specialists.
+            </p>
+          </div>
+
+          <div className="glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b', padding: '30px', borderRadius: '16px', maxWidth: '700px', margin: '0 auto' }}>
+            {bookingSubmitted ? (
+              <div style={{ textAlign: 'center', padding: '20px 0' }}>
+                <div style={{ fontSize: '3rem', marginBottom: '10px' }}>🎉</div>
+                <h3 style={{ color: '#f8fafc', fontSize: '1.4rem', marginBottom: '10px' }}>Consultation Request Submitted!</h3>
+                <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.6' }}>
+                  Thank you for reaching out. One of our senior consultants will contact you within 24 business hours.
+                </p>
+              </div>
+            ) : (
+              <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.88rem', display: 'block', marginBottom: '6px' }}>Full Name *</label>
+                    <input 
+                      type="text" 
+                      className="select-control"
+                      placeholder="John Doe"
+                      value={bookingData.fullName}
+                      onChange={(e) => setBookingData({ ...bookingData, fullName: e.target.value })}
+                      style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.88rem', display: 'block', marginBottom: '6px' }}>Email Address *</label>
+                    <input 
+                      type="email" 
+                      className="select-control"
+                      placeholder="john@example.com"
+                      value={bookingData.email}
+                      onChange={(e) => setBookingData({ ...bookingData, email: e.target.value })}
+                      style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                    />
+                  </div>
+                </div>
+
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.88rem', display: 'block', marginBottom: '6px' }}>Phone Number *</label>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <input 
+                        type="text" 
+                        value={bookingData.countryCode} 
+                        onChange={(e) => setBookingData({ ...bookingData, countryCode: e.target.value })}
+                        style={{ width: '70px', padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }} 
+                      />
+                      <input 
+                        type="tel" 
+                        className="select-control"
+                        placeholder="9876543210"
+                        value={bookingData.phone}
+                        onChange={(e) => setBookingData({ ...bookingData, phone: e.target.value })}
+                        style={{ flex: 1, padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.88rem', display: 'block', marginBottom: '6px' }}>Preferred Destination *</label>
+                    <select 
+                      className="select-control" 
+                      value={bookingData.destination} 
+                      onChange={(e) => setBookingData({ ...bookingData, destination: e.target.value })}
+                      style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                    >
+                      <option value="canada">Canada</option>
+                      <option value="australia">Australia</option>
+                      <option value="germany">Germany</option>
+                      <option value="uk">United Kingdom</option>
+                      <option value="nz">New Zealand</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.88rem', display: 'block', marginBottom: '6px' }}>Preferred Consultation Time *</label>
+                  <input 
+                    type="datetime-local" 
+                    className="select-control"
+                    value={bookingData.consultationTime}
+                    onChange={(e) => setBookingData({ ...bookingData, consultationTime: e.target.value })}
+                    style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px' }}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label" style={{ color: '#94a3b8', fontSize: '0.88rem', display: 'block', marginBottom: '6px' }}>Your Query / Message (Optional)</label>
+                  <textarea 
+                    className="select-control" 
+                    rows={3} 
+                    placeholder="Provide details regarding your education, job profile, or questions..."
+                    value={bookingData.message}
+                    onChange={(e) => setBookingData({ ...bookingData, message: e.target.value })}
+                    style={{ padding: '10px', background: '#1e293b', color: '#fff', border: '1px solid #334155', borderRadius: '8px', width: '100%' }}
+                  ></textarea>
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '4px 0' }}>
+                  <input 
+                    type="checkbox" 
+                    id="consent" 
+                    checked={bookingData.consent} 
+                    onChange={(e) => setBookingData({ ...bookingData, consent: e.target.checked })} 
+                  />
+                  <label htmlFor="consent" style={{ color: '#94a3b8', fontSize: '0.82rem' }}>
+                    I agree to be contacted by Cloyster Visas specialists regarding my immigration request.
+                  </label>
+                </div>
+
+                <button 
+                  type="submit" 
+                  className="btn btn-primary" 
+                  disabled={isSubmitting}
+                  style={{ width: '100%', padding: '12px', marginTop: '8px' }}
+                >
+                  {isSubmitting ? 'Sending Request...' : 'Submit Request →'}
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </section>
@@ -775,403 +1048,89 @@ export default function App() {
                   Detailed Overview
                 </span>
                 <h3 style={{ fontSize: '1.6rem', marginTop: '10px', marginBottom: '15px' }}>📄 Documentation Support</h3>
-                <ul style={{ color: '#cbd5e1', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
-                  <li><strong>Educational Credential Assessment (ECA):</strong> Step-by-step guidance for WES, IQAS, or ICAS.</li>
-                  <li><strong>Statement of Purpose & LOE:</strong> Customized Letters of Explanation for study permits.</li>
-                  <li><strong>Proof of / Financial Documentation:</strong> Reviewing bank statements and liquid assets.</li>
-                  <li><strong>Work Experience Reference Letters:</strong> Aligning duties with NOC codes.</li>
-                </ul>
+                <p style={{ color: '#94a3b8', lineHeight: '1.6', fontSize: '0.95rem' }}>
+                  Our legal experts meticulously organize and verify all required immigration paperwork, including academic credential evaluations (ECA), employer reference letters, bank proof of funds, and legal statements of explanation.
+                </p>
               </div>
             )}
 
             {activeModal === 'postlanding' && (
               <div>
-                <span style={{ background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', padding: '4px 12px', borderRadius: '12px', fontSize: '0.85rem' }}>
-                  Relocation Assistance
+                <span style={{ background: 'rgba(37, 99, 235, 0.2)', color: '#60a5fa', padding: '4px 12px', borderRadius: '12px', fontSize: '0.85rem' }}>
+                  Settlement Assistance
                 </span>
-                <h3 style={{ fontSize: '1.6rem', marginTop: '10px', marginBottom: '15px' }}>✈️ Post-Landing Support</h3>
-                <ul style={{ color: '#cbd5e1', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
-                  <li><strong>Social Security / SIN Card Setup:</strong> Guided registration.</li>
-                  <li><strong>Housing Assistance:</strong> Rental leads and short-term stay arrangements.</li>
-                  <li><strong>Health Insurance & Banking:</strong> Bank account setup upon landing.</li>
-                </ul>
+                <h3 style={{ fontSize: '1.6rem', marginTop: '10px', marginBottom: '15px' }}>🏡 Post-Landing Support</h3>
+                <p style={{ color: '#94a3b8', lineHeight: '1.6', fontSize: '0.95rem' }}>
+                  We assist you after your arrival in your destination country with finding temporary accommodation, opening local bank accounts, applying for Social Insurance Numbers (SIN / TFN), and understanding healthcare coverage.
+                </p>
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* ELIGIBILITY CALCULATOR */}
-      <section id="calculator" className="section-padding">
-        <div className="container">
-          <div className="section-header">
-            <span className="section-tag">Interactive Evaluation</span>
-            <h2 className="section-title text-gradient">Check Your Immigration Eligibility</h2>
-            <p className="section-desc">
-              Instant preliminary points assessment for Express Entry, GSM, and Study Visas.
-            </p>
-          </div>
-
-          <div className="glass-panel calculator-box" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
-            <div className="calc-progress">
-              <div className="calc-progress-bar" style={{ width: `${((calcStep - 1) / 3) * 100}%` }}></div>
-              <div className={`progress-step ${calcStep >= 1 ? 'active' : ''} ${calcStep > 1 ? 'completed' : ''}`}>1</div>
-              <div className={`progress-step ${calcStep >= 2 ? 'active' : ''} ${calcStep > 2 ? 'completed' : ''}`}>2</div>
-              <div className={`progress-step ${calcStep >= 3 ? 'active' : ''} ${calcStep > 3 ? 'completed' : ''}`}>3</div>
-              <div className={`progress-step ${calcStep >= 4 ? 'active' : ''} ${calcStep > 4 ? 'completed' : ''}`}>📊</div>
-            </div>
-
-            {calcStep === 1 && (
-              <div className="calc-step-content">
-                <h3 className="calc-step-title">Select Relocation Preferences</h3>
-                <div className="calc-grid">
-                  <div className="form-group">
-                    <label className="form-label">Preferred Destination</label>
-                    <select
-                      className="select-control"
-                      value={calcData.destination}
-                      onChange={(e) => setCalcData({ ...calcData, destination: e.target.value })}
-                    >
-                      <option value="canada">Canada (Express Entry / PNP)</option>
-                      <option value="australia">Australia (GSM)</option>
-                      <option value="germany">Germany (Opportunity Card)</option>
-                      <option value="uk">United Kingdom (Skilled Worker)</option>
-                      <option value="nz">New Zealand (SMC)</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Visa Category</label>
-                    <select
-                      className="select-control"
-                      value={calcData.visaType}
-                      onChange={(e) => setCalcData({ ...calcData, visaType: e.target.value })}
-                    >
-                      <option value="pr">Permanent Residency (PR)</option>
-                      <option value="work">Skilled Work Permit</option>
-                      <option value="student">Study Visa / Higher Education Pathway</option>
-                    </select>
-                  </div>
-                </div>
-                <button className="btn btn-primary" onClick={() => setCalcStep(2)} style={{ marginTop: '20px' }}>
-                  Next Step <ArrowRightIcon />
-                </button>
-              </div>
-            )}
-
-            {calcStep === 2 && (
-              <div className="calc-step-content">
-                <h3 className="calc-step-title">Basic Profile Details</h3>
-                <div className="calc-grid">
-                  <div className="form-group">
-                    <label className="form-label">Age Group</label>
-                    <select
-                      className="select-control"
-                      value={calcData.age}
-                      onChange={(e) => setCalcData({ ...calcData, age: e.target.value })}
-                    >
-                      <option value="18-24">18 - 24 years</option>
-                      <option value="25-32">25 - 32 years</option>
-                      <option value="33-39">33 - 39 years</option>
-                      <option value="40+">40+ years</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Highest Qualification</label>
-                    <select
-                      className="select-control"
-                      value={calcData.education}
-                      onChange={(e) => setCalcData({ ...calcData, education: e.target.value })}
-                    >
-                      <option value="phd">Doctorate / PhD</option>
-                      <option value="masters">Master's Degree</option>
-                      <option value="bachelors">Bachelor's Degree</option>
-                      <option value="diploma">2-Year Diploma / Cert</option>
-                    </select>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)}>Back</button>
-                  <button className="btn btn-primary" onClick={() => setCalcStep(3)}>Next Step <ArrowRightIcon /></button>
-                </div>
-              </div>
-            )}
-
-            {calcStep === 3 && (
-              <div className="calc-step-content">
-                <h3 className="calc-step-title">Experience & Language Ability</h3>
-                <div className="calc-grid">
-                  <div className="form-group">
-                    <label className="form-label">Work Experience</label>
-                    <select
-                      className="select-control"
-                      value={calcData.experience}
-                      onChange={(e) => setCalcData({ ...calcData, experience: e.target.value })}
-                    >
-                      <option value="6+">6+ Years</option>
-                      <option value="3-5">3 - 5 Years</option>
-                      <option value="1-2">1 - 2 Years</option>
-                      <option value="0">Less than 1 Year</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Language Proficiency</label>
-                    <select
-                      className="select-control"
-                      value={calcData.englishScore}
-                      onChange={(e) => setCalcData({ ...calcData, englishScore: e.target.value })}
-                    >
-                      <option value="clb9">CLB 9+ / High Proficiency</option>
-                      <option value="clb8">CLB 8 / Moderate Proficiency</option>
-                      <option value="clb7">CLB 7 / Basic Qualification</option>
-                    </select>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(2)}>Back</button>
-                  <button className="btn btn-primary" onClick={runCalculation}>Calculate Points <ArrowRightIcon /></button>
-                </div>
-              </div>
-            )}
-
-            {calcStep === 4 && (
-              <div className="calc-step-content" style={{ textAlign: 'center' }}>
-                <h3 className="calc-step-title">Estimated Eligibility Score</h3>
-                <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#3b82f6', margin: '15px 0' }}>
-                  {calcScore} Points
-                </div>
-                <p style={{ color: '#94a3b8', marginBottom: '20px' }}>
-                  {calcScore >= 70
-                    ? "🎉 Strong Score! You meet the standard points benchmark for PR considerations."
-                    : "👍 Good Score! Regional nominations or specific PNP options can boost your profile."}
-                </p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)}>Recalculate</button>
-                  <a href="#contact" className="btn btn-primary">Book Consultation</a>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* BOOKING / CONSULTATION FORM */}
-      <section id="contact" className="section-padding" style={{ background: '#0b1120' }}>
-        <div className="container">
-          <div className="section-header">
-            <span className="section-tag">Direct Legal Support</span>
-            <h2 className="section-title text-gradient">Book Your Consultation</h2>
-            <p className="section-desc">
-              Schedule a personalized session with our certified specialists to explore your options.
-            </p>
-          </div>
-
-          <div className="glass-panel" style={{ maxWidth: '650px', margin: '0 auto', padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
-            {bookingSubmitted ? (
-              <div style={{ textAlign: 'center', padding: '20px 0' }}>
-                <h3 style={{ color: '#22c55e', fontSize: '1.5rem', marginBottom: '10px' }}>
-                  🎉 Consultation Request Submitted!
-                </h3>
-                <p style={{ color: '#94a3b8' }}>
-                  Thank you, <strong>{bookingData.fullName}</strong>. Our team will contact you within 24 hours.
-                </p>
-                <button className="btn btn-primary" style={{ marginTop: '20px' }} onClick={() => setBookingSubmitted(false)}>
-                  Submit Another Request
-                </button>
-              </div>
-            ) : (
-              <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-                <div className="form-group">
-                  <label className="form-label">Full Name</label>
-                  <input
-                    type="text"
-                    required
-                    className="select-control"
-                    placeholder="Enter your full name"
-                    value={bookingData.fullName}
-                    onChange={(e) => setBookingData({ ...bookingData, fullName: e.target.value })}
-                  />
-                </div>
-
-                <div className="calc-grid">
-                  <div className="form-group">
-                    <label className="form-label">Email Address</label>
-                    <input
-                      type="email"
-                      required
-                      className="select-control"
-                      placeholder="name@example.com"
-                      value={bookingData.email}
-                      onChange={(e) => setBookingData({ ...bookingData, email: e.target.value })}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label">Phone Number</label>
-                    <div className="phone-input-row" style={{ display: 'grid', gridTemplateColumns: '100px minmax(0, 1fr)', gap: '8px' }}>
-                      <select
-                        required
-                        className="select-control"
-                        value={bookingData.countryCode}
-                        onChange={(e) => setBookingData({ ...bookingData, countryCode: e.target.value })}
-                      >
-                        <option value="+91">🇮🇳 +91</option>
-                        <option value="+1">🇺🇸 +1</option>
-                        <option value="+44">🇬🇧 +44</option>
-                        <option value="+61">🇦🇺 +61</option>
-                        <option value="+64">🇳🇿 +64</option>
-                        <option value="+49">🇩🇪 +49</option>
-                        <option value="+971">🇦🇪 +971</option>
-                      </select>
-                      <input
-                        type="tel"
-                        required
-                        className="select-control"
-                        placeholder="7027466559"
-                        value={bookingData.phone}
-                        onChange={(e) => setBookingData({ ...bookingData, phone: e.target.value })}
-                      />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Target Destination</label>
-                  <select
-                    className="select-control"
-                    value={bookingData.destination}
-                    onChange={(e) => setBookingData({ ...bookingData, destination: e.target.value })}
-                  >
-                    <option value="canada">Canada</option>
-                    <option value="australia">Australia</option>
-                    <option value="germany">Germany</option>
-                    <option value="uk">United Kingdom</option>
-                    <option value="nz">New Zealand</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Preferred Consultation Time</label>
-                  <select
-                    required
-                    className="select-control"
-                    value={bookingData.consultationTime}
-                    onChange={(e) => setBookingData({ ...bookingData, consultationTime: e.target.value })}
-                  >
-                    <option value="">Select a preferred time</option>
-                    <option value="9:00 AM - 11:00 AM">9:00 AM - 11:00 AM</option>
-                    <option value="11:00 AM - 1:00 PM">11:00 AM - 1:00 PM</option>
-                    <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
-                    <option value="4:00 PM - 6:00 PM">4:00 PM - 6:00 PM</option>
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Additional Message / Inquiries</label>
-                  <textarea
-                    rows={3}
-                    className="select-control"
-                    placeholder="Provide details regarding education, work experience, or specific visa queries..."
-                    value={bookingData.message}
-                    onChange={(e) => setBookingData({ ...bookingData, message: e.target.value })}
-                  ></textarea>
-                </div>
-
-                <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', color: '#cbd5e1', fontSize: '0.86rem', lineHeight: '1.4', cursor: 'pointer' }}>
-                  <input
-                    type="checkbox"
-                    required
-                    checked={bookingData.consent}
-                    onChange={(e) => setBookingData({ ...bookingData, consent: e.target.checked })}
-                    style={{ marginTop: '3px', accentColor: '#2563eb' }}
-                  />
-                  <span>I agree to be contacted by Cloyster Visas regarding my enquiry and consultation request.</span>
-                </label>
-
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  style={{ width: '100%', justifyContent: 'center' }}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? 'Sending Request...' : 'Submit Booking Request'} {!isSubmitting && <ArrowRightIcon />}
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* FLOATING WHATSAPP BUTTON */}
-      <a
+      {/* WHATSAPP FLOATING BUTTON */}
+      <a 
+        href="https://wa.me/1234567890" 
+        target="_blank" 
+        rel="noopener noreferrer" 
         className="whatsapp-float"
-        href="https://wa.me/917027466559?text=Hello%20Cloyster%20Visas,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Chat on WhatsApp"
         style={{
           position: 'fixed',
-          bottom: '25px',
-          right: '25px',
-          backgroundColor: '#25D366',
-          color: '#ffffff',
-          borderRadius: '50%',
-          width: '56px',
-          height: '56px',
+          bottom: '24px',
+          right: '24px',
+          background: '#25D366',
+          color: '#FFF',
+          borderRadius: '50px',
+          padding: '12px',
+          boxShadow: '0 10px 25px rgba(37, 211, 102, 0.4)',
+          zIndex: 99,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'center',
-          boxShadow: '0 4px 14px rgba(0,0,0,0.3)',
-          zIndex: 999,
-          cursor: 'pointer',
-          transition: 'transform 0.2s ease-in-out'
+          justifyContent: 'center'
         }}
       >
         <WhatsAppIcon />
       </a>
 
       {/* FOOTER */}
-      <footer style={{ background: '#070a12', borderTop: '1px solid #1e293b', padding: '45px 0 25px 0', color: '#94a3b8' }}>
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '30px', marginBottom: '35px' }}>
-          
+      <footer style={{ background: '#070a12', padding: '50px 0 25px', borderTop: '1px solid #1e293b', color: '#94a3b8' }}>
+        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '30px' }}>
           <div>
-            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
               <ShieldIcon />
-              <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#f8fafc' }}>
+              <span style={{ fontSize: '1.2rem', fontWeight: '800', color: '#f8fafc' }}>
                 Cloyster <span style={{ color: '#2563eb' }}>Visas</span>
               </span>
-            </a>
-            <p style={{ fontSize: '0.88rem', lineHeight: '1.6', color: '#64748b' }}>
-              Immigration Made Simple. Providing streamlined pathways for PR, work permits, and global education.
+            </div>
+            <p style={{ fontSize: '0.88rem', lineHeight: '1.6' }}>
+              Empowering global dreams with expert guidance for immigration, study visas, and permanent residency.
             </p>
           </div>
 
           <div>
-            <h4 style={{ color: '#f8fafc', fontSize: '0.98rem', fontWeight: '700', marginBottom: '12px' }}>Quick Links</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.88rem' }}>
-              <li><a href="#about" style={{ color: '#94a3b8', textDecoration: 'none' }}>About Us</a></li>
-              <li><a href="#destinations" style={{ color: '#94a3b8', textDecoration: 'none' }}>Destinations</a></li>
-              <li><a href="#services" style={{ color: '#94a3b8', textDecoration: 'none' }}>Advisory Services</a></li>
-              <li><a href="#calculator" style={{ color: '#94a3b8', textDecoration: 'none' }}>Eligibility Check</a></li>
-              <li><a href="#contact" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '600' }}>Book Consultation</a></li>
+            <h4 style={{ color: '#f8fafc', marginBottom: '12px', fontSize: '0.95rem' }}>Quick Links</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.88rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <li><a href="#about" style={{ color: 'inherit', textDecoration: 'none' }}>About Us</a></li>
+              <li><a href="#destinations" style={{ color: 'inherit', textDecoration: 'none' }}>Destinations</a></li>
+              <li><a href="#services" style={{ color: 'inherit', textDecoration: 'none' }}>Services</a></li>
+              <li><a href="#calculator" style={{ color: 'inherit', textDecoration: 'none' }}>Eligibility Calculator</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 style={{ color: '#f8fafc', fontSize: '0.98rem', fontWeight: '700', marginBottom: '12px' }}>Office Support Section</h4>
-            <p style={{ fontSize: '0.86rem', lineHeight: '1.5', marginBottom: '8px', color: '#94a3b8' }}>
-              📍 <strong>Address:</strong> Room no. 2, 3rd Floor, A-66, Block A, Sector 7 Dwarka, Dwarka, New Delhi, Delhi-110077
-            </p>
-            <p style={{ fontSize: '0.88rem', marginBottom: '6px' }}>
-              📞 <strong>Ph no:</strong> <a href="tel:7027466559" style={{ color: '#94a3b8', textDecoration: 'none' }}>7027466559</a>
-            </p>
-            <p style={{ fontSize: '0.88rem', marginBottom: '6px' }}>
-              ✉️ <strong>Email:</strong> <a href="mailto:ak9362351@gmail.com" style={{ color: '#94a3b8', textDecoration: 'none' }}>ak9362351@gmail.com</a>
-            </p>
+            <h4 style={{ color: '#f8fafc', marginBottom: '12px', fontSize: '0.95rem' }}>Destinations</h4>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, fontSize: '0.88rem', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <li>🇨🇦 Canada Express Entry</li>
+              <li>🇦🇺 Australia GSM</li>
+              <li>🇩🇪 Germany Opportunity Card</li>
+              <li>🇬🇧 UK Skilled Worker</li>
+            </ul>
           </div>
-
         </div>
 
-        <div className="container" style={{ borderTop: '1px solid #1e293b', paddingTop: '18px', textAlign: 'center', fontSize: '0.82rem', color: '#64748b' }}>
-          <p>© {new Date().getFullYear()} Cloyster Visas. All Rights Reserved.</p>
+        <div className="container" style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', fontSize: '0.8rem' }}>
+          © {new Date().getFullYear()} Cloyster Visas. All rights reserved.
         </div>
       </footer>
     </>
