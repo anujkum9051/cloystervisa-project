@@ -1306,6 +1306,78 @@ footer {
   }
 }
 
+
+/* =========================================================
+   FINAL HEADER / ANNOUNCEMENT OVERLAP FIX
+   The announcement is above the navbar in normal document flow.
+   The navbar becomes sticky only after it reaches the top.
+   This prevents the announcement text from hiding behind it.
+   ========================================================= */
+
+.announcement-bar {
+  position: relative !important;
+  z-index: 1100 !important;
+  width: 100% !important;
+  min-height: 40px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 9px 16px !important;
+  line-height: 1.35 !important;
+  text-align: center;
+  overflow: hidden;
+}
+
+.announcement-bar strong {
+  display: inline;
+}
+
+.announcement-bar a {
+  display: inline;
+  white-space: nowrap;
+}
+
+.navbar {
+  position: sticky !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 1000 !important;
+  margin: 0 !important;
+}
+
+.navbar .nav-container {
+  min-height: 68px;
+}
+
+@media (max-width: 640px) {
+  .announcement-bar {
+    min-height: 42px;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+    flex-wrap: wrap;
+  }
+
+  .announcement-bar a {
+    white-space: nowrap;
+  }
+
+  .navbar {
+    position: sticky !important;
+    top: 0 !important;
+  }
+
+  .navbar .nav-container {
+    min-height: 62px !important;
+  }
+
+  .hero-sec {
+    padding-top: 26px !important;
+  }
+}
+
 /* ---------- VERY SMALL PHONES ---------- */
 @media (max-width: 380px) {
   .container {
@@ -1530,7 +1602,7 @@ export default function App() {
           <a href="#" className="logo-link" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
             <ShieldIcon />
             <span style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--text-primary)' }}>
-              Cloyster<span style={{ color: '#2563eb' }}>Visa</span>
+              Cloyster<span style={{ color: '#2563eb' }}>Visas</span>
             </span>
           </a>
 
@@ -2382,7 +2454,7 @@ export default function App() {
             <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '15px' }}>
               <ShieldIcon />
               <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#f8fafc' }}>
-                Cloyster<span style={{ color: '#2563eb' }}>Visa</span>
+                Cloyster<span style={{ color: '#2563eb' }}>Visas</span>
               </span>
             </a>
             <p style={{ fontSize: '0.9rem', lineHeight: '1.6', color: '#64748b' }}>
@@ -2424,7 +2496,12 @@ export default function App() {
               💬 WhatsApp: <a href="https://wa.me/917027466559?text=Hello%20Cloyster%20Visas" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
             </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              ✉️ Email: <span style={{ color: '#94a3b8' }}>[Add company email address]</span>
+              ✉️ Email: <a
+                href="mailto:ak9362351@gmail.com"
+                style={{ color: '#94a3b8', textDecoration: 'none' }}
+              >
+                ak9362351@gmail.com
+              </a>
             </p>
             <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '12px' }}>
               Available Monday – Saturday (9:00 AM – 6:00 PM)
