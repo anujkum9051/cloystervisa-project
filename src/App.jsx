@@ -616,7 +616,7 @@ const staticCountriesData = [
       { name: 'Provincial Nominee Programs (PNP)', tag: 'Regional' },
       { name: 'Post-Graduation Work Permit (PGWP)', tag: 'Study first' }
     ],
-    image: 'https://images.unsplash.com/photo-1519832979-6fa011b87665?auto=format&fit=crop&w=600&q=80'
+    image: 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg'
   },
   {
     id: 'australia',
@@ -945,7 +945,7 @@ footer {
   /* Hero */
   .hero-sec {
     min-height: auto !important;
-    padding: 42px 0 48px !important;
+    padding: 26px 0 48px !important;
   }
 
   .hero-grid {
@@ -1347,6 +1347,32 @@ footer {
     justify-self: start;
   }
 }
+
+
+@media (max-width: 640px) {
+  .roadmap-success-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .profile-score-preview {
+    padding: 16px !important;
+  }
+
+  .profile-score-preview > div:last-child {
+    width: 100%;
+    display: grid !important;
+    grid-template-columns: 1fr;
+  }
+
+  .profile-score-preview > div:last-child .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .phone-input-row {
+    grid-template-columns: 92px minmax(0, 1fr) !important;
+  }
+}
 `
 
 export default function App() {
@@ -1381,8 +1407,11 @@ export default function App() {
     fullName: '',
     email: '',
     phone: '',
+    countryCode: '+91',
     destination: 'canada',
-    message: ''
+    consultationTime: '',
+    message: '',
+    consent: false
   })
 
   useEffect(() => {
@@ -1428,8 +1457,13 @@ export default function App() {
   const handleBookingSubmit = (e) => {
     e.preventDefault()
 
-    if (!bookingData.fullName || !bookingData.email || !bookingData.phone) {
+    if (!bookingData.fullName || !bookingData.email || !bookingData.phone || !bookingData.countryCode || !bookingData.consultationTime) {
       alert('Please fill in all required fields.')
+      return
+    }
+
+    if (!bookingData.consent) {
+      alert('Please agree to be contacted by Cloyster Visas before submitting.')
       return
     }
 
@@ -1438,8 +1472,10 @@ export default function App() {
     const templateParams = {
       from_name: bookingData.fullName,
       from_email: bookingData.email,
-      phone_number: bookingData.phone,
+      phone_number: `${bookingData.countryCode} ${bookingData.phone}`,
       target_destination: bookingData.destination.toUpperCase(),
+      preferred_consultation_time: bookingData.consultationTime,
+      consent: bookingData.consent ? 'Yes' : 'No',
       message: bookingData.message
     }
 
@@ -1482,7 +1518,7 @@ export default function App() {
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
         }}
       >
-        🔥 <strong>Germany Opportunity Card Now Open</strong> — {' '}
+        🔥 <strong>Germany Opportunity Card — Assessments Live</strong> — {' '}
         <a href="#calculator" style={{ color: '#60a5fa', textDecoration: 'underline', fontWeight: '600' }}>
           Explore Eligibility →
         </a>
@@ -1542,7 +1578,7 @@ export default function App() {
         <div className="container hero-grid">
           <div className="hero-content">
             <div className="hero-badge animate-pulse-glow" style={{ background: '#0f172a', borderColor: '#2563eb' }}>
-              <span className="hero-badge-tag" style={{ background: '#2563eb' }}>CloysterVisa</span>
+              <span className="hero-badge-tag" style={{ background: '#2563eb' }}>Cloyster Visas</span>
               <span>Immigration Made Simple</span>
             </div>
             
@@ -1628,12 +1664,51 @@ export default function App() {
         </div>
       </header>
 
+      {/* VISA ROADMAP + CLIENT SUCCESS */}
+      <section className="section-padding" style={{ paddingTop: '34px', paddingBottom: '34px' }}>
+        <div className="container">
+          <div className="roadmap-success-grid" style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gap: '18px'
+          }}>
+            <div className="glass-panel" style={{
+              padding: '24px',
+              background: '#0f172a',
+              border: '1px solid #1e293b',
+              borderRadius: '16px'
+            }}>
+              <div style={{ fontSize: '1.7rem', marginBottom: '8px' }}>🗺️</div>
+              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: '#f8fafc' }}>Visa Roadmap</h3>
+              <p style={{ margin: '0 0 14px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                Profile evaluation → Pathway selection → Documentation → Application → Visa decision → Post-landing support.
+              </p>
+              <a href="#calculator" className="service-link">Start Your Roadmap <ArrowRightIcon /></a>
+            </div>
+
+            <div className="glass-panel" style={{
+              padding: '24px',
+              background: '#0f172a',
+              border: '1px solid #1e293b',
+              borderRadius: '16px'
+            }}>
+              <div style={{ fontSize: '1.7rem', marginBottom: '8px' }}>🏆</div>
+              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: '#f8fafc' }}>Client Success</h3>
+              <p style={{ margin: '0 0 14px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                128+ successful grants this month with personalized support across work, study and permanent residency pathways.
+              </p>
+              <a href="#contact" className="service-link">Talk to a Consultant <ArrowRightIcon /></a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ABOUT / FEATURES */}
       <section id="about" className="section-padding" style={{ background: '#0b1120' }}>
         <div className="container">
           <div className="section-header">
-            <span className="section-tag" style={{ background: '#0f172a', color: '#60a5fa' }}>CloysterVisa Guarantee</span>
-            <h2 className="section-title text-gradient">Why Choose CloysterVisa?</h2>
+            <span className="section-tag" style={{ background: '#0f172a', color: '#60a5fa' }}>Cloyster Visas Guarantee</span>
+            <h2 className="section-title text-gradient">Why Choose Cloyster Visas?</h2>
             <p className="section-desc">
               Navigating global migration standard procedures with clear guidance and customized advisory solutions.
             </p>
@@ -1774,14 +1849,14 @@ export default function App() {
                 Receive an extensive review of your academic history, age, skill-set, and language scores to compute your potential immigration points before application.
               </p>
               <a href="#calculator" className="service-link">
-                Evaluate profile <ArrowRightIcon />
+                Check Your Immigration Eligibility <ArrowRightIcon />
               </a>
             </div>
 
             <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
               <h3 className="service-title">3. Documentation Support</h3>
               <p className="service-desc">
-                Ensure error-free submissions. We guide you in drafting letters of explanation, credential assessment (ECA), financial proofing, and reference formats.
+                Ensure error-free submissions. We guide you in drafting letters of explanation, Educational Credential Assessment (ECA), proof of / financial documentation, and reference formats.
               </p>
               <button 
                 onClick={() => setActiveModal('documentation')} 
@@ -1804,6 +1879,52 @@ export default function App() {
               >
                 Learn more <ArrowRightIcon />
               </button>
+            </div>
+
+            <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
+              <h3 className="service-title">5. Study Visa Services</h3>
+              <p className="service-desc">
+                Get guidance for study visa applications, university and college documentation, statements of purpose, financial documentation, and post-study work pathways.
+              </p>
+              <a href="#calculator" className="service-link">
+                Check Study Visa Eligibility <ArrowRightIcon />
+              </a>
+            </div>
+          </div>
+
+          <div className="profile-score-preview glass-panel" style={{
+            marginTop: '22px',
+            padding: '18px 20px',
+            background: '#0f172a',
+            border: '1px solid #1e293b',
+            borderRadius: '14px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '18px',
+            flexWrap: 'wrap'
+          }}>
+            <div>
+              <div style={{ color: '#94a3b8', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
+                Preliminary Profile Snapshot
+              </div>
+              <div style={{ color: '#f8fafc', fontSize: '1.25rem', fontWeight: '800' }}>
+                Estimated Score: <span style={{ color: '#60a5fa' }}>472</span>
+              </div>
+              <div style={{ color: '#22c55e', fontWeight: '700', fontSize: '0.92rem', marginTop: '4px' }}>
+                🟢 Potentially Eligible
+              </div>
+              <div style={{ color: '#94a3b8', fontSize: '0.82rem', marginTop: '3px' }}>
+                Based on the information provided.
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '9px', flexWrap: 'wrap' }}>
+              <a href="#calculator" className="btn btn-secondary" style={{ padding: '10px 14px' }}>
+                Get Detailed Assessment <ArrowRightIcon />
+              </a>
+              <a href="#contact" className="btn btn-primary" style={{ padding: '10px 14px' }}>
+                Book Consultation <ArrowRightIcon />
+              </a>
             </div>
           </div>
         </div>
@@ -1863,7 +1984,7 @@ export default function App() {
                 <ul style={{ color: '#cbd5e1', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
                   <li><strong>Educational Credential Assessment (ECA):</strong> Step-by-step guidance for WES, IQAS, or ICAS submissions.</li>
                   <li><strong>Statement of Purpose & LOE:</strong> Customized Letters of Explanation for study permits or gap years.</li>
-                  <li><strong>Financial Proofing:</strong> Reviewing bank certificates, GIC setups, and liquid asset statements.</li>
+                  <li><strong>Proof of / Financial Documentation:</strong> Reviewing bank certificates, GIC setups, and liquid asset statements.</li>
                   <li><strong>Work Experience Reference Letters:</strong> Aligning job duties with exact NOC/ANZSCO codes.</li>
                 </ul>
                 <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
@@ -1881,7 +2002,7 @@ export default function App() {
                 </span>
                 <h3 style={{ fontSize: '1.6rem', marginTop: '10px', marginBottom: '15px' }}>✈️ Post-Landing Support</h3>
                 <p style={{ color: '#94a3b8', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Moving to a new country shouldn't feel overwhelming. CloysterVisa provides dedicated post-arrival assistance to ensure a smooth transition:
+                  Moving to a new country shouldn't feel overwhelming. Cloyster Visas provides dedicated post-arrival assistance to ensure a smooth transition:
                 </p>
                 <ul style={{ color: '#cbd5e1', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
                   <li><strong>Social Security / SIN Card Setup:</strong> Guided registration for work authorization and tax setup.</li>
@@ -1905,7 +2026,7 @@ export default function App() {
         <div className="container">
           <div className="section-header">
             <span className="section-tag">Interactive Evaluation</span>
-            <h2 className="section-title text-gradient">Calculate Your Visa Points</h2>
+            <h2 className="section-title text-gradient">Check Your Immigration Eligibility</h2>
             <p className="section-desc">
               Instant preliminary points assessment for Express Entry, GSM, and European job cards.
             </p>
@@ -1948,7 +2069,7 @@ export default function App() {
                     >
                       <option value="pr">Permanent Residency (PR)</option>
                       <option value="work">Skilled Work Permit</option>
-                      <option value="student">Higher Education Pathway</option>
+                      <option value="student">Study Visa / Higher Education Pathway</option>
                     </select>
                   </div>
                 </div>
@@ -2117,14 +2238,32 @@ export default function App() {
                   </div>
                   <div className="form-group">
                     <label className="form-label">Phone Number</label>
-                    <input
-                      type="tel"
-                      required
-                      className="select-control"
-                      placeholder="+1 (555) 000-0000"
-                      value={bookingData.phone}
-                      onChange={(e) => setBookingData({ ...bookingData, phone: e.target.value })}
-                    />
+                    <div className="phone-input-row" style={{ display: 'grid', gridTemplateColumns: '105px minmax(0, 1fr)', gap: '8px' }}>
+                      <select
+                        required
+                        className="select-control"
+                        value={bookingData.countryCode}
+                        onChange={(e) => setBookingData({ ...bookingData, countryCode: e.target.value })}
+                        aria-label="Country code"
+                      >
+                        <option value="+91">🇮🇳 +91</option>
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+61">🇦🇺 +61</option>
+                        <option value="+64">🇳🇿 +64</option>
+                        <option value="+49">🇩🇪 +49</option>
+                        <option value="+971">🇦🇪 +971</option>
+                        <option value="+65">🇸🇬 +65</option>
+                      </select>
+                      <input
+                        type="tel"
+                        required
+                        className="select-control"
+                        placeholder="7027466559"
+                        value={bookingData.phone}
+                        onChange={(e) => setBookingData({ ...bookingData, phone: e.target.value })}
+                      />
+                    </div>
                   </div>
                 </div>
 
@@ -2144,6 +2283,22 @@ export default function App() {
                 </div>
 
                 <div className="form-group">
+                  <label className="form-label">Preferred Consultation Time</label>
+                  <select
+                    required
+                    className="select-control"
+                    value={bookingData.consultationTime}
+                    onChange={(e) => setBookingData({ ...bookingData, consultationTime: e.target.value })}
+                  >
+                    <option value="">Select a preferred time</option>
+                    <option value="9:00 AM - 11:00 AM">9:00 AM - 11:00 AM</option>
+                    <option value="11:00 AM - 1:00 PM">11:00 AM - 1:00 PM</option>
+                    <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
+                    <option value="4:00 PM - 6:00 PM">4:00 PM - 6:00 PM</option>
+                  </select>
+                </div>
+
+                <div className="form-group">
                   <label className="form-label">Additional Message / Inquiries</label>
                   <textarea
                     rows={4}
@@ -2153,6 +2308,25 @@ export default function App() {
                     onChange={(e) => setBookingData({ ...bookingData, message: e.target.value })}
                   ></textarea>
                 </div>
+
+                <label style={{
+                  display: 'flex',
+                  alignItems: 'flex-start',
+                  gap: '10px',
+                  color: '#cbd5e1',
+                  fontSize: '0.86rem',
+                  lineHeight: '1.5',
+                  cursor: 'pointer'
+                }}>
+                  <input
+                    type="checkbox"
+                    required
+                    checked={bookingData.consent}
+                    onChange={(e) => setBookingData({ ...bookingData, consent: e.target.checked })}
+                    style={{ marginTop: '4px', accentColor: '#2563eb' }}
+                  />
+                  <span>I agree to be contacted by Cloyster Visas regarding my enquiry and consultation request.</span>
+                </label>
 
                 <button
                   type="submit"
@@ -2172,7 +2346,7 @@ export default function App() {
       {/* FLOATING WHATSAPP BUTTON */}
       <a
         className="whatsapp-float"
-        href="https://wa.me/?text=Hello%20CloysterVisa,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
+        href="https://wa.me/?text=Hello%20Cloyster Visas,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
@@ -2240,8 +2414,17 @@ export default function App() {
 
           <div>
             <h4 style={{ color: '#f8fafc', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Office Support</h4>
+            <p style={{ fontSize: '0.88rem', lineHeight: '1.55', marginBottom: '10px', color: '#94a3b8' }}>
+              📍 Room No. 2, 3rd Floor, A-66, Block A, Sector 7 Dwarka, Dwarka, New Delhi, Delhi-110077
+            </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              💬 WhatsApp: <a href="https://wa.me/?text=Hello%20CloysterVisa" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
+              📞 <a href="tel:+917027466559" style={{ color: '#94a3b8', textDecoration: 'none' }}>7027466559</a>
+            </p>
+            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
+              💬 WhatsApp: <a href="https://wa.me/917027466559?text=Hello%20Cloyster%20Visas" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
+            </p>
+            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
+              ✉️ Email: <span style={{ color: '#94a3b8' }}>[Add company email address]</span>
             </p>
             <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '12px' }}>
               Available Monday – Saturday (9:00 AM – 6:00 PM)
@@ -2251,7 +2434,7 @@ export default function App() {
         </div>
 
         <div className="container" style={{ borderTop: '1px solid #1e293b', paddingTop: '20px', textAlign: 'center', fontSize: '0.85rem', color: '#64748b' }}>
-          <p>© {new Date().getFullYear()} CloysterVisa Advisory Services. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} Cloyster Visas Advisory Services. All Rights Reserved.</p>
         </div>
       </footer>
     </>
