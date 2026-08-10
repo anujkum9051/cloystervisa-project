@@ -1,23 +1,107 @@
 import { useState, useEffect } from 'react'
 import emailjs from '@emailjs/browser'
+import cloysterLogo from './cloyster-logo.png'
 
-// Custom SVG Icons Components
-const ShieldIcon = () => (
-  <svg className="logo-icon" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ width: '28px', height: '28px' }}>
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="#0f172a" />
+// Custom SVG Icons & Components
+const LogoImage = ({ className = '', footer = false }) => (
+  <span className={`cloyster-logo-box ${footer ? 'cloyster-logo-footer' : ''} ${className}`}>
+    <img
+      src={cloysterLogo}
+      alt="Cloyster Visas"
+      className="cloyster-logo-image"
+    />
+  </span>
+)
+
+// Real Flag Image Component (Fixes Windows CA, AU, DE letter bug)
+const Flag = ({ code = 'ca', label, size = 20 }) => {
+  const codeMap = {
+    canada: 'ca',
+    australia: 'au',
+    germany: 'de',
+    uk: 'gb',
+    nz: 'nz',
+    'new zealand': 'nz',
+    india: 'in',
+    us: 'us',
+    uae: 'ae',
+    singapore: 'sg'
+  }
+  const countryCode = codeMap[code?.toLowerCase()] || code?.toLowerCase() || 'ca'
+  const flagUrl = `https://flagcdn.com/w40/${countryCode}.png`
+
+  return (
+    <img
+      src={flagUrl}
+      alt={label || `${countryCode} flag`}
+      className="flag-img"
+      style={{
+        width: `${size}px`,
+        height: 'auto',
+        maxHeight: `${size}px`,
+        borderRadius: '3px',
+        objectFit: 'cover',
+        display: 'inline-block',
+        verticalAlign: 'middle',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
+      }}
+    />
+  )
+}
+
+const SunIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="4" />
+    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42" />
+  </svg>
+)
+
+const MoonIcon = () => (
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z" />
+  </svg>
+)
+
+const ScaleIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M12 3v18M5 6h14M5 6l-3 6a3 3 0 0 0 6 0L5 6ZM19 6l-3 6a3 3 0 0 0 6 0l-3-6ZM8 21h8" />
+  </svg>
+)
+
+const TargetIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="8.5" />
+    <circle cx="12" cy="12" r="4.5" />
+    <circle cx="12" cy="12" r="1.2" fill="currentColor" />
+    <path d="M12 2v2M22 12h-2M12 22v-2M2 12h2" />
+  </svg>
+)
+
+const ReceiptIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z" />
+    <path d="M9 8h6M9 12h6M9 16h3" />
   </svg>
 )
 
 const CheckIcon = () => (
-  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="pathway-check">
-    <polyline points="20 6 9 17 4 12" />
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M20 6 9 17l-5-5" />
   </svg>
 )
 
-const ArrowRightIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="5" y1="12" x2="19" y2="12" />
-    <polyline points="12 5 19 12 12 19" />
+const ArrowRightIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M5 12h14" />
+    <path d="m13 6 6 6-6 6" />
+  </svg>
+)
+
+const CalendarIcon = ({ size = 17 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3" y="4.5" width="18" height="16" rx="2" />
+    <path d="M7 2.5v4M17 2.5v4M3 9h18" />
+    <path d="M8 13h2M14 13h2M8 16.5h2M14 16.5h2" />
   </svg>
 )
 
@@ -35,581 +119,16 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
-
-// Responsive/mobile layout fixes.
-// This keeps the desktop design intact while preventing horizontal overflow
-// and converting dense sections into a single-column mobile layout.
-const MobileResponsiveStyles = () => (
-  <style>{`
-    html {
-      scroll-behavior: smooth;
-      overflow-x: hidden;
-    }
-
-    body {
-      margin: 0;
-      overflow-x: hidden;
-      width: 100%;
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    img, svg, video, canvas {
-      max-width: 100%;
-    }
-
-    button, input, select, textarea {
-      max-width: 100%;
-    }
-
-    .container {
-      width: min(1180px, calc(100% - 40px));
-      max-width: 1180px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    .hero-sec {
-      overflow: hidden;
-    }
-
-    .hero-grid {
-      min-width: 0;
-    }
-
-    .hero-content,
-    .hero-visual,
-    .country-info-box,
-    .country-image-wrapper,
-    .service-card,
-    .calculator-box {
-      min-width: 0;
-    }
-
-    .hero-title {
-      overflow-wrap: anywhere;
-    }
-
-    .hero-desc,
-    .section-desc,
-    .country-desc,
-    .service-desc,
-    .pathway-name {
-      overflow-wrap: anywhere;
-    }
-
-    .country-img {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      object-fit: cover;
-    }
-
-    .select-control,
-    input.select-control,
-    textarea.select-control {
-      width: 100%;
-      min-width: 0;
-    }
-
-    .announcement-bar {
-      width: 100%;
-      overflow: hidden;
-    }
-
-    .announcement-bar a {
-      white-space: nowrap;
-    }
-
-    @media (max-width: 900px) {
-      .container {
-        width: min(100% - 28px, 720px) !important;
-      }
-
-      .navbar {
-        width: 100%;
-      }
-
-      .nav-container {
-        min-height: 64px;
-        gap: 10px;
-      }
-
-      .logo-link {
-        min-width: 0;
-        flex: 1 1 auto;
-      }
-
-      .logo-link > span {
-        font-size: 1.15rem !important;
-        white-space: nowrap;
-      }
-
-      .nav-actions {
-        gap: 8px;
-        flex: 0 0 auto;
-      }
-
-      .nav-actions .theme-toggle,
-      .nav-actions > .btn {
-        display: none !important;
-      }
-
-      .hamburger {
-        display: flex !important;
-        flex-direction: column;
-        justify-content: center;
-        gap: 5px;
-        width: 42px;
-        height: 42px;
-        padding: 8px;
-        cursor: pointer;
-        flex: 0 0 42px;
-      }
-
-      .hamburger span {
-        display: block;
-        width: 100%;
-        height: 3px;
-        border-radius: 99px;
-      }
-
-      .nav-menu {
-        position: fixed !important;
-        top: var(--mobile-menu-top, 124px);
-        left: 14px !important;
-        right: 14px !important;
-        width: auto !important;
-        max-height: calc(100vh - 140px);
-        overflow-y: auto;
-        padding: 14px !important;
-        display: none !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 6px !important;
-        border: 1px solid rgba(59, 130, 246, 0.25);
-        border-radius: 16px;
-        background: rgba(7, 10, 18, 0.98);
-        backdrop-filter: blur(18px);
-        box-shadow: 0 20px 60px rgba(0,0,0,.45);
-        z-index: 1200;
-      }
-
-      .nav-menu.open {
-        display: flex !important;
-      }
-
-      .nav-menu .nav-link {
-        display: block;
-        width: 100%;
-        padding: 13px 14px !important;
-        border-radius: 10px;
-      }
-
-      .nav-menu .highlight-consult-link {
-        text-align: center;
-        margin-top: 4px;
-      }
-
-      .hero-grid {
-        grid-template-columns: minmax(0, 1fr) !important;
-        gap: 24px !important;
-      }
-
-      .hero-content {
-        width: 100%;
-        max-width: 100%;
-        text-align: center;
-      }
-
-      .hero-badge {
-        width: 100%;
-        max-width: 100%;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 8px 10px !important;
-        font-size: .88rem !important;
-        line-height: 1.25;
-      }
-
-      .hero-title {
-        font-size: clamp(2.15rem, 9vw, 3.25rem) !important;
-        line-height: 1.08 !important;
-        margin-left: auto;
-        margin-right: auto;
-        max-width: 680px;
-      }
-
-      .hero-desc {
-        font-size: 1rem !important;
-        line-height: 1.65 !important;
-        max-width: 620px;
-        margin-left: auto !important;
-        margin-right: auto !important;
-      }
-
-      .hero-buttons {
-        width: 100%;
-        display: flex !important;
-        flex-direction: column;
-        align-items: stretch;
-        gap: 12px !important;
-      }
-
-      .hero-buttons .btn {
-        width: 100%;
-        justify-content: center;
-      }
-
-      .hero-content > div:last-child {
-        margin-top: 24px !important;
-      }
-
-      .hero-content > div:last-child > div {
-        justify-content: center;
-      }
-
-      .hero-visual {
-        width: 100%;
-        min-height: 0 !important;
-      }
-
-      .globe-placeholder {
-        min-height: 330px !important;
-        width: 100%;
-        overflow: hidden;
-      }
-
-      .hero-card-floating {
-        max-width: calc(100% - 20px);
-      }
-
-      .hero-card-1 {
-        top: 20px !important;
-        left: 10px !important;
-      }
-
-      .hero-card-2 {
-        top: 145px !important;
-        right: 10px !important;
-      }
-
-      .globe-placeholder > .glass-panel {
-        left: 10px !important;
-        right: 10px;
-        width: auto;
-        bottom: 8px !important;
-      }
-
-      .flight-path {
-        max-width: 100%;
-      }
-
-      .section-padding {
-        padding-top: 58px !important;
-        padding-bottom: 58px !important;
-      }
-
-      .section-header {
-        margin-bottom: 28px !important;
-      }
-
-      .section-title {
-        font-size: clamp(1.85rem, 7vw, 2.5rem) !important;
-        line-height: 1.15 !important;
-      }
-
-      .section-desc {
-        font-size: .98rem !important;
-        line-height: 1.6;
-      }
-
-      .services-grid {
-        grid-template-columns: 1fr !important;
-      }
-
-      .services-grid > * {
-        width: 100%;
-      }
-
-      .explorer-tabs {
-        display: flex !important;
-        overflow-x: auto;
-        overflow-y: hidden;
-        justify-content: flex-start !important;
-        flex-wrap: nowrap !important;
-        gap: 8px !important;
-        padding: 4px 2px 12px;
-        scrollbar-width: none;
-        -webkit-overflow-scrolling: touch;
-      }
-
-      .explorer-tabs::-webkit-scrollbar {
-        display: none;
-      }
-
-      .tab-btn {
-        flex: 0 0 auto;
-        white-space: nowrap;
-      }
-
-      #destinations .glass-panel {
-        padding: 16px !important;
-      }
-
-      .country-display-grid {
-        grid-template-columns: 1fr !important;
-        gap: 22px !important;
-      }
-
-      .country-image-wrapper {
-        min-height: 220px;
-      }
-
-      .country-img {
-        height: 220px !important;
-        min-height: 220px;
-      }
-
-      .country-flag-badge {
-        left: 12px !important;
-        right: 12px;
-        width: auto !important;
-        max-width: calc(100% - 24px);
-      }
-
-      .country-title {
-        font-size: 1.45rem !important;
-        line-height: 1.25;
-      }
-
-      .country-stats-row {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
-      }
-
-      .c-stat-card {
-        min-width: 0;
-      }
-
-      .pathway-item {
-        display: grid !important;
-        grid-template-columns: 22px minmax(0, 1fr);
-        gap: 8px !important;
-        align-items: start;
-      }
-
-      .pathway-item .pathway-tag {
-        grid-column: 2;
-        justify-self: start;
-        margin-top: -2px;
-      }
-
-      .calculator-box {
-        padding: 20px !important;
-      }
-
-      .calc-grid {
-        grid-template-columns: 1fr !important;
-      }
-
-      .calc-step-content .btn {
-        min-height: 46px;
-      }
-
-      #contact .glass-panel {
-        padding: 22px !important;
-      }
-
-      #contact form {
-        gap: 16px !important;
-      }
-
-      #contact .calc-grid {
-        gap: 16px !important;
-      }
-
-      footer .container {
-        grid-template-columns: 1fr !important;
-        gap: 28px !important;
-      }
-
-      footer {
-        padding-top: 40px !important;
-      }
-
-      .whatsapp-float {
-        right: 16px !important;
-        bottom: 16px !important;
-        width: 54px !important;
-        height: 54px !important;
-      }
-    }
-
-    @media (max-width: 520px) {
-      .container {
-        width: calc(100% - 24px) !important;
-      }
-
-      .announcement-bar {
-        padding: 8px 10px !important;
-        font-size: .76rem !important;
-        line-height: 1.35;
-      }
-
-      .navbar {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-      }
-
-      .nav-container {
-        width: calc(100% - 20px) !important;
-      }
-
-      .logo-icon {
-        width: 25px !important;
-        height: 25px !important;
-      }
-
-      .hero-sec {
-        padding-top: 52px !important;
-      }
-
-      .hero-badge-tag {
-        padding: 6px 11px !important;
-      }
-
-      .hero-title {
-        font-size: clamp(2rem, 12vw, 2.65rem) !important;
-      }
-
-      .hero-desc {
-        font-size: .96rem !important;
-      }
-
-      .glass-panel {
-        max-width: 100%;
-      }
-
-      .hero-card-floating {
-        padding: 10px !important;
-        gap: 8px !important;
-      }
-
-      .hero-card-floating h4 {
-        font-size: .78rem !important;
-      }
-
-      .hero-card-floating p {
-        font-size: .68rem !important;
-      }
-
-      .globe-placeholder {
-        min-height: 300px !important;
-      }
-
-      .hero-card-1 {
-        top: 10px !important;
-        left: 4px !important;
-      }
-
-      .hero-card-2 {
-        top: 125px !important;
-        right: 4px !important;
-      }
-
-      .globe-placeholder > .glass-panel {
-        left: 4px !important;
-        right: 4px !important;
-        padding: 10px 12px !important;
-      }
-
-      .globe-placeholder > .glass-panel h5 {
-        font-size: .78rem !important;
-      }
-
-      .globe-placeholder > .glass-panel p {
-        font-size: .68rem !important;
-      }
-
-      .country-image-wrapper,
-      .country-img {
-        height: 190px !important;
-        min-height: 190px !important;
-      }
-
-      .country-info-box {
-        padding: 0 !important;
-      }
-
-      .country-title {
-        font-size: 1.25rem !important;
-      }
-
-      .country-desc {
-        font-size: .9rem !important;
-        line-height: 1.55;
-      }
-
-      .pathway-item {
-        padding: 10px 0 !important;
-      }
-
-      .pathway-name {
-        font-size: .86rem !important;
-      }
-
-      .pathway-tag {
-        font-size: .72rem !important;
-      }
-
-      .calc-progress {
-        transform: scale(.9);
-        transform-origin: left center;
-        width: 111%;
-      }
-
-      .calc-step-title {
-        font-size: 1.15rem !important;
-      }
-
-      .calc-step-content > div[style*="display: flex"] {
-        flex-wrap: wrap;
-      }
-
-      .calc-step-content > div[style*="display: flex"] .btn {
-        flex: 1 1 140px;
-      }
-
-      .service-card {
-        padding: 24px !important;
-      }
-
-      #contact .section-desc {
-        font-size: .92rem !important;
-      }
-
-      .nav-menu {
-        top: 116px !important;
-      }
-    }
-  `}</style>
-)
-
-
 // Destination Countries Data
 const staticCountriesData = [
   {
     id: 'canada',
     name: 'Canada',
-    flag: '🇨🇦',
+    code: 'ca',
     title: 'Immigrate to Canada via Express Entry & PNPs',
     desc: 'Canada offers some of the world\'s most welcoming immigration programs. Whether you want to apply for Permanent Residency (PR), study at top universities, or obtain a work permit, Canada provides stable career pathways and an exceptional quality of life.',
     successRate: '94%',
-    processingTime: '6-8 Months',
+    processingTime: '6–8 Months*',
     minPoints: '67/100',
     pathways: [
       { name: 'Express Entry (FSWP, FSTP, CEC)', tag: 'PR Path' },
@@ -621,12 +140,12 @@ const staticCountriesData = [
   {
     id: 'australia',
     name: 'Australia',
-    flag: '🇦🇺',
+    code: 'au',
     title: 'Explore General Skilled Migration in Australia',
     desc: 'With a booming economy and a demand for skilled professionals, Australia offers competitive visa pathways. The General Skilled Migration (GSM) program allows eligible workers to live and work permanently without needing a sponsor.',
     successRate: '91%',
-    processingTime: '8-10 Months',
-    minPoints: '65 Points',
+    processingTime: '8–10 Months*',
+    minPoints: '65',
     pathways: [
       { name: 'Skilled Independent Visa (Subclass 189)', tag: 'Independent' },
       { name: 'Skilled Nominated Visa (Subclass 190)', tag: 'State Sponsor' },
@@ -637,11 +156,11 @@ const staticCountriesData = [
   {
     id: 'germany',
     name: 'Germany',
-    flag: '🇩🇪',
+    code: 'de',
     title: 'Work & Live in Germany with Opportunity Card',
     desc: 'Germany\'s new Opportunity Card (Chancenkarte) makes job hunting in Europe easier than ever. Skilled professionals can relocate to Germany to secure employment in engineering, IT, healthcare, and other highly demanded fields.',
     successRate: '88%',
-    processingTime: '3-5 Months',
+    processingTime: '3–5 Months*',
     minPoints: '6/10 Points',
     pathways: [
       { name: 'Opportunity Card (Chancenkarte)', tag: 'Job Search' },
@@ -653,11 +172,11 @@ const staticCountriesData = [
   {
     id: 'uk',
     name: 'United Kingdom',
-    flag: '🇬🇧',
+    code: 'gb',
     title: 'UK Skilled Worker & Expansion Visas',
     desc: 'The UK\'s points-based system offers attractive visas for global talent. Relocate quickly as a skilled worker or establish a branch of your business using the UK Expansion Worker pathway.',
     successRate: '92%',
-    processingTime: '2-4 Months',
+    processingTime: '2–4 Months*',
     minPoints: '70 Points',
     pathways: [
       { name: 'Skilled Worker Visa (Sponsored)', tag: 'Work' },
@@ -669,11 +188,11 @@ const staticCountriesData = [
   {
     id: 'nz',
     name: 'New Zealand',
-    flag: '🇳🇿',
+    code: 'nz',
     title: 'New Zealand Skilled Migrant Category',
     desc: 'Experience exceptional work-life balance in New Zealand. The Skilled Migrant Category Resident Visa allows skilled specialists to work and live in New Zealand permanently.',
     successRate: '89%',
-    processingTime: '6-9 Months',
+    processingTime: '6–9 Months*',
     minPoints: '6 Points',
     pathways: [
       { name: 'Skilled Migrant Category (SMC)', tag: 'PR Path' },
@@ -683,697 +202,6 @@ const staticCountriesData = [
     image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=600&q=80'
   }
 ]
-
-const mobileResponsiveStyles = `
-/* =========================================================
-   CLOYSTERVISA — MOBILE-FIRST RESPONSIVE PATCH
-   Keeps desktop layout, but gives phones their own layout.
-   ========================================================= */
-
-html, body, #root {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden !important;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-img, svg, video {
-  max-width: 100%;
-}
-
-button,
-input,
-select,
-textarea {
-  max-width: 100%;
-  font: inherit;
-}
-
-.container {
-  width: min(1180px, calc(100% - 40px));
-  margin-inline: auto;
-}
-
-.navbar {
-  width: 100%;
-}
-
-.nav-container {
-  min-width: 0;
-}
-
-.nav-menu {
-  min-width: 0;
-}
-
-.hero-sec,
-.section-padding,
-footer {
-  overflow: hidden;
-}
-
-.hero-grid,
-.country-display-grid,
-.calc-grid,
-.services-grid {
-  min-width: 0;
-}
-
-.hero-content,
-.hero-visual,
-.country-info-box,
-.country-image-wrapper,
-.calc-step-content,
-.service-card {
-  min-width: 0;
-}
-
-.hero-title {
-  overflow-wrap: anywhere;
-  word-break: normal;
-}
-
-.hero-desc,
-.section-desc,
-.country-desc,
-.service-desc {
-  overflow-wrap: anywhere;
-}
-
-/* ---------- TABLET ---------- */
-@media (max-width: 900px) {
-  .container {
-    width: min(100% - 32px, 760px);
-  }
-
-  .nav-container {
-    min-height: 68px;
-  }
-
-  .nav-actions > .btn {
-    display: none !important;
-  }
-
-  .nav-menu {
-    gap: 10px;
-  }
-
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .hero-content {
-    max-width: 720px;
-    margin-inline: auto;
-    text-align: center;
-  }
-
-  .hero-visual {
-    min-height: 340px;
-    max-width: 720px;
-    width: 100%;
-    margin-inline: auto;
-  }
-
-  .hero-buttons {
-    justify-content: center;
-  }
-
-  .country-display-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .services-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-
-  .calc-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-  }
-}
-
-/* ---------- PHONE ---------- */
-@media (max-width: 640px) {
-  html {
-    scroll-behavior: smooth;
-  }
-
-  body {
-    min-width: 0 !important;
-  }
-
-  .container {
-    width: calc(100% - 28px) !important;
-    max-width: none !important;
-    margin-inline: auto !important;
-  }
-
-  /* Announcement */
-  .announcement-bar {
-    padding: 9px 12px !important;
-    min-height: 40px;
-    font-size: 12px !important;
-    line-height: 1.35 !important;
-    white-space: normal !important;
-  }
-
-  .announcement-bar a {
-    white-space: nowrap;
-  }
-
-  /* Header */
-  .navbar {
-    position: relative;
-    z-index: 100;
-  }
-
-  .nav-container {
-    min-height: 62px !important;
-    padding-block: 8px;
-  }
-
-  .logo-link {
-    gap: 6px !important;
-    flex: 0 0 auto;
-  }
-
-  .logo-link .logo-icon {
-    width: 25px !important;
-    height: 25px !important;
-  }
-
-  .logo-link span {
-    font-size: 1.08rem !important;
-  }
-
-  .nav-actions {
-    margin-left: auto;
-    gap: 7px !important;
-  }
-
-  .theme-toggle {
-    width: 36px;
-    height: 36px;
-    padding: 0 !important;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .hamburger {
-    width: 38px !important;
-    height: 38px !important;
-    display: flex !important;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    cursor: pointer;
-    flex: 0 0 auto;
-  }
-
-  .hamburger span {
-    width: 23px !important;
-    height: 2.5px !important;
-    border-radius: 999px;
-  }
-
-  /* Mobile dropdown */
-  .nav-menu {
-    position: absolute !important;
-    top: calc(100% + 6px);
-    left: 14px;
-    right: 14px;
-    width: auto !important;
-    display: none !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 4px !important;
-    padding: 10px !important;
-    border-radius: 16px;
-    background: rgba(7, 10, 18, 0.98);
-    border: 1px solid #1e293b;
-    box-shadow: 0 18px 45px rgba(0,0,0,.35);
-    backdrop-filter: blur(18px);
-  }
-
-  .nav-menu.open {
-    display: flex !important;
-  }
-
-  .nav-menu .nav-link {
-    display: flex !important;
-    align-items: center;
-    min-height: 44px;
-    padding: 10px 12px !important;
-    border-radius: 10px !important;
-    font-size: 14px !important;
-  }
-
-  .nav-menu .highlight-consult-link {
-    justify-content: center;
-    margin-top: 4px;
-  }
-
-  /* Hero */
-  .hero-sec {
-    min-height: auto !important;
-    padding: 26px 0 48px !important;
-  }
-
-  .hero-grid {
-    display: block !important;
-    width: 100% !important;
-  }
-
-  .hero-content {
-    width: 100% !important;
-    max-width: 100% !important;
-    padding: 0 !important;
-    text-align: center !important;
-  }
-
-  .hero-badge {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height: 46px;
-    padding: 5px 7px !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    gap: 7px !important;
-    border-radius: 999px !important;
-    font-size: 11px !important;
-    line-height: 1.15;
-  }
-
-  .hero-badge-tag {
-    flex: 0 0 auto;
-    padding: 8px 10px !important;
-    border-radius: 999px !important;
-    font-size: 11px !important;
-  }
-
-  .hero-title {
-    width: 100% !important;
-    max-width: 100% !important;
-    margin: 24px 0 14px !important;
-    font-size: clamp(2.05rem, 10.5vw, 3.1rem) !important;
-    line-height: 1.02 !important;
-    letter-spacing: -1.7px !important;
-    overflow-wrap: normal !important;
-    word-break: normal !important;
-  }
-
-  .hero-desc {
-    width: 100% !important;
-    max-width: 430px !important;
-    margin: 0 auto 24px !important;
-    padding-inline: 3px;
-    font-size: 15px !important;
-    line-height: 1.7 !important;
-    text-align: center !important;
-  }
-
-  .hero-buttons {
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 10px !important;
-    align-items: stretch !important;
-  }
-
-  .hero-buttons .btn {
-    width: 100% !important;
-    min-height: 54px;
-    justify-content: center !important;
-    padding: 14px 18px !important;
-    font-size: 15px !important;
-  }
-
-  .hero-content > div:last-child {
-    margin-top: 28px !important;
-  }
-
-  .hero-content > div:last-child > p {
-    font-size: 11px !important;
-    letter-spacing: .8px !important;
-    margin-bottom: 9px !important;
-  }
-
-  .hero-content > div:last-child > div {
-    justify-content: center !important;
-    gap: 7px !important;
-  }
-
-  .hero-content .glass-panel {
-    padding: 6px 10px !important;
-    font-size: 12px !important;
-  }
-
-  /* The decorative desktop globe/card area is hidden on small phones.
-     This prevents overlap and gives the CTA/content the full screen width. */
-  .hero-visual {
-    display: none !important;
-  }
-
-  /* Sections */
-  .section-padding {
-    padding: 54px 0 !important;
-  }
-
-  .section-header {
-    margin-bottom: 26px !important;
-  }
-
-  .section-tag {
-    font-size: 11px !important;
-  }
-
-  .section-title {
-    font-size: clamp(1.75rem, 8vw, 2.3rem) !important;
-    line-height: 1.12 !important;
-    margin-top: 10px !important;
-  }
-
-  .section-desc {
-    font-size: 14px !important;
-    line-height: 1.65 !important;
-  }
-
-  /* Feature/service grids */
-  .services-grid {
-    grid-template-columns: 1fr !important;
-    gap: 14px !important;
-  }
-
-  .services-grid > * {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .glass-panel {
-    max-width: 100%;
-  }
-
-  .services-grid .glass-panel {
-    padding: 22px !important;
-  }
-
-  .service-card {
-    padding: 22px !important;
-  }
-
-  .service-title {
-    font-size: 17px !important;
-  }
-
-  .service-desc {
-    font-size: 14px !important;
-    line-height: 1.65 !important;
-  }
-
-  /* Destination tabs */
-  .explorer-tabs {
-    display: flex !important;
-    flex-wrap: nowrap !important;
-    overflow-x: auto !important;
-    overflow-y: hidden !important;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    gap: 8px !important;
-    padding: 3px 2px 10px !important;
-    margin-inline: -2px;
-  }
-
-  .explorer-tabs::-webkit-scrollbar {
-    display: none;
-  }
-
-  .tab-btn {
-    flex: 0 0 auto !important;
-    min-height: 42px;
-    white-space: nowrap !important;
-    padding: 9px 13px !important;
-    font-size: 13px !important;
-  }
-
-  .country-display-grid {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 20px !important;
-  }
-
-  .country-display-grid > * {
-    width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  .country-image-wrapper {
-    height: 210px !important;
-    min-height: 210px !important;
-  }
-
-  .country-img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
-  }
-
-  .country-info-box {
-    padding: 0 !important;
-  }
-
-  .country-title {
-    font-size: 21px !important;
-    line-height: 1.2 !important;
-  }
-
-  .country-desc {
-    font-size: 14px !important;
-    line-height: 1.65 !important;
-  }
-
-  .country-stats-row {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 8px !important;
-  }
-
-  .c-stat-card {
-    width: 100% !important;
-    padding: 12px !important;
-  }
-
-  .c-stat-value {
-    font-size: 18px !important;
-  }
-
-  .pathway-item {
-    display: grid !important;
-    grid-template-columns: 20px minmax(0, 1fr) auto !important;
-    gap: 8px !important;
-    align-items: center !important;
-    padding: 10px 0 !important;
-  }
-
-  .pathway-name {
-    min-width: 0 !important;
-    font-size: 13px !important;
-    line-height: 1.4 !important;
-  }
-
-  .pathway-tag {
-    white-space: nowrap !important;
-    font-size: 10px !important;
-  }
-
-  /* Calculator */
-  .calculator-box {
-    padding: 20px 15px !important;
-    border-radius: 16px !important;
-  }
-
-  .calc-progress {
-    margin-bottom: 28px !important;
-  }
-
-  .calc-step-content {
-    width: 100% !important;
-  }
-
-  .calc-step-title {
-    font-size: 19px !important;
-    line-height: 1.3 !important;
-  }
-
-  .calc-grid {
-    display: grid !important;
-    grid-template-columns: 1fr !important;
-    gap: 15px !important;
-  }
-
-  .form-group {
-    min-width: 0 !important;
-  }
-
-  .form-label {
-    font-size: 13px !important;
-  }
-
-  .select-control {
-    width: 100% !important;
-    min-width: 0 !important;
-    min-height: 48px;
-    font-size: 14px !important;
-  }
-
-  .calc-step-content > div[style*="display: flex"] {
-    flex-wrap: wrap !important;
-  }
-
-  .calc-step-content .btn {
-    min-height: 48px;
-  }
-
-  /* Contact form */
-  #contact .glass-panel {
-    padding: 22px 16px !important;
-    border-radius: 16px !important;
-  }
-
-  #contact form {
-    gap: 15px !important;
-  }
-
-  #contact .calc-grid {
-    gap: 15px !important;
-  }
-
-  #contact textarea {
-    min-height: 120px;
-    resize: vertical;
-  }
-
-  /* Modal */
-  [style*="position: fixed"][style*="z-index: 1000"] {
-    align-items: flex-end !important;
-    padding: 10px !important;
-  }
-
-  [style*="position: fixed"][style*="z-index: 1000"] > .glass-panel {
-    max-height: 88vh !important;
-    overflow-y: auto !important;
-    padding: 24px 18px !important;
-    border-radius: 18px 18px 12px 12px !important;
-  }
-
-  /* WhatsApp */
-  .whatsapp-float {
-    width: 54px !important;
-    height: 54px !important;
-    right: 14px !important;
-    bottom: 14px !important;
-  }
-
-  .whatsapp-float svg {
-    width: 26px !important;
-    height: 26px !important;
-  }
-
-  /* Footer */
-  footer {
-    padding: 40px 0 20px !important;
-  }
-
-  footer .container {
-    grid-template-columns: 1fr !important;
-    gap: 26px !important;
-  }
-
-  footer p,
-  footer li,
-  footer a {
-    font-size: 13px !important;
-    line-height: 1.6;
-  }
-}
-
-/* ---------- VERY SMALL PHONES ---------- */
-@media (max-width: 380px) {
-  .container {
-    width: calc(100% - 22px) !important;
-  }
-
-  .logo-link span {
-    font-size: 1rem !important;
-  }
-
-  .hero-badge {
-    font-size: 10px !important;
-  }
-
-  .hero-badge-tag {
-    font-size: 10px !important;
-    padding-inline: 8px !important;
-  }
-
-  .hero-title {
-    font-size: 1.95rem !important;
-  }
-
-  .hero-desc {
-    font-size: 14px !important;
-  }
-
-  .hero-content .glass-panel {
-    font-size: 11px !important;
-    padding-inline: 8px !important;
-  }
-
-  .pathway-item {
-    grid-template-columns: 18px minmax(0, 1fr) !important;
-  }
-
-  .pathway-tag {
-    grid-column: 2;
-    justify-self: start;
-  }
-}
-
-
-@media (max-width: 640px) {
-  .roadmap-success-grid {
-    grid-template-columns: 1fr !important;
-  }
-
-  .profile-score-preview {
-    padding: 16px !important;
-  }
-
-  .profile-score-preview > div:last-child {
-    width: 100%;
-    display: grid !important;
-    grid-template-columns: 1fr;
-  }
-
-  .profile-score-preview > div:last-child .btn {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .phone-input-row {
-    grid-template-columns: 92px minmax(0, 1fr) !important;
-  }
-}
-`
 
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -1398,7 +226,7 @@ export default function App() {
     experience: '3-5',
     englishScore: 'clb9'
   })
-  const [calcScore, setCalcScore] = useState(0)
+  const [calcScore, setCalcScore] = useState(75)
 
   // Booking Form State
   const [bookingSubmitted, setBookingSubmitted] = useState(false)
@@ -1422,10 +250,12 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme)
+  }, [theme])
+
   const toggleTheme = () => {
-    const nextTheme = theme === 'dark' ? 'light' : 'dark'
-    setTheme(nextTheme)
-    document.documentElement.setAttribute('data-theme', nextTheme)
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'))
   }
 
   // Calculate Eligibility Score Client-Side
@@ -1502,10 +332,197 @@ export default function App() {
 
   const visualPolishStyles = `
     /* =========================================================
-       CLOYSTER VISAS — FINAL VISUAL POLISH
-       Keeps the existing design/functionality and fixes only
-       header overlap, spacing, footer alignment and email layout.
+       CLOYSTER VISAS — FULL LIGHT/DARK THEMING & POLISHED STYLES
        ========================================================= */
+
+    :root {
+      --bg-main: #060b13;
+      --bg-card: #0f172a;
+      --bg-alt: #0b1120;
+      --border-color: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-blue: #2563eb;
+      --accent-hover: #1d4ed8;
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    [data-theme="light"] {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-alt: #f1f5f9;
+      --border-color: #e2e8f0;
+      --text-primary: #0f172a;
+      --text-secondary: #334155;
+      --text-muted: #64748b;
+      --accent-blue: #2563eb;
+      --accent-hover: #1d4ed8;
+      --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-primary);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .cloyster-logo-box {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 178px;
+      height: 54px;
+      padding: 4px 9px;
+      box-sizing: border-box;
+      background: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 18px rgba(0,0,0,.16);
+    }
+
+    .cloyster-logo-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+    }
+
+    .cloyster-logo-footer {
+      width: 190px;
+      height: 58px;
+    }
+
+    .logo-link {
+      display: inline-flex !important;
+      align-items: center;
+    }
+
+    .theme-toggle {
+      color: var(--text-primary) !important;
+      background: var(--bg-card) !important;
+      border: 1px solid var(--border-color) !important;
+      border-radius: 10px !important;
+      padding: 8px 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .glass-panel {
+      background: var(--bg-card) !important;
+      border: 1px solid var(--border-color) !important;
+      box-shadow: var(--card-shadow);
+      border-radius: 16px;
+    }
+
+    .text-gradient {
+      color: var(--text-primary) !important;
+    }
+
+    .select-control {
+      background: var(--bg-main) !important;
+      color: var(--text-primary) !important;
+      border: 1px solid var(--border-color) !important;
+      padding: 10px 14px;
+      border-radius: 8px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .hero-trust-line {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 18px;
+      align-items: center;
+      margin-top: 20px;
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    .hero-trust-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-trust-item svg {
+      width: 16px;
+      height: 16px;
+      color: #22c55e;
+      flex: 0 0 auto;
+    }
+
+    .destination-chip {
+      display: inline-flex !important;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px !important;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .country-note {
+      margin-top: 12px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+    .country-next-step {
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .country-next-step-title {
+      color: var(--text-primary);
+      font-size: 0.98rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .country-next-step-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .clean-feature-icon {
+      width: 52px;
+      height: 52px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      color: #60a5fa;
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      margin-bottom: 14px;
+    }
+
+    .study-support-tag {
+      display: inline-flex;
+      margin: 0 0 12px;
+      padding: 5px 9px;
+      border-radius: 999px;
+      color: #93c5fd;
+      background: rgba(37, 99, 235, 0.12);
+      border: 1px solid rgba(59, 130, 246, 0.22);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: .35px;
+    }
 
     .announcement-bar {
       position: relative !important;
@@ -1518,20 +535,46 @@ export default function App() {
       text-align: center;
     }
 
-    /* The announcement is in normal flow; the navbar now follows it
-       instead of covering it. On scroll the navbar stays visible. */
     .navbar {
       position: sticky !important;
       top: 0 !important;
       z-index: 1000 !important;
       width: 100%;
+      background: var(--bg-card) !important;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-link:hover {
+      color: var(--accent-blue);
     }
 
     .hero-sec {
       margin-top: 0 !important;
     }
 
-    /* Cleaner desktop footer proportions. */
+    @media (min-width: 901px) {
+      .hero-sec {
+        padding-top: 18px !important;
+      }
+
+      .hero-content {
+        padding-top: 0 !important;
+      }
+    }
+
+    footer {
+      background: var(--bg-alt) !important;
+      border-top: 1px solid var(--border-color) !important;
+      padding: 50px 0 25px 0;
+      color: var(--text-secondary);
+    }
+
     footer > .container:first-child {
       grid-template-columns: 1.15fr .85fr 1.15fr 1.35fr !important;
       column-gap: 48px !important;
@@ -1566,6 +609,33 @@ export default function App() {
     }
 
     @media (max-width: 640px) {
+      .cloyster-logo-image {
+        width: 138px;
+      }
+
+      .cloyster-logo-footer {
+        width: 175px;
+      }
+
+      .hero-trust-line {
+        justify-content: center;
+        font-size: 0.78rem;
+        gap: 7px 12px;
+      }
+
+      .country-next-step {
+        align-items: stretch;
+      }
+
+      .country-next-step-actions {
+        width: 100%;
+      }
+
+      .country-next-step-actions .btn {
+        flex: 1 1 180px;
+        justify-content: center;
+      }
+
       .announcement-bar {
         min-height: 42px;
         padding: 8px 12px !important;
@@ -1593,9 +663,7 @@ export default function App() {
   `
 
   return (
-    <>
-      <style dangerouslySetInnerHTML={{ __html: mobileResponsiveStyles }} />
-      <MobileResponsiveStyles />
+    <div style={{ backgroundColor: 'var(--bg-main)', minHeight: '100vh' }}>
       <style dangerouslySetInnerHTML={{ __html: visualPolishStyles }} />
 
       {/* TOP ANNOUNCEMENT BAR */}
@@ -1611,7 +679,7 @@ export default function App() {
           borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
         }}
       >
-        🔥 <strong>Germany Opportunity Card — Assessments Live</strong> — {' '}
+        🔥 <strong>Germany Opportunity Card — Assessments Live</strong> —{' '}
         <a href="#calculator" style={{ color: '#60a5fa', textDecoration: 'underline', fontWeight: '600' }}>
           Explore Eligibility →
         </a>
@@ -1619,22 +687,19 @@ export default function App() {
 
       {/* HEADER & NAVBAR */}
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
-        <div className="container nav-container">
-          <a href="#" className="logo-link" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-            <ShieldIcon />
-            <span style={{ fontSize: '1.4rem', fontWeight: '800', color: 'var(--text-primary)' }}>
-              Cloyster <span style={{ color: '#2563eb' }}>Visas</span>
-            </span>
+        <div className="container nav-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 24px' }}>
+          <a href="#" className="logo-link" style={{ textDecoration: 'none' }} aria-label="Cloyster Visas home">
+            <LogoImage />
           </a>
 
-          <div className={`nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
+          <div className={`nav-menu ${mobileMenuOpen ? 'open' : ''}`} style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
             <a href="#about" className="nav-link" onClick={() => setMobileMenuOpen(false)}>About Us</a>
             <a href="#destinations" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Destinations</a>
             <a href="#services" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Services</a>
             <a href="#calculator" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Eligibility Check</a>
-            <a 
-              href="#contact" 
-              className="nav-link highlight-consult-link" 
+            <a
+              href="#contact"
+              className="nav-link highlight-consult-link"
               onClick={() => setMobileMenuOpen(false)}
               style={{
                 background: 'rgba(37, 99, 235, 0.15)',
@@ -1645,15 +710,17 @@ export default function App() {
                 fontWeight: '600'
               }}
             >
-              Book Consult 📅
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                Book a Consultation <CalendarIcon />
+              </span>
             </a>
           </div>
 
-          <div className="nav-actions">
-            <button className="theme-toggle" onClick={toggleTheme} aria-label="Toggle theme">
-              {theme === 'dark' ? '☀️' : '🌙'}
+          <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <button className="theme-toggle" onClick={toggleTheme} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+              {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
             </button>
-            <a href="#calculator" className="btn btn-primary" style={{ padding: '10px 18px', borderRadius: '8px' }}>
+            <a href="#calculator" className="btn btn-primary" style={{ padding: '10px 18px', borderRadius: '8px', background: 'var(--accent-blue)', color: '#fff', textDecoration: 'none', fontWeight: '600' }}>
               Check Your Eligibility
             </a>
             <div className="hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -1666,67 +733,73 @@ export default function App() {
       </nav>
 
       {/* HERO SECTION */}
-      <header className="hero-sec" style={{ background: 'radial-gradient(circle at top right, #0f172a, var(--bg-dark))' }}>
+      <header className="hero-sec">
         <div className="hero-mesh"></div>
         <div className="container hero-grid">
           <div className="hero-content">
-            <div className="hero-badge animate-pulse-glow" style={{ background: '#0f172a', borderColor: '#2563eb' }}>
-              <span className="hero-badge-tag" style={{ background: '#2563eb' }}>Cloyster Visas</span>
-              <span>Immigration Made Simple</span>
+            <div className="hero-badge animate-pulse-glow" style={{ background: 'var(--bg-card)', borderColor: 'var(--accent-blue)' }}>
+              <span className="hero-badge-tag" style={{ background: '#2563eb', color: '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', marginRight: '8px' }}>Cloyster Visas</span>
+              <span style={{ color: 'var(--text-secondary)' }}>Immigration Made Simple</span>
             </div>
-            
-            <h1 className="hero-title text-gradient" style={{ fontSize: '2.8rem', lineHeight: '1.2' }}>
+
+            <h1 className="hero-title text-gradient" style={{ fontSize: '2.8rem', lineHeight: '1.2', margin: '16px 0' }}>
               Immigration Made Simple.
             </h1>
-            <p className="hero-desc" style={{ fontSize: '1.15rem', color: '#94a3b8', margin: '15px 0 25px 0' }}>
-              Personalized Visa Solutions for Work, Study & Permanent Residency. Connect with trusted immigration consultants for global mobility.
+            <p className="hero-desc" style={{ fontSize: '1.15rem', color: 'var(--text-secondary)', margin: '15px 0 25px 0' }}>
+              Personalized visa solutions for Work, Study & Permanent Residency, with guidance tailored to your profile and destination.
             </p>
 
-            <div className="hero-buttons">
-              <a href="#calculator" className="btn btn-primary">
+            <div className="hero-buttons" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
+              <a href="#calculator" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 Check Your Eligibility <ArrowRightIcon />
               </a>
-              <a href="#contact" className="btn btn-secondary" style={{ background: '#0f172a', borderColor: '#334155' }}>
-                Talk to Consultant
+              <a href="#contact" className="btn btn-secondary" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
+                Book a Consultation
               </a>
             </div>
 
-            <div style={{ marginTop: '30px' }}>
-              <p style={{ fontSize: '0.85rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px', fontWeight: '600' }}>
+            <div className="hero-trust-line" aria-label="Cloyster Visas service strengths">
+              <span className="hero-trust-item"><CheckIcon /> Profile Assessment</span>
+              <span className="hero-trust-item"><CheckIcon /> Transparent Guidance</span>
+              <span className="hero-trust-item"><CheckIcon /> End-to-End Support</span>
+            </div>
+
+            <div style={{ marginTop: '26px' }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px', fontWeight: '600' }}>
                 Supported Destination Programs
               </p>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇨🇦 Canada</span>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇦🇺 Australia</span>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇩🇪 Germany</span>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇬🇧 UK</span>
-                <span className="glass-panel" style={{ padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem' }}>🇳🇿 New Zealand</span>
+                <span className="glass-panel destination-chip"><Flag code="ca" label="Canada" /> Canada</span>
+                <span className="glass-panel destination-chip"><Flag code="au" label="Australia" /> Australia</span>
+                <span className="glass-panel destination-chip"><Flag code="de" label="Germany" /> Germany</span>
+                <span className="glass-panel destination-chip"><Flag code="gb" label="United Kingdom" /> UK</span>
+                <span className="glass-panel destination-chip"><Flag code="nz" label="New Zealand" /> New Zealand</span>
               </div>
             </div>
           </div>
 
           <div className="hero-visual">
             <div className="globe-placeholder" style={{ minHeight: '380px', position: 'relative' }}>
-              <div className="globe-circle-1" style={{ borderColor: '#1e293b' }}></div>
-              <div className="globe-circle-2" style={{ borderColor: '#0f172a' }}></div>
-              
-              <div className="hero-card-floating hero-card-1 glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
+              <div className="globe-circle-1" style={{ borderColor: 'var(--border-color)' }}></div>
+              <div className="globe-circle-2" style={{ borderColor: 'var(--border-color)' }}></div>
+
+              <div className="hero-card-floating hero-card-1 glass-panel" style={{ padding: '16px', borderRadius: '12px', display: 'flex', gap: '12px', alignItems: 'center' }}>
                 <div className="floating-icon">
                   <GlobeIcon />
                 </div>
                 <div className="floating-info">
-                  <h4>Passport & Global Mobility 🛂</h4>
-                  <p>Express Entry & Skilled Worker Pathways</p>
+                  <h4 style={{ color: 'var(--text-primary)', margin: 0 }}>Passport & Global Mobility 🛂</h4>
+                  <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.85rem' }}>Express Entry & Skilled Worker Pathways</p>
                 </div>
               </div>
 
-              <div className="hero-card-floating hero-card-2 glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
+              <div className="hero-card-floating hero-card-2 glass-panel" style={{ padding: '16px', borderRadius: '12px', display: 'flex', gap: '12px', alignItems: 'center', marginTop: '16px' }}>
                 <div className="floating-icon" style={{ background: 'rgba(34, 197, 94, 0.2)', padding: '6px', borderRadius: '50%' }}>
                   ✅
                 </div>
                 <div className="floating-info">
-                  <h4>Visa Approval Status</h4>
-                  <p>128+ Successful Grants This Month</p>
+                  <h4 style={{ color: 'var(--text-primary)', margin: 0 }}>Visa Approval Status</h4>
+                  <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.85rem' }}>128+ Successful Grants This Month</p>
                 </div>
               </div>
 
@@ -1738,20 +811,14 @@ export default function App() {
                 borderRadius: '12px',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '12px',
-                background: '#0f172a',
-                border: '1px solid #1e293b'
+                gap: '12px'
               }}>
                 <span style={{ fontSize: '1.8rem' }}>🧳✈️</span>
                 <div>
-                  <h5 style={{ margin: 0, fontSize: '0.95rem', color: '#f8fafc' }}>Seamless Relocation</h5>
-                  <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>Dedicated Assistance Worldwide</p>
+                  <h5 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)' }}>Seamless Relocation</h5>
+                  <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Dedicated Assistance Worldwide</p>
                 </div>
               </div>
-
-              <svg className="flight-path" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.5" strokeDasharray="3 3">
-                <path d="M10,80 Q50,20 90,80" stroke="#3b82f6" />
-              </svg>
             </div>
           </div>
         </div>
@@ -1762,78 +829,68 @@ export default function App() {
         <div className="container">
           <div className="roadmap-success-grid" style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
             gap: '18px'
           }}>
-            <div className="glass-panel" style={{
-              padding: '24px',
-              background: '#0f172a',
-              border: '1px solid #1e293b',
-              borderRadius: '16px'
-            }}>
+            <div className="glass-panel" style={{ padding: '24px' }}>
               <div style={{ fontSize: '1.7rem', marginBottom: '8px' }}>🗺️</div>
-              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: '#f8fafc' }}>Visa Roadmap</h3>
-              <p style={{ margin: '0 0 14px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.6' }}>
+              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: 'var(--text-primary)' }}>Visa Roadmap</h3>
+              <p style={{ margin: '0 0 14px', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
                 Profile evaluation → Pathway selection → Documentation → Application → Visa decision → Post-landing support.
               </p>
-              <a href="#calculator" className="service-link">Start Your Roadmap <ArrowRightIcon /></a>
+              <a href="#calculator" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>Start Your Roadmap <ArrowRightIcon /></a>
             </div>
 
-            <div className="glass-panel" style={{
-              padding: '24px',
-              background: '#0f172a',
-              border: '1px solid #1e293b',
-              borderRadius: '16px'
-            }}>
+            <div className="glass-panel" style={{ padding: '24px' }}>
               <div style={{ fontSize: '1.7rem', marginBottom: '8px' }}>🏆</div>
-              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: '#f8fafc' }}>Client Success</h3>
-              <p style={{ margin: '0 0 14px', color: '#94a3b8', fontSize: '0.9rem', lineHeight: '1.6' }}>
+              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: 'var(--text-primary)' }}>Client Success</h3>
+              <p style={{ margin: '0 0 14px', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
                 128+ successful grants this month with personalized support across work, study and permanent residency pathways.
               </p>
-              <a href="#contact" className="service-link">Talk to a Consultant <ArrowRightIcon /></a>
+              <a href="#contact" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>Book a Consultation <ArrowRightIcon /></a>
             </div>
           </div>
         </div>
       </section>
 
       {/* ABOUT / FEATURES */}
-      <section id="about" className="section-padding" style={{ background: '#0b1120' }}>
+      <section id="about" className="section-padding" style={{ background: 'var(--bg-alt)', padding: '60px 0' }}>
         <div className="container">
-          <div className="section-header">
-            <span className="section-tag" style={{ background: '#0f172a', color: '#60a5fa' }}>Cloyster Visas Guarantee</span>
-            <h2 className="section-title text-gradient">Why Choose Cloyster Visas?</h2>
-            <p className="section-desc">
-              Navigating global migration standard procedures with clear guidance and customized advisory solutions.
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <span className="section-tag" style={{ background: 'var(--bg-card)', color: '#60a5fa', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>Professional Immigration Guidance</span>
+            <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Why Choose Cloyster Visas?</h2>
+            <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
+              Clear guidance, personalized strategies, and transparent support for your immigration journey.
             </p>
           </div>
 
-          <div className="services-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
-            <div className="glass-panel" style={{ padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>⚖️</div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px' }}>
+          <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+            <div className="glass-panel" style={{ padding: '35px' }}>
+              <div className="clean-feature-icon"><ScaleIcon /></div>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px', color: 'var(--text-primary)' }}>
                 Legal Representation
               </h3>
-              <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.6' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6' }}>
                 We guide you through certified regulations, ensuring fully compliant documentation for IRCC, MARA, and EU immigration authorities.
               </p>
             </div>
 
-            <div className="glass-panel" style={{ padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>🎯</div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px' }}>
+            <div className="glass-panel" style={{ padding: '35px' }}>
+              <div className="clean-feature-icon"><TargetIcon /></div>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px', color: 'var(--text-primary)' }}>
                 Tailored Strategy
               </h3>
-              <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.6' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6' }}>
                 We evaluate your career credentials to construct the optimum pathway—maximizing points for Express Entry or state sponsorships.
               </p>
             </div>
 
-            <div className="glass-panel" style={{ padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>💰</div>
-              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px' }}>
+            <div className="glass-panel" style={{ padding: '35px' }}>
+              <div className="clean-feature-icon"><ReceiptIcon /></div>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px', color: 'var(--text-primary)' }}>
                 Transparent Pricing
               </h3>
-              <p style={{ color: '#94a3b8', fontSize: '0.95rem', lineHeight: '1.6' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6' }}>
                 No hidden costs or false promises. Clear milestone-based service fee quotes upfront with full evaluation reports.
               </p>
             </div>
@@ -1842,70 +899,96 @@ export default function App() {
       </section>
 
       {/* DESTINATIONS */}
-      <section id="destinations" className="section-padding">
+      <section id="destinations" className="section-padding" style={{ padding: '60px 0' }}>
         <div className="container">
-          <div className="section-header">
-            <span className="section-tag">Global Pathways</span>
-            <h2 className="section-title text-gradient">Choose Your Destination</h2>
-            <p className="section-desc">
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '30px' }}>
+            <span className="section-tag" style={{ background: 'var(--bg-card)', color: 'var(--accent-blue)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>Global Pathways</span>
+            <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Choose Your Destination</h2>
+            <p className="section-desc" style={{ color: 'var(--text-secondary)' }}>
               Explore eligibility scoring systems, visa pathways, and expected processing timelines.
             </p>
           </div>
 
-          <div className="explorer-tabs">
+          <div className="explorer-tabs" style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '30px' }}>
             {countries.map((country) => (
               <button
                 key={country.id}
                 className={`tab-btn ${activeTab === country.id ? 'active' : ''}`}
                 onClick={() => setActiveTab(country.id)}
+                style={{
+                  background: activeTab === country.id ? 'var(--accent-blue)' : 'var(--bg-card)',
+                  color: activeTab === country.id ? '#ffffff' : 'var(--text-primary)',
+                  border: '1px solid var(--border-color)',
+                  padding: '10px 18px',
+                  borderRadius: '20px',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  fontWeight: '600'
+                }}
               >
-                <span className="flag-icon">{country.flag}</span>
-                {country.name}
+                <Flag code={country.code} label={country.name} size={18} />
+                <span style={{ marginLeft: '6px' }}>{country.name}</span>
               </button>
             ))}
           </div>
 
           {currentCountry && (
-            <div className="glass-panel" style={{ padding: '35px', background: '#0f172a', border: '1px solid #1e293b' }}>
-              <div className="country-display-grid">
+            <div className="glass-panel" style={{ padding: '35px' }}>
+              <div className="country-display-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
                 <div className="country-image-wrapper">
-                  <img src={currentCountry.image} alt={currentCountry.name} className="country-img" />
-                  <div className="country-flag-badge">
-                    <span className="flag-icon">{currentCountry.flag}</span>
-                    <span>{currentCountry.name} Pathway</span>
+                  <img src={currentCountry.image} alt={currentCountry.name} className="country-img" style={{ width: '100%', borderRadius: '12px', height: '240px', objectFit: 'cover' }} />
+                  <div className="country-flag-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
+                    <Flag code={currentCountry.code} label={currentCountry.name} size={22} />
+                    <span style={{ fontWeight: '700', color: 'var(--text-primary)' }}>{currentCountry.name} Pathway</span>
                   </div>
                 </div>
 
                 <div className="country-info-box">
-                  <h3 className="country-title">{currentCountry.title}</h3>
-                  <p className="country-desc">{currentCountry.desc}</p>
-                  
-                  <div className="country-stats-row">
-                    <div className="c-stat-card">
-                      <div className="c-stat-label">Success Rate</div>
-                      <div className="c-stat-value">{currentCountry.successRate}</div>
+                  <h3 className="country-title" style={{ color: 'var(--text-primary)', fontSize: '1.5rem', marginBottom: '10px' }}>{currentCountry.title}</h3>
+                  <p className="country-desc" style={{ color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '20px' }}>{currentCountry.desc}</p>
+
+                  <div className="country-stats-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '20px' }}>
+                    <div className="c-stat-card" style={{ background: 'var(--bg-main)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>SUCCESS RATE</div>
+                      <div className="c-stat-value" style={{ fontWeight: '800', color: '#22c55e' }}>{currentCountry.successRate}</div>
                     </div>
-                    <div className="c-stat-card highlighted">
-                      <div className="c-stat-label">Processing Time</div>
-                      <div className="c-stat-value">{currentCountry.processingTime}</div>
+                    <div className="c-stat-card highlighted" style={{ background: 'var(--bg-main)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>EST. PROCESSING</div>
+                      <div className="c-stat-value" style={{ fontWeight: '800', color: 'var(--accent-blue)' }}>{currentCountry.processingTime}</div>
                     </div>
-                    <div className="c-stat-card">
-                      <div className="c-stat-label">Min. Score</div>
-                      <div className="c-stat-value">{currentCountry.minPoints}</div>
+                    <div className="c-stat-card" style={{ background: 'var(--bg-main)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>MIN. POINTS</div>
+                      <div className="c-stat-value" style={{ fontWeight: '800', color: 'var(--text-primary)' }}>{currentCountry.minPoints}</div>
                     </div>
                   </div>
 
                   <div className="country-pathways-list">
-                    <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-primary)', letterSpacing: '1px' }}>
+                    <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-primary)', letterSpacing: '1px', marginBottom: '10px' }}>
                       Primary Relocation Streams
                     </h4>
                     {currentCountry.pathways.map((pw, i) => (
-                      <div key={i} className="pathway-item">
+                      <div key={i} className="pathway-item" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', color: 'var(--text-secondary)' }}>
                         <CheckIcon />
-                        <span className="pathway-name">{pw.name}</span>
-                        <span className="pathway-tag">{pw.tag}</span>
+                        <span className="pathway-name" style={{ flexGrow: 1 }}>{pw.name}</span>
+                        <span className="pathway-tag" style={{ background: 'rgba(37,99,235,0.1)', color: 'var(--accent-blue)', padding: '2px 8px', borderRadius: '10px', fontSize: '0.75rem', fontWeight: '600' }}>{pw.tag}</span>
                       </div>
                     ))}
+                    <div className="country-note">
+                      * Estimates vary by pathway, application profile, and current processing conditions.
+                    </div>
+                  </div>
+
+                  <div className="country-next-step">
+                    <p className="country-next-step-title">Not sure which pathway fits your profile?</p>
+                    <div className="country-next-step-actions">
+                      <a href="#calculator" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '10px 16px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
+                        Check Your Eligibility <ArrowRightIcon />
+                      </a>
+                      <a href="#contact" className="btn btn-secondary" style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 16px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
+                        Talk to an Advisor <ArrowRightIcon />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1914,82 +997,88 @@ export default function App() {
         </div>
       </section>
 
-      {/* CORE SERVICES SECTION */}
-      <section id="services" className="section-padding" style={{ background: '#0b1120' }}>
+      {/* CORE SERVICES SECTION (6 CARDS) */}
+      <section id="services" className="section-padding" style={{ background: 'var(--bg-alt)', padding: '60px 0' }}>
         <div className="container">
-          <div className="section-header">
-            <span className="section-tag">End-to-End Solutions</span>
-            <h2 className="section-title text-gradient">Our Advisory Services</h2>
-            <p className="section-desc">
-              Comprehensive assistance through every stage of your immigration journey.
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <span className="section-tag" style={{ background: 'var(--bg-card)', color: 'var(--accent-blue)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>End-to-End Solutions</span>
+            <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Our Advisory Services</h2>
+            <p className="section-desc" style={{ color: 'var(--text-secondary)' }}>
+              Practical support from profile review and documentation through application, interview preparation, and post-submission follow-up.
             </p>
           </div>
 
-          <div className="services-grid">
-            <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
-              <h3 className="service-title">1. Visa Consultation</h3>
-              <p className="service-desc">
-                Engage in one-on-one virtual strategy sessions with licensed legal experts to understand eligibility criteria, regional quotas, and visa application procedures.
+          <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+            <div className="service-card glass-panel" style={{ padding: '28px' }}>
+              <h3 className="service-title" style={{ color: 'var(--text-primary)', marginBottom: '10px' }}>1. Visa Consultation</h3>
+              <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
+                Discuss your goals, destination, visa category, eligibility questions, and next steps in a focused consultation.
               </p>
-              <a href="#contact" className="service-link">
-                Book consultation <ArrowRightIcon />
+              <a href="#contact" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                Book a Consultation <ArrowRightIcon />
               </a>
             </div>
 
-            <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
-              <h3 className="service-title">2. Profile Assessment</h3>
-              <p className="service-desc">
-                Receive an extensive review of your academic history, age, skill-set, and language scores to compute your potential immigration points before application.
+            <div className="service-card glass-panel" style={{ padding: '28px' }}>
+              <h3 className="service-title" style={{ color: 'var(--text-primary)', marginBottom: '10px' }}>2. Profile Assessment</h3>
+              <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
+                Review your age, education, experience, language profile, destination, and visa category to understand your potential pathway.
               </p>
-              <a href="#calculator" className="service-link">
-                Check Your Immigration Eligibility <ArrowRightIcon />
+              <a href="#calculator" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                Assess My Profile <ArrowRightIcon />
               </a>
             </div>
 
-            <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
-              <h3 className="service-title">3. Documentation Support</h3>
-              <p className="service-desc">
-                Ensure error-free submissions. We guide you in drafting letters of explanation, Educational Credential Assessment (ECA), proof of / financial documentation, and reference formats.
+            <div className="service-card glass-panel" style={{ padding: '28px' }}>
+              <h3 className="service-title" style={{ color: 'var(--text-primary)', marginBottom: '10px' }}>3. Documentation Support</h3>
+              <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
+                Get structured help with Educational Credential Assessment (ECA), proof of financial documentation, reference letters, statements, and supporting records.
               </p>
-              <button 
-                onClick={() => setActiveModal('documentation')} 
-                className="service-link" 
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#3b82f6', fontWeight: '600' }}
+              <button
+                onClick={() => setActiveModal('documentation')}
+                className="service-link"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--accent-blue)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
               >
-                Learn more <ArrowRightIcon />
+                Explore Documentation Support <ArrowRightIcon />
               </button>
             </div>
 
-            <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
-              <h3 className="service-title">4. Post-Landing Support</h3>
-              <p className="service-desc">
-                Settle down with absolute ease. Access orientation assistance, temporary housing leads, local health insurance guidance, and social security application updates.
+            <div className="service-card glass-panel" style={{ padding: '28px' }}>
+              <h3 className="service-title" style={{ color: 'var(--text-primary)', marginBottom: '10px' }}>4. Application Preparation</h3>
+              <span className="study-support-tag">Includes Study Visa Support</span>
+              <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
+                Prepare complete applications for work, permanent residency, and study visa pathways, including forms, statements, financial documentation, and submission readiness.
               </p>
-              <button 
-                onClick={() => setActiveModal('postlanding')} 
-                className="service-link" 
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: '#3b82f6', fontWeight: '600' }}
-              >
-                Learn more <ArrowRightIcon />
-              </button>
+              <a href="#calculator" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                Explore Application Preparation <ArrowRightIcon />
+              </a>
             </div>
 
-            <div className="service-card glass-panel" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
-              <h3 className="service-title">5. Study Visa Services</h3>
-              <p className="service-desc">
-                Get guidance for study visa applications, university and college documentation, statements of purpose, financial documentation, and post-study work pathways.
+            <div className="service-card glass-panel" style={{ padding: '28px' }}>
+              <h3 className="service-title" style={{ color: 'var(--text-primary)', marginBottom: '10px' }}>5. Interview / Pre-Departure Guidance</h3>
+              <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
+                Prepare for visa interviews where applicable and get practical pre-departure guidance for study, work, and relocation.
               </p>
-              <a href="#calculator" className="service-link">
-                Check Study Visa Eligibility <ArrowRightIcon />
+              <a href="#contact" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                Explore Pre-Departure Guidance <ArrowRightIcon />
+              </a>
+            </div>
+
+            <div className="service-card glass-panel" style={{ padding: '28px' }}>
+              <h3 className="service-title" style={{ color: 'var(--text-primary)', marginBottom: '10px' }}>6. Post-Submission Support</h3>
+              <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
+                Stay supported after submission with status follow-up guidance, document response support, and next-step assistance through the decision stage.
+              </p>
+              <a href="#contact" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                Explore Post-Submission Support <ArrowRightIcon />
               </a>
             </div>
           </div>
 
+          {/* DYNAMIC SNAPSHOT CARD */}
           <div className="profile-score-preview glass-panel" style={{
             marginTop: '22px',
-            padding: '18px 20px',
-            background: '#0f172a',
-            border: '1px solid #1e293b',
+            padding: '20px 24px',
             borderRadius: '14px',
             display: 'flex',
             alignItems: 'center',
@@ -1998,32 +1087,35 @@ export default function App() {
             flexWrap: 'wrap'
           }}>
             <div>
-              <div style={{ color: '#94a3b8', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '0.8px', marginBottom: '4px' }}>
                 Preliminary Profile Snapshot
               </div>
-              <div style={{ color: '#f8fafc', fontSize: '1.25rem', fontWeight: '800' }}>
-                Estimated Score: <span style={{ color: '#60a5fa' }}>472</span>
+              <div style={{ color: 'var(--text-primary)', fontSize: '1.25rem', fontWeight: '800' }}>
+                Estimated Score: <span style={{ color: 'var(--accent-blue)' }}>{calcScore} Points</span>
+              </div>
+              <div style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', marginTop: '4px' }}>
+                Age Group: <strong style={{ color: 'var(--text-primary)' }}>{calcData.age}</strong> | Target: <strong style={{ color: 'var(--text-primary)', textTransform: 'capitalize' }}>{calcData.destination}</strong>
               </div>
               <div style={{ color: '#22c55e', fontWeight: '700', fontSize: '0.92rem', marginTop: '4px' }}>
                 🟢 Potentially Eligible
               </div>
-              <div style={{ color: '#94a3b8', fontSize: '0.82rem', marginTop: '3px' }}>
-                Based on the information provided.
+              <div style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '4px', maxWidth: '560px', lineHeight: '1.45' }}>
+                Eligibility depends on your individual profile and current program requirements.
               </div>
             </div>
             <div style={{ display: 'flex', gap: '9px', flexWrap: 'wrap' }}>
-              <a href="#calculator" className="btn btn-secondary" style={{ padding: '10px 14px' }}>
+              <a href="#calculator" className="btn btn-secondary" style={{ padding: '10px 14px', background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', textDecoration: 'none', borderRadius: '8px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                 Get Detailed Assessment <ArrowRightIcon />
               </a>
-              <a href="#contact" className="btn btn-primary" style={{ padding: '10px 14px' }}>
-                Book Consultation <ArrowRightIcon />
+              <a href="#contact" className="btn btn-primary" style={{ padding: '10px 14px', background: 'var(--accent-blue)', color: '#fff', textDecoration: 'none', borderRadius: '8px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                Book a Consultation <ArrowRightIcon />
               </a>
             </div>
           </div>
         </div>
       </section>
 
-      {/* DEDICATED MODALS FOR SERVICES 3 & 4 */}
+      {/* DEDICATED MODAL FOR SERVICE DETAILS */}
       {activeModal && (
         <div style={{
           position: 'fixed',
@@ -2040,24 +1132,24 @@ export default function App() {
           padding: '20px'
         }}>
           <div className="glass-panel" style={{
-            background: '#0f172a',
-            border: '1px solid #2563eb',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--accent-blue)',
             borderRadius: '16px',
             maxWidth: '550px',
             width: '100%',
             padding: '30px',
             position: 'relative',
-            color: '#f8fafc'
+            color: 'var(--text-primary)'
           }}>
-            <button 
-              onClick={() => setActiveModal(null)} 
+            <button
+              onClick={() => setActiveModal(null)}
               style={{
                 position: 'absolute',
                 top: '15px',
                 right: '20px',
                 background: 'none',
                 border: 'none',
-                color: '#94a3b8',
+                color: 'var(--text-muted)',
                 fontSize: '1.5rem',
                 cursor: 'pointer'
               }}
@@ -2067,45 +1159,22 @@ export default function App() {
 
             {activeModal === 'documentation' && (
               <div>
-                <span style={{ background: 'rgba(37, 99, 235, 0.2)', color: '#60a5fa', padding: '4px 12px', borderRadius: '12px', fontSize: '0.85rem' }}>
+                <span style={{ background: 'rgba(37, 99, 235, 0.2)', color: 'var(--accent-blue)', padding: '4px 12px', borderRadius: '12px', fontSize: '0.85rem' }}>
                   Detailed Overview
                 </span>
                 <h3 style={{ fontSize: '1.6rem', marginTop: '10px', marginBottom: '15px' }}>📄 Documentation Support</h3>
-                <p style={{ color: '#94a3b8', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Immigration officers reject up to 30% of applications due to formatting errors or insufficient proofing. Our specialists assist you with:
+                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '0.95rem' }}>
+                  Strong documentation can make an application easier to review. Our specialists assist you with:
                 </p>
-                <ul style={{ color: '#cbd5e1', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
+                <ul style={{ color: 'var(--text-secondary)', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
                   <li><strong>Educational Credential Assessment (ECA):</strong> Step-by-step guidance for WES, IQAS, or ICAS submissions.</li>
                   <li><strong>Statement of Purpose & LOE:</strong> Customized Letters of Explanation for study permits or gap years.</li>
-                  <li><strong>Proof of / Financial Documentation:</strong> Reviewing bank certificates, GIC setups, and liquid asset statements.</li>
+                  <li><strong>Proof of Financial Documentation:</strong> Reviewing bank certificates, GIC setups, and liquid asset statements.</li>
                   <li><strong>Work Experience Reference Letters:</strong> Aligning job duties with exact NOC/ANZSCO codes.</li>
                 </ul>
                 <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-                  <a href="#contact" onClick={() => setActiveModal(null)} className="btn btn-primary" style={{ flex: 1, textAlign: 'center', justifyContent: 'center' }}>
+                  <a href="#contact" onClick={() => setActiveModal(null)} className="btn btn-primary" style={{ flex: 1, textAlign: 'center', justifyContent: 'center', background: 'var(--accent-blue)', color: '#fff', padding: '10px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
                     Request Document Review
-                  </a>
-                </div>
-              </div>
-            )}
-
-            {activeModal === 'postlanding' && (
-              <div>
-                <span style={{ background: 'rgba(34, 197, 94, 0.2)', color: '#4ade80', padding: '4px 12px', borderRadius: '12px', fontSize: '0.85rem' }}>
-                  Relocation Assistance
-                </span>
-                <h3 style={{ fontSize: '1.6rem', marginTop: '10px', marginBottom: '15px' }}>✈️ Post-Landing Support</h3>
-                <p style={{ color: '#94a3b8', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Moving to a new country shouldn't feel overwhelming. Cloyster Visas provides dedicated post-arrival assistance to ensure a smooth transition:
-                </p>
-                <ul style={{ color: '#cbd5e1', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
-                  <li><strong>Social Security / SIN Card Setup:</strong> Guided registration for work authorization and tax setup.</li>
-                  <li><strong>Temporary & Long-Term Housing:</strong> Verified rental options and short-term stay discounts.</li>
-                  <li><strong>Health Insurance & Banking:</strong> Setting up provincial health cards and local bank accounts upon landing.</li>
-                  <li><strong>Airport Pickup & Community Orientation:</strong> Welcome briefing to help you navigate your new city.</li>
-                </ul>
-                <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-                  <a href="#contact" onClick={() => setActiveModal(null)} className="btn btn-primary" style={{ flex: 1, textAlign: 'center', justifyContent: 'center' }}>
-                    Inquire About Post-Landing Services
                   </a>
                 </div>
               </div>
@@ -2115,32 +1184,31 @@ export default function App() {
       )}
 
       {/* ELIGIBILITY CALCULATOR */}
-      <section id="calculator" className="section-padding">
+      <section id="calculator" className="section-padding" style={{ padding: '60px 0' }}>
         <div className="container">
-          <div className="section-header">
-            <span className="section-tag">Interactive Evaluation</span>
-            <h2 className="section-title text-gradient">Check Your Immigration Eligibility</h2>
-            <p className="section-desc">
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <span className="section-tag" style={{ background: 'var(--bg-card)', color: 'var(--accent-blue)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>Interactive Evaluation</span>
+            <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Check Your Immigration Eligibility</h2>
+            <p className="section-desc" style={{ color: 'var(--text-secondary)' }}>
               Instant preliminary points assessment for Express Entry, GSM, and European job cards.
             </p>
           </div>
 
-          <div className="glass-panel calculator-box" style={{ background: '#0f172a', border: '1px solid #1e293b' }}>
-            <div className="calc-progress">
-              <div className="calc-progress-bar" style={{ width: `${((calcStep - 1) / 3) * 100}%` }}></div>
-              <div className={`progress-step ${calcStep >= 1 ? 'active' : ''} ${calcStep > 1 ? 'completed' : ''}`}>1</div>
-              <div className={`progress-step ${calcStep >= 2 ? 'active' : ''} ${calcStep > 2 ? 'completed' : ''}`}>2</div>
-              <div className={`progress-step ${calcStep >= 3 ? 'active' : ''} ${calcStep > 3 ? 'completed' : ''}`}>3</div>
-              <div className={`progress-step ${calcStep >= 4 ? 'active' : ''} ${calcStep > 4 ? 'completed' : ''}`}>📊</div>
+          <div className="glass-panel calculator-box" style={{ padding: '30px', maxWidth: '700px', margin: '0 auto' }}>
+            <div className="calc-progress" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px', position: 'relative' }}>
+              <div className={`progress-step ${calcStep >= 1 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 1 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>1</div>
+              <div className={`progress-step ${calcStep >= 2 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 2 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>2</div>
+              <div className={`progress-step ${calcStep >= 3 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 3 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>3</div>
+              <div className={`progress-step ${calcStep >= 4 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 4 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>📊</div>
             </div>
 
             {/* STEP 1 */}
             {calcStep === 1 && (
               <div className="calc-step-content">
-                <h3 className="calc-step-title">Select Relocation Preferences</h3>
-                <div className="calc-grid">
+                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)', marginBottom: '18px' }}>Select Relocation Preferences</h3>
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
                   <div className="form-group">
-                    <label className="form-label">Preferred Destination</label>
+                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Preferred Destination</label>
                     <select
                       className="select-control"
                       value={calcData.destination}
@@ -2154,7 +1222,7 @@ export default function App() {
                     </select>
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Visa Category</label>
+                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Visa Category</label>
                     <select
                       className="select-control"
                       value={calcData.visaType}
@@ -2166,7 +1234,21 @@ export default function App() {
                     </select>
                   </div>
                 </div>
-                <button className="btn btn-primary" onClick={() => setCalcStep(2)} style={{ marginTop: '20px' }}>
+                {calcData.visaType === 'student' && (
+                  <div style={{
+                    marginTop: '14px',
+                    padding: '12px 14px',
+                    borderRadius: '10px',
+                    border: '1px solid rgba(59,130,246,.2)',
+                    background: 'rgba(37,99,235,.08)',
+                    color: 'var(--text-secondary)',
+                    fontSize: '0.84rem',
+                    lineHeight: '1.55'
+                  }}>
+                    Study Visa assessment includes your academic profile, destination, language readiness, financial documentation, and post-study pathway considerations.
+                  </div>
+                )}
+                <button className="btn btn-primary" onClick={() => setCalcStep(2)} style={{ marginTop: '20px', background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                   Next Step <ArrowRightIcon />
                 </button>
               </div>
@@ -2175,10 +1257,10 @@ export default function App() {
             {/* STEP 2 */}
             {calcStep === 2 && (
               <div className="calc-step-content">
-                <h3 className="calc-step-title">Basic Profile Details</h3>
-                <div className="calc-grid">
+                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)', marginBottom: '18px' }}>Basic Profile Details</h3>
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
                   <div className="form-group">
-                    <label className="form-label">Age Group</label>
+                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Age Group</label>
                     <select
                       className="select-control"
                       value={calcData.age}
@@ -2191,7 +1273,7 @@ export default function App() {
                     </select>
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Highest Qualification</label>
+                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Highest Qualification</label>
                     <select
                       className="select-control"
                       value={calcData.education}
@@ -2205,8 +1287,8 @@ export default function App() {
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)}>Back</button>
-                  <button className="btn btn-primary" onClick={() => setCalcStep(3)}>
+                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Back</button>
+                  <button className="btn btn-primary" onClick={() => setCalcStep(3)} style={{ background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                     Next Step <ArrowRightIcon />
                   </button>
                 </div>
@@ -2216,10 +1298,10 @@ export default function App() {
             {/* STEP 3 */}
             {calcStep === 3 && (
               <div className="calc-step-content">
-                <h3 className="calc-step-title">Experience & Language Ability</h3>
-                <div className="calc-grid">
+                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)', marginBottom: '18px' }}>{calcData.visaType === 'student' ? 'Study Profile & Language Ability' : 'Experience & Language Ability'}</h3>
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
                   <div className="form-group">
-                    <label className="form-label">Work Experience</label>
+                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>{calcData.visaType === 'student' ? 'Work / Relevant Experience' : 'Work Experience'}</label>
                     <select
                       className="select-control"
                       value={calcData.experience}
@@ -2232,7 +1314,7 @@ export default function App() {
                     </select>
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Language Proficiency Score</label>
+                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Language Proficiency Score</label>
                     <select
                       className="select-control"
                       value={calcData.englishScore}
@@ -2245,8 +1327,8 @@ export default function App() {
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(2)}>Back</button>
-                  <button className="btn btn-primary" onClick={runCalculation}>
+                  <button className="btn btn-secondary" onClick={() => setCalcStep(2)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Back</button>
+                  <button className="btn btn-primary" onClick={runCalculation} style={{ background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                     Calculate Points <ArrowRightIcon />
                   </button>
                 </div>
@@ -2256,18 +1338,18 @@ export default function App() {
             {/* STEP 4: RESULTS */}
             {calcStep === 4 && (
               <div className="calc-step-content" style={{ textAlign: 'center' }}>
-                <h3 className="calc-step-title">Estimated Eligibility Score</h3>
-                <div style={{ fontSize: '3.5rem', fontWeight: '800', color: '#3b82f6', margin: '15px 0' }}>
+                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)' }}>Estimated Eligibility Score</h3>
+                <div style={{ fontSize: '3.5rem', fontWeight: '800', color: 'var(--accent-blue)', margin: '15px 0' }}>
                   {calcScore} Points
                 </div>
-                <p style={{ color: '#94a3b8', marginBottom: '20px' }}>
+                <p style={{ color: 'var(--text-secondary)', marginBottom: '20px' }}>
                   {calcScore >= 70
                     ? "🎉 Strong Score! You meet the standard points benchmark for PR considerations."
                     : "👍 Good Score! Regional nominations or specific PNP options can boost your profile."}
                 </p>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)}>Recalculate</button>
-                  <a href="#contact" className="btn btn-primary">Book Consultation</a>
+                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Recalculate</button>
+                  <a href="#contact" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '10px 18px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>Book a Consultation</a>
                 </div>
               </div>
             )}
@@ -2276,28 +1358,28 @@ export default function App() {
       </section>
 
       {/* BOOKING / CONSULTATION FORM */}
-      <section id="contact" className="section-padding" style={{ background: '#0b1120' }}>
+      <section id="contact" className="section-padding" style={{ background: 'var(--bg-alt)', padding: '60px 0' }}>
         <div className="container">
-          <div className="section-header">
-            <span className="section-tag">Direct Legal Support</span>
-            <h2 className="section-title text-gradient">Book Your Consultation</h2>
-            <p className="section-desc">
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
+            <span className="section-tag" style={{ background: 'var(--bg-card)', color: 'var(--accent-blue)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>Direct Legal Support</span>
+            <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Book Your Consultation</h2>
+            <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
               Schedule a personalized 1-on-1 session with our certified immigration specialists to review your profile and explore your relocation options.
             </p>
           </div>
 
-          <div className="glass-panel" style={{ maxWidth: '650px', margin: '0 auto', padding: '40px', background: '#0f172a', border: '1px solid #1e293b' }}>
+          <div className="glass-panel" style={{ maxWidth: '650px', margin: '0 auto', padding: '40px' }}>
             {bookingSubmitted ? (
               <div style={{ textAlign: 'center', padding: '20px 0' }}>
                 <h3 style={{ color: '#22c55e', fontSize: '1.6rem', marginBottom: '10px' }}>
                   🎉 Consultation Request Submitted!
                 </h3>
-                <p style={{ color: '#94a3b8' }}>
+                <p style={{ color: 'var(--text-secondary)' }}>
                   Thank you, <strong>{bookingData.fullName}</strong>. Our immigration advisory team has received your request and will reach out to you within 24 hours.
                 </p>
                 <button
                   className="btn btn-primary"
-                  style={{ marginTop: '20px' }}
+                  style={{ marginTop: '20px', background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer' }}
                   onClick={() => setBookingSubmitted(false)}
                 >
                   Submit Another Request
@@ -2306,7 +1388,7 @@ export default function App() {
             ) : (
               <form onSubmit={handleBookingSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 <div className="form-group">
-                  <label className="form-label">Full Name</label>
+                  <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px' }}>Full Name</label>
                   <input
                     type="text"
                     required
@@ -2317,9 +1399,9 @@ export default function App() {
                   />
                 </div>
 
-                <div className="calc-grid">
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
                   <div className="form-group">
-                    <label className="form-label">Email Address</label>
+                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px' }}>Email Address</label>
                     <input
                       type="email"
                       required
@@ -2330,7 +1412,7 @@ export default function App() {
                     />
                   </div>
                   <div className="form-group">
-                    <label className="form-label">Phone Number</label>
+                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px' }}>Phone Number</label>
                     <div className="phone-input-row" style={{ display: 'grid', gridTemplateColumns: '105px minmax(0, 1fr)', gap: '8px' }}>
                       <select
                         required
@@ -2361,7 +1443,7 @@ export default function App() {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Target Destination</label>
+                  <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px' }}>Target Destination</label>
                   <select
                     className="select-control"
                     value={bookingData.destination}
@@ -2376,7 +1458,7 @@ export default function App() {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Preferred Consultation Time</label>
+                  <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px' }}>Preferred Consultation Time</label>
                   <select
                     required
                     className="select-control"
@@ -2392,7 +1474,7 @@ export default function App() {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Additional Message / Inquiries</label>
+                  <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px' }}>Additional Message / Inquiries</label>
                   <textarea
                     rows={4}
                     className="select-control"
@@ -2406,7 +1488,7 @@ export default function App() {
                   display: 'flex',
                   alignItems: 'flex-start',
                   gap: '10px',
-                  color: '#cbd5e1',
+                  color: 'var(--text-secondary)',
                   fontSize: '0.86rem',
                   lineHeight: '1.5',
                   cursor: 'pointer'
@@ -2424,7 +1506,7 @@ export default function App() {
                 <button
                   type="submit"
                   className="btn btn-primary"
-                  style={{ width: '100%', justifyContent: 'center' }}
+                  style={{ width: '100%', justifyContent: 'center', background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '12px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Sending Request...' : 'Submit Booking Request'}{' '}
@@ -2439,11 +1521,10 @@ export default function App() {
       {/* FLOATING WHATSAPP BUTTON */}
       <a
         className="whatsapp-float"
-        href="https://wa.me/?text=Hello%20Cloyster Visas,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
+        href="https://wa.me/917027466559?text=Hello%20Cloyster%20Visas,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
-        className="whatsapp-float"
         style={{
           position: 'fixed',
           bottom: '25px',
@@ -2468,68 +1549,65 @@ export default function App() {
       </a>
 
       {/* FOOTER */}
-      <footer style={{ background: '#070a12', borderTop: '1px solid #1e293b', padding: '50px 0 25px 0', color: '#94a3b8' }}>
+      <footer>
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '30px', marginBottom: '40px' }}>
-          
+
           <div>
-            <a href="#" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', marginBottom: '15px' }}>
-              <ShieldIcon />
-              <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#f8fafc' }}>
-                Cloyster <span style={{ color: '#2563eb' }}>Visas</span>
-              </span>
+            <a href="#" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', marginBottom: '15px' }} aria-label="Cloyster Visas home">
+              <LogoImage footer />
             </a>
-            <p style={{ fontSize: '0.9rem', lineHeight: '1.6', color: '#64748b' }}>
+            <p style={{ fontSize: '0.9rem', lineHeight: '1.6', color: 'var(--text-muted)' }}>
               Immigration Made Simple. Providing streamlined pathways for PR, work permits, and global education.
             </p>
           </div>
 
           <div>
-            <h4 style={{ color: '#f8fafc', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Quick Links</h4>
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Quick Links</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem' }}>
-              <li><a href="#about" style={{ color: '#94a3b8', textDecoration: 'none' }}>About Us</a></li>
-              <li><a href="#destinations" style={{ color: '#94a3b8', textDecoration: 'none' }}>Destinations</a></li>
-              <li><a href="#services" style={{ color: '#94a3b8', textDecoration: 'none' }}>Advisory Services</a></li>
-              <li><a href="#calculator" style={{ color: '#94a3b8', textDecoration: 'none' }}>Eligibility Points Check</a></li>
-              <li><a href="#contact" style={{ color: '#3b82f6', textDecoration: 'none', fontWeight: '600' }}>Book Consultation</a></li>
+              <li><a href="#about" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>About Us</a></li>
+              <li><a href="#destinations" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Destinations</a></li>
+              <li><a href="#services" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Advisory Services</a></li>
+              <li><a href="#calculator" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Eligibility Points Check</a></li>
+              <li><a href="#contact" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600' }}>Book a Consultation</a></li>
             </ul>
           </div>
 
           <div>
-            <h4 style={{ color: '#f8fafc', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Popular Destinations</h4>
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Popular Destinations</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem' }}>
-              <li><a href="#destinations" onClick={() => setActiveTab('canada')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇨🇦 Canada Express Entry</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('germany')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇩🇪 Germany Opportunity Card</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('australia')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇦🇺 Australia GSM</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('uk')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇬🇧 UK Skilled Worker</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('nz')} style={{ color: '#94a3b8', textDecoration: 'none' }}>🇳🇿 New Zealand SMC</a></li>
+              <li><a href="#destinations" onClick={() => setActiveTab('canada')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="ca" size={16} /> Canada Express Entry</a></li>
+              <li><a href="#destinations" onClick={() => setActiveTab('germany')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="de" size={16} /> Germany Opportunity Card</a></li>
+              <li><a href="#destinations" onClick={() => setActiveTab('australia')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="au" size={16} /> Australia GSM</a></li>
+              <li><a href="#destinations" onClick={() => setActiveTab('uk')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="gb" size={16} /> UK Skilled Worker</a></li>
+              <li><a href="#destinations" onClick={() => setActiveTab('nz')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="nz" size={16} /> New Zealand SMC</a></li>
             </ul>
           </div>
 
           <div className="office-support-block">
-            <h4 style={{ color: '#f8fafc', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Office Support</h4>
-            <p style={{ fontSize: '0.88rem', lineHeight: '1.55', marginBottom: '10px', color: '#94a3b8' }}>
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Office Support</h4>
+            <p style={{ fontSize: '0.88rem', lineHeight: '1.55', marginBottom: '10px', color: 'var(--text-secondary)' }}>
               📍 Room No. 2, 3rd Floor, A-66, Block A, Sector 7 Dwarka, Dwarka, New Delhi, Delhi-110077
             </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              📞 <a href="tel:+917027466559" style={{ color: '#94a3b8', textDecoration: 'none' }}>7027466559</a>
+              📞 <a href="tel:+917027466559" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>7027466559</a>
             </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
               💬 WhatsApp: <a href="https://wa.me/917027466559?text=Hello%20Cloyster%20Visas" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
             </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              ✉️ Email: <a className="office-email" href="mailto:ak9362351@gmail.com" style={{ color: '#94a3b8', textDecoration: 'none' }}>ak9362351@gmail.com</a>
+              ✉️ Email: <a className="office-email" href="mailto:cloysterimmigration@gmail.com" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>cloysterimmigration@gmail.com</a>
             </p>
-            <p style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '12px' }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '12px' }}>
               Available Monday – Saturday (9:00 AM – 6:00 PM)
             </p>
           </div>
 
         </div>
 
-        <div className="container" style={{ borderTop: '1px solid #1e293b', paddingTop: '20px', textAlign: 'center', fontSize: '0.85rem', color: '#64748b' }}>
+        <div className="container" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
           <p>© {new Date().getFullYear()} Cloyster Visas Advisory Services. All Rights Reserved.</p>
         </div>
       </footer>
-    </>
+    </div>
   )
 }
