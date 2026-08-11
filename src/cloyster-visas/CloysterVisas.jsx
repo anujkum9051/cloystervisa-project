@@ -4,50 +4,12 @@ import cloysterLogo from './cloyster-logo.png'
 
 // Custom SVG Icons & Components
 const LogoImage = ({ className = '', footer = false }) => (
-  <span className={`cloyster-logo-box ${footer ? 'cloyster-logo-footer' : ''} ${className}`}>
-    <img
-      src={cloysterLogo}
-      alt="Cloyster Visas"
-      className="cloyster-logo-image"
-    />
-  </span>
+  <img
+    src={cloysterLogo}
+    alt="CloysterVisa"
+    className={`cloyster-logo-image ${footer ? 'cloyster-logo-footer' : ''} ${className}`}
+  />
 )
-
-// Real Flag Image Component (Fixes Windows CA, AU, DE letter bug)
-const Flag = ({ code = 'ca', label, size = 20 }) => {
-  const codeMap = {
-    canada: 'ca',
-    australia: 'au',
-    germany: 'de',
-    uk: 'gb',
-    nz: 'nz',
-    'new zealand': 'nz',
-    india: 'in',
-    us: 'us',
-    uae: 'ae',
-    singapore: 'sg'
-  }
-  const countryCode = codeMap[code?.toLowerCase()] || code?.toLowerCase() || 'ca'
-  const flagUrl = `https://flagcdn.com/w40/${countryCode}.png`
-
-  return (
-    <img
-      src={flagUrl}
-      alt={label || `${countryCode} flag`}
-      className="flag-img"
-      style={{
-        width: `${size}px`,
-        height: 'auto',
-        maxHeight: `${size}px`,
-        borderRadius: '3px',
-        objectFit: 'cover',
-        display: 'inline-block',
-        verticalAlign: 'middle',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.2)'
-      }}
-    />
-  )
-}
 
 const SunIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -119,12 +81,14 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
-// Destination Countries Data
+// Destination Countries Data with Flags
 const staticCountriesData = [
   {
     id: 'canada',
     name: 'Canada',
     code: 'ca',
+    flag: 'https://flagcdn.com/w40/ca.png',
+    pathwayFlag: 'https://flagcdn.com/ca.svg',
     title: 'Immigrate to Canada via Express Entry & PNPs',
     desc: 'Canada offers some of the world\'s most welcoming immigration programs. Whether you want to apply for Permanent Residency (PR), study at top universities, or obtain a work permit, Canada provides stable career pathways and an exceptional quality of life.',
     successRate: '94%',
@@ -135,12 +99,13 @@ const staticCountriesData = [
       { name: 'Provincial Nominee Programs (PNP)', tag: 'Regional' },
       { name: 'Post-Graduation Work Permit (PGWP)', tag: 'Study first' }
     ],
-    image: 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg'
+    image: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 'australia',
     name: 'Australia',
     code: 'au',
+    flag: 'https://flagcdn.com/w40/au.png',
     title: 'Explore General Skilled Migration in Australia',
     desc: 'With a booming economy and a demand for skilled professionals, Australia offers competitive visa pathways. The General Skilled Migration (GSM) program allows eligible workers to live and work permanently without needing a sponsor.',
     successRate: '91%',
@@ -151,12 +116,13 @@ const staticCountriesData = [
       { name: 'Skilled Nominated Visa (Subclass 190)', tag: 'State Sponsor' },
       { name: 'Skilled Work Regional Visa (Subclass 491)', tag: 'Regional' }
     ],
-    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 'germany',
     name: 'Germany',
     code: 'de',
+    flag: 'https://flagcdn.com/w40/de.png',
     title: 'Work & Live in Germany with Opportunity Card',
     desc: 'Germany\'s new Opportunity Card (Chancenkarte) makes job hunting in Europe easier than ever. Skilled professionals can relocate to Germany to secure employment in engineering, IT, healthcare, and other highly demanded fields.',
     successRate: '88%',
@@ -167,12 +133,13 @@ const staticCountriesData = [
       { name: 'German EU Blue Card', tag: 'Fast Track' },
       { name: 'Vocational Training (Ausbildung)', tag: 'Entry Level' }
     ],
-    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 'uk',
     name: 'United Kingdom',
     code: 'gb',
+    flag: 'https://flagcdn.com/w40/gb.png',
     title: 'UK Skilled Worker & Expansion Visas',
     desc: 'The UK\'s points-based system offers attractive visas for global talent. Relocate quickly as a skilled worker or establish a branch of your business using the UK Expansion Worker pathway.',
     successRate: '92%',
@@ -183,12 +150,13 @@ const staticCountriesData = [
       { name: 'UK Global Talent Visa', tag: 'Elite Tech/Arts' },
       { name: 'UK Scale-up Visa', tag: 'Fast Growth' }
     ],
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80'
   },
   {
     id: 'nz',
     name: 'New Zealand',
     code: 'nz',
+    flag: 'https://flagcdn.com/w40/nz.png',
     title: 'New Zealand Skilled Migrant Category',
     desc: 'Experience exceptional work-life balance in New Zealand. The Skilled Migrant Category Resident Visa allows skilled specialists to work and live in New Zealand permanently.',
     successRate: '89%',
@@ -199,7 +167,7 @@ const staticCountriesData = [
       { name: 'Green List Straight to Residence', tag: 'Fast Track' },
       { name: 'Accredited Employer Work Visa', tag: 'Work' }
     ],
-    image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=800&q=80'
   }
 ]
 
@@ -293,7 +261,7 @@ export default function App() {
     }
 
     if (!bookingData.consent) {
-      alert('Please agree to be contacted by Cloyster Visas before submitting.')
+      alert('Please agree to be contacted by CloysterVisa before submitting.')
       return
     }
 
@@ -331,10 +299,6 @@ export default function App() {
   const currentCountry = countries.find((c) => c.id === activeTab)
 
   const visualPolishStyles = `
-    /* =========================================================
-       CLOYSTER VISAS — FULL LIGHT/DARK THEMING & POLISHED STYLES
-       ========================================================= */
-
     :root {
       --bg-main: #060b13;
       --bg-card: #0f172a;
@@ -367,36 +331,36 @@ export default function App() {
       transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    .cloyster-logo-box {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 178px;
-      height: 54px;
-      padding: 4px 9px;
-      box-sizing: border-box;
-      background: #ffffff;
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 4px 18px rgba(0,0,0,.16);
-    }
-
     .cloyster-logo-image {
       display: block;
-      width: 100%;
-      height: 100%;
+      width: 178px;
+      height: auto;
       max-width: 100%;
       object-fit: contain;
+      background: transparent !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      flex: 0 0 auto;
     }
 
     .cloyster-logo-footer {
       width: 190px;
-      height: 58px;
+      height: auto;
     }
 
     .logo-link {
       display: inline-flex !important;
       align-items: center;
+      justify-content: flex-start;
+      background: transparent !important;
+      padding: 0 !important;
+      border: 0 !important;
+      box-shadow: none !important;
+    }
+
+    .nav-container .logo-link {
+      min-width: 178px;
     }
 
     .theme-toggle {
@@ -568,6 +532,231 @@ export default function App() {
       }
     }
 
+    .roadmap-section {
+      overflow: hidden;
+    }
+
+    .roadmap-timeline {
+      position: relative;
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 8px 0 6px;
+    }
+
+    .roadmap-line {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 3px;
+      transform: translateX(-50%);
+      background: linear-gradient(180deg, #2563eb 0%, #22c55e 55%, #8b5cf6 100%);
+      border-radius: 999px;
+      opacity: .9;
+    }
+
+    .roadmap-step {
+      position: relative;
+      width: 50%;
+      box-sizing: border-box;
+      padding: 26px 54px;
+    }
+
+    .roadmap-step-left {
+      padding-left: 0;
+      padding-right: 54px;
+    }
+
+    .roadmap-step-right {
+      margin-left: 50%;
+      padding-left: 54px;
+      padding-right: 0;
+    }
+
+    .roadmap-card {
+      position: relative;
+      padding: 28px 30px;
+      min-height: 170px;
+      box-sizing: border-box;
+    }
+
+    .roadmap-step-number {
+      position: absolute;
+      top: 50%;
+      right: -72px;
+      transform: translateY(-50%);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-main);
+      color: #fff;
+      border: 3px solid var(--accent-blue);
+      box-shadow: 0 0 0 6px var(--bg-main), 0 0 18px rgba(37,99,235,.35);
+      font-weight: 800;
+      z-index: 2;
+    }
+
+    .roadmap-step-right .roadmap-step-number {
+      left: -72px;
+      right: auto;
+      border-color: #22c55e;
+      box-shadow: 0 0 0 6px var(--bg-main), 0 0 18px rgba(34,197,94,.25);
+    }
+
+    .roadmap-kicker,
+    .roadmap-cta-label {
+      display: inline-block;
+      color: var(--accent-blue);
+      font-size: .72rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      margin-bottom: 9px;
+    }
+
+    .roadmap-card h3 {
+      margin: 0 0 10px;
+      color: var(--text-primary);
+      font-size: 1.25rem;
+    }
+
+    .roadmap-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      font-size: .92rem;
+    }
+
+    .roadmap-step-right .roadmap-kicker {
+      color: #22c55e;
+    }
+
+    .roadmap-cta {
+      max-width: 1040px;
+      margin: 42px auto 0;
+      padding: 22px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+      flex-wrap: wrap;
+    }
+
+    .roadmap-cta h3 {
+      margin: 0 0 5px;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+    }
+
+    .roadmap-cta p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: .9rem;
+      line-height: 1.5;
+    }
+
+    .roadmap-cta .roadmap-cta-label {
+      margin-bottom: 5px;
+      color: #22c55e;
+    }
+
+    .client-success-section {
+      background: var(--bg-alt);
+      padding: 84px 0 90px;
+    }
+
+    .client-success-shell {
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .client-success-panel {
+      padding: 48px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .client-success-panel::before {
+      content: '';
+      position: absolute;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      border: 1px solid rgba(59,130,246,.14);
+      top: -150px;
+      right: -90px;
+    }
+
+    .client-success-panel::after {
+      content: '';
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      border: 1px solid rgba(34,197,94,.12);
+      bottom: -120px;
+      left: -70px;
+    }
+
+    .client-success-quote-mark {
+      color: rgba(59,130,246,.28);
+      font-size: 4rem;
+      line-height: .7;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .client-success-panel h3 {
+      position: relative;
+      z-index: 1;
+      margin: 0 auto 16px;
+      max-width: 760px;
+      color: var(--text-primary);
+      font-size: clamp(1.35rem, 2.4vw, 2rem);
+      line-height: 1.35;
+    }
+
+    .client-success-panel > p {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    .client-success-stats {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 720px;
+      margin: 32px auto 0;
+    }
+
+    .client-success-stat {
+      padding: 18px 14px;
+      background: rgba(37,99,235,.06);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+    }
+
+    .client-success-stat strong {
+      display: block;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+      margin-bottom: 4px;
+    }
+
+    .client-success-stat span {
+      color: var(--text-muted);
+      font-size: .78rem;
+    }
+
     footer {
       background: var(--bg-alt) !important;
       border-top: 1px solid var(--border-color) !important;
@@ -601,6 +790,77 @@ export default function App() {
       word-break: break-word;
     }
 
+    .flag-icon {
+      width: 20px;
+      height: 14px;
+      object-fit: cover;
+      border-radius: 2px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+
+    /* Canada pathway image: use the real Canadian flag inside the existing card */
+    .country-pathway-visual {
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      min-height: 220px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .country-pathway-visual img.country-pathway-main-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      object-fit: cover;
+    }
+
+    .country-pathway-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(7, 12, 22, 0.86);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.22);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .country-pathway-badge .flag-icon {
+      width: 25px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
+
+    @media (max-width: 760px) {
+      .country-pathway-visual {
+        min-height: 190px;
+      }
+
+      .country-pathway-badge {
+        top: 12px;
+        left: 12px;
+        padding: 8px 11px;
+        font-size: 0.84rem;
+      }
+    }
+
     @media (max-width: 1100px) and (min-width: 901px) {
       footer > .container:first-child {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -608,13 +868,68 @@ export default function App() {
       }
     }
 
+    @media (max-width: 760px) {
+      .roadmap-line {
+        left: 19px;
+        transform: none;
+      }
+
+      .roadmap-step,
+      .roadmap-step-right {
+        width: 100%;
+        margin-left: 0;
+        padding: 18px 0 18px 58px;
+      }
+
+      .roadmap-step-number,
+      .roadmap-step-right .roadmap-step-number {
+        left: 0;
+        right: auto;
+        top: 32px;
+        transform: none;
+        width: 36px;
+        height: 36px;
+      }
+
+      .roadmap-card {
+        padding: 24px 22px;
+      }
+
+      .roadmap-cta {
+        align-items: stretch;
+      }
+
+      .roadmap-cta .country-next-step-actions {
+        width: 100%;
+      }
+
+      .roadmap-cta .country-next-step-actions .btn {
+        flex: 1 1 190px;
+        justify-content: center;
+      }
+
+      .client-success-panel {
+        padding: 34px 22px;
+      }
+
+      .client-success-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media (max-width: 640px) {
       .cloyster-logo-image {
-        width: 138px;
+        width: 150px;
+        height: auto;
+      }
+
+      .nav-container .logo-link {
+        min-width: 150px;
       }
 
       .cloyster-logo-footer {
         width: 175px;
+        height: auto;
       }
 
       .hero-trust-line {
@@ -688,7 +1003,7 @@ export default function App() {
       {/* HEADER & NAVBAR */}
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="container nav-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 24px' }}>
-          <a href="#" className="logo-link" style={{ textDecoration: 'none' }} aria-label="Cloyster Visas home">
+          <a href="#" className="logo-link" style={{ textDecoration: 'none' }} aria-label="CloysterVisa home">
             <LogoImage />
           </a>
 
@@ -738,7 +1053,7 @@ export default function App() {
         <div className="container hero-grid">
           <div className="hero-content">
             <div className="hero-badge animate-pulse-glow" style={{ background: 'var(--bg-card)', borderColor: 'var(--accent-blue)' }}>
-              <span className="hero-badge-tag" style={{ background: '#2563eb', color: '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', marginRight: '8px' }}>Cloyster Visas</span>
+              <span className="hero-badge-tag" style={{ background: '#2563eb', color: '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', marginRight: '8px' }}>CloysterVisa</span>
               <span style={{ color: 'var(--text-secondary)' }}>Immigration Made Simple</span>
             </div>
 
@@ -758,7 +1073,7 @@ export default function App() {
               </a>
             </div>
 
-            <div className="hero-trust-line" aria-label="Cloyster Visas service strengths">
+            <div className="hero-trust-line" aria-label="CloysterVisa service strengths">
               <span className="hero-trust-item"><CheckIcon /> Profile Assessment</span>
               <span className="hero-trust-item"><CheckIcon /> Transparent Guidance</span>
               <span className="hero-trust-item"><CheckIcon /> End-to-End Support</span>
@@ -769,11 +1084,12 @@ export default function App() {
                 Supported Destination Programs
               </p>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <span className="glass-panel destination-chip"><Flag code="ca" label="Canada" /> Canada</span>
-                <span className="glass-panel destination-chip"><Flag code="au" label="Australia" /> Australia</span>
-                <span className="glass-panel destination-chip"><Flag code="de" label="Germany" /> Germany</span>
-                <span className="glass-panel destination-chip"><Flag code="gb" label="United Kingdom" /> UK</span>
-                <span className="glass-panel destination-chip"><Flag code="nz" label="New Zealand" /> New Zealand</span>
+                {countries.map((c) => (
+                  <span key={c.id} className="glass-panel destination-chip">
+                    <img src={c.flag} alt={`${c.name} Flag`} className="flag-icon" />
+                    {c.name}
+                  </span>
+                ))}
               </div>
             </div>
           </div>
@@ -788,7 +1104,7 @@ export default function App() {
                   <GlobeIcon />
                 </div>
                 <div className="floating-info">
-                  <h4 style={{ color: 'var(--text-primary)', margin: 0 }}>Passport & Global Mobility 🛂</h4>
+                  <h4 style={{ color: 'var(--text-primary)', margin: 0 }}>Passport & Global Mobility</h4>
                   <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.85rem' }}>Express Entry & Skilled Worker Pathways</p>
                 </div>
               </div>
@@ -813,7 +1129,7 @@ export default function App() {
                 alignItems: 'center',
                 gap: '12px'
               }}>
-                <span style={{ fontSize: '1.8rem' }}>🧳✈️</span>
+                <span style={{ color: 'var(--accent-blue)', display: 'inline-flex' }}><GlobeIcon /></span>
                 <div>
                   <h5 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)' }}>Seamless Relocation</h5>
                   <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Dedicated Assistance Worldwide</p>
@@ -824,41 +1140,12 @@ export default function App() {
         </div>
       </header>
 
-      {/* VISA ROADMAP + CLIENT SUCCESS */}
-      <section className="section-padding" style={{ paddingTop: '34px', paddingBottom: '34px' }}>
-        <div className="container">
-          <div className="roadmap-success-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '18px'
-          }}>
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <div style={{ fontSize: '1.7rem', marginBottom: '8px' }}>🗺️</div>
-              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: 'var(--text-primary)' }}>Visa Roadmap</h3>
-              <p style={{ margin: '0 0 14px', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
-                Profile evaluation → Pathway selection → Documentation → Application → Visa decision → Post-landing support.
-              </p>
-              <a href="#calculator" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>Start Your Roadmap <ArrowRightIcon /></a>
-            </div>
-
-            <div className="glass-panel" style={{ padding: '24px' }}>
-              <div style={{ fontSize: '1.7rem', marginBottom: '8px' }}>🏆</div>
-              <h3 style={{ margin: '0 0 9px', fontSize: '1.2rem', color: 'var(--text-primary)' }}>Client Success</h3>
-              <p style={{ margin: '0 0 14px', color: 'var(--text-secondary)', fontSize: '0.9rem', lineHeight: '1.6' }}>
-                128+ successful grants this month with personalized support across work, study and permanent residency pathways.
-              </p>
-              <a href="#contact" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>Book a Consultation <ArrowRightIcon /></a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ABOUT / FEATURES */}
       <section id="about" className="section-padding" style={{ background: 'var(--bg-alt)', padding: '60px 0' }}>
         <div className="container">
           <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
             <span className="section-tag" style={{ background: 'var(--bg-card)', color: '#60a5fa', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>Professional Immigration Guidance</span>
-            <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Why Choose Cloyster Visas?</h2>
+            <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Why Choose CloysterVisa?</h2>
             <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '600px', margin: '0 auto' }}>
               Clear guidance, personalized strategies, and transparent support for your immigration journey.
             </p>
@@ -909,6 +1196,7 @@ export default function App() {
             </p>
           </div>
 
+          {/* DESTINATION TAB BUTTONS WITH FLAGS */}
           <div className="explorer-tabs" style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '30px' }}>
             {countries.map((country) => (
               <button
@@ -924,11 +1212,12 @@ export default function App() {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
+                  gap: '8px',
                   fontWeight: '600'
                 }}
               >
-                <Flag code={country.code} label={country.name} size={18} />
-                <span style={{ marginLeft: '6px' }}>{country.name}</span>
+                <img src={country.flag} alt={`${country.name} Flag`} className="flag-icon" />
+                <span>{country.name}</span>
               </button>
             ))}
           </div>
@@ -937,10 +1226,21 @@ export default function App() {
             <div className="glass-panel" style={{ padding: '35px' }}>
               <div className="country-display-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
                 <div className="country-image-wrapper">
-                  <img src={currentCountry.image} alt={currentCountry.name} className="country-img" style={{ width: '100%', borderRadius: '12px', height: '240px', objectFit: 'cover' }} />
-                  <div className="country-flag-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
-                    <Flag code={currentCountry.code} label={currentCountry.name} size={22} />
-                    <span style={{ fontWeight: '700', color: 'var(--text-primary)' }}>{currentCountry.name} Pathway</span>
+                  <div className="country-pathway-visual">
+                    <img
+                      src={currentCountry.id === 'canada' ? currentCountry.pathwayFlag : currentCountry.image}
+                      alt={currentCountry.id === 'canada' ? 'Canada flag' : `${currentCountry.name} destination`}
+                      className="country-pathway-main-image"
+                    />
+
+                    <div className="country-pathway-badge">
+                      <img
+                        src={currentCountry.flag}
+                        alt={`${currentCountry.name} Flag`}
+                        className="flag-icon"
+                      />
+                      <span>{currentCountry.name} Pathway</span>
+                    </div>
                   </div>
                 </div>
 
@@ -954,11 +1254,11 @@ export default function App() {
                       <div className="c-stat-value" style={{ fontWeight: '800', color: '#22c55e' }}>{currentCountry.successRate}</div>
                     </div>
                     <div className="c-stat-card highlighted" style={{ background: 'var(--bg-main)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>EST. PROCESSING</div>
+                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>EST. PROCESSING TIME</div>
                       <div className="c-stat-value" style={{ fontWeight: '800', color: 'var(--accent-blue)' }}>{currentCountry.processingTime}</div>
                     </div>
                     <div className="c-stat-card" style={{ background: 'var(--bg-main)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>MIN. POINTS</div>
+                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>MINIMUM POINTS THRESHOLD</div>
                       <div className="c-stat-value" style={{ fontWeight: '800', color: 'var(--text-primary)' }}>{currentCountry.minPoints}</div>
                     </div>
                   </div>
@@ -1097,7 +1397,7 @@ export default function App() {
                 Age Group: <strong style={{ color: 'var(--text-primary)' }}>{calcData.age}</strong> | Target: <strong style={{ color: 'var(--text-primary)', textTransform: 'capitalize' }}>{calcData.destination}</strong>
               </div>
               <div style={{ color: '#22c55e', fontWeight: '700', fontSize: '0.92rem', marginTop: '4px' }}>
-                🟢 Potentially Eligible
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><CheckIcon /> Potentially Eligible</span>
               </div>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '4px', maxWidth: '560px', lineHeight: '1.45' }}>
                 Eligibility depends on your individual profile and current program requirements.
@@ -1108,6 +1408,87 @@ export default function App() {
                 Get Detailed Assessment <ArrowRightIcon />
               </a>
               <a href="#contact" className="btn btn-primary" style={{ padding: '10px 14px', background: 'var(--accent-blue)', color: '#fff', textDecoration: 'none', borderRadius: '8px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                Book a Consultation <ArrowRightIcon />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* VISA ROADMAP — placed directly below Advisory Services */}
+      <section id="visa-roadmap" className="section-padding roadmap-section" style={{ padding: '76px 0', background: 'var(--bg-main)' }}>
+        <div className="container">
+          <div className="section-header roadmap-header" style={{ textAlign: 'center', marginBottom: '48px' }}>
+            <span className="section-tag" style={{ background: 'rgba(34,197,94,0.12)', color: '#22c55e', padding: '7px 14px', borderRadius: '999px', fontSize: '0.8rem', fontWeight: '700', letterSpacing: '1px' }}>
+              VISA ROADMAP
+            </span>
+            <h2 className="section-title text-gradient" style={{ fontSize: '2.45rem', margin: '16px 0 12px' }}>
+              The Step-by-Step Pathway
+            </h2>
+            <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '720px', margin: '0 auto', lineHeight: '1.7' }}>
+              We divide your immigration process into clear, manageable phases, from profile assessment and documentation to submission and post-landing support.
+            </p>
+          </div>
+
+          <div className="roadmap-timeline">
+            <div className="roadmap-line" aria-hidden="true"></div>
+
+            <div className="roadmap-step roadmap-step-left">
+              <div className="roadmap-card glass-panel">
+                <div className="roadmap-step-number">1</div>
+                <span className="roadmap-kicker">ASSESSMENT</span>
+                <h3>Evaluation &amp; Strategy</h3>
+                <p>
+                  We review your profile, goals, destination and visa category to identify suitable pathways and build a practical strategy around your circumstances.
+                </p>
+              </div>
+            </div>
+
+            <div className="roadmap-step roadmap-step-right">
+              <div className="roadmap-card glass-panel">
+                <div className="roadmap-step-number">2</div>
+                <span className="roadmap-kicker">PREPARATION</span>
+                <h3>Documentation &amp; Application</h3>
+                <p>
+                  We organize the required records, supporting evidence, forms and application materials so your file is structured and ready for submission.
+                </p>
+              </div>
+            </div>
+
+            <div className="roadmap-step roadmap-step-left">
+              <div className="roadmap-card glass-panel">
+                <div className="roadmap-step-number">3</div>
+                <span className="roadmap-kicker">SUBMISSION</span>
+                <h3>Submission &amp; Decision</h3>
+                <p>
+                  We support the submission stage and help you understand requests, updates and next steps as your application moves through the relevant process.
+                </p>
+              </div>
+            </div>
+
+            <div className="roadmap-step roadmap-step-right">
+              <div className="roadmap-card glass-panel">
+                <div className="roadmap-step-number">4</div>
+                <span className="roadmap-kicker">RELOCATION</span>
+                <h3>Pre &amp; Post Landing</h3>
+                <p>
+                  Get practical guidance for interview or pre-departure preparation, relocation planning and post-submission support through the next stage of your journey.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="roadmap-cta glass-panel">
+            <div>
+              <span className="roadmap-cta-label">READY FOR YOUR NEXT STEP?</span>
+              <h3>Not sure which pathway fits your profile?</h3>
+              <p>Start with a preliminary assessment or speak with an advisor about your goals.</p>
+            </div>
+            <div className="country-next-step-actions">
+              <a href="#calculator" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '11px 17px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
+                Assess My Profile <ArrowRightIcon />
+              </a>
+              <a href="#contact" className="btn btn-secondary" style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '11px 17px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
                 Book a Consultation <ArrowRightIcon />
               </a>
             </div>
@@ -1214,11 +1595,11 @@ export default function App() {
                       value={calcData.destination}
                       onChange={(e) => setCalcData({ ...calcData, destination: e.target.value })}
                     >
-                      <option value="canada">Canada (Express Entry)</option>
-                      <option value="australia">Australia (General Skilled Migration)</option>
-                      <option value="germany">Germany (Opportunity Card)</option>
-                      <option value="uk">United Kingdom (Skilled Worker)</option>
-                      <option value="nz">New Zealand (SMC)</option>
+                      <option value="canada">🇨🇦 Canada (Express Entry)</option>
+                      <option value="australia">🇦🇺 Australia (General Skilled Migration)</option>
+                      <option value="germany">🇩🇪 Germany (Opportunity Card)</option>
+                      <option value="uk">🇬🇧 United Kingdom (Skilled Worker)</option>
+                      <option value="nz">🇳🇿 New Zealand (SMC)</option>
                     </select>
                   </div>
                   <div className="form-group">
@@ -1421,14 +1802,14 @@ export default function App() {
                         onChange={(e) => setBookingData({ ...bookingData, countryCode: e.target.value })}
                         aria-label="Country code"
                       >
-                        <option value="+91">🇮🇳 +91</option>
-                        <option value="+1">🇺🇸 +1</option>
-                        <option value="+44">🇬🇧 +44</option>
-                        <option value="+61">🇦🇺 +61</option>
-                        <option value="+64">🇳🇿 +64</option>
-                        <option value="+49">🇩🇪 +49</option>
-                        <option value="+971">🇦🇪 +971</option>
-                        <option value="+65">🇸🇬 +65</option>
+                        <option value="+91">+91</option>
+                        <option value="+1">+1</option>
+                        <option value="+44">+44</option>
+                        <option value="+61">+61</option>
+                        <option value="+64">+64</option>
+                        <option value="+49">+49</option>
+                        <option value="+971">+971</option>
+                        <option value="+65">+65</option>
                       </select>
                       <input
                         type="tel"
@@ -1449,11 +1830,11 @@ export default function App() {
                     value={bookingData.destination}
                     onChange={(e) => setBookingData({ ...bookingData, destination: e.target.value })}
                   >
-                    <option value="canada">Canada</option>
-                    <option value="australia">Australia</option>
-                    <option value="germany">Germany</option>
-                    <option value="uk">United Kingdom</option>
-                    <option value="nz">New Zealand</option>
+                    <option value="canada">🇨🇦 Canada</option>
+                    <option value="australia">🇦🇺 Australia</option>
+                    <option value="germany">🇩🇪 Germany</option>
+                    <option value="uk">🇬🇧 United Kingdom</option>
+                    <option value="nz">🇳🇿 New Zealand</option>
                   </select>
                 </div>
 
@@ -1500,7 +1881,7 @@ export default function App() {
                     onChange={(e) => setBookingData({ ...bookingData, consent: e.target.checked })}
                     style={{ marginTop: '4px', accentColor: '#2563eb' }}
                   />
-                  <span>I agree to be contacted by Cloyster Visas regarding my enquiry and consultation request.</span>
+                  <span>I agree to be contacted by CloysterVisa regarding my enquiry and consultation request.</span>
                 </label>
 
                 <button
@@ -1518,10 +1899,61 @@ export default function App() {
         </div>
       </section>
 
+      {/* CLIENT SUCCESS — kept at the bottom, immediately before the footer */}
+      <section id="client-success" className="client-success-section">
+        <div className="container">
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '42px' }}>
+            <span className="section-tag" style={{ background: 'rgba(34,197,94,0.12)', color: '#22c55e', padding: '7px 14px', borderRadius: '999px', fontSize: '0.8rem', fontWeight: '700', letterSpacing: '1px' }}>
+              CLIENT SUCCESS
+            </span>
+            <h2 className="section-title text-gradient" style={{ fontSize: '2.45rem', margin: '16px 0 12px' }}>
+              Client Success Stories
+            </h2>
+            <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '720px', margin: '0 auto', lineHeight: '1.7' }}>
+              Structured, destination-focused support designed to make your immigration journey clearer from the first assessment through the next stage.
+            </p>
+          </div>
+
+          <div className="client-success-shell">
+            <div className="client-success-panel glass-panel">
+              <div className="client-success-quote-mark" aria-hidden="true">“</div>
+              <h3>Personalized guidance, transparent communication, and practical support at every stage of the journey.</h3>
+              <p>
+                CloysterVisa supports clients across work, study and permanent residency pathways with profile assessment, documentation guidance, application preparation and post-submission support.
+              </p>
+
+              <div className="client-success-stats">
+                <div className="client-success-stat">
+                  <strong>128+</strong>
+                  <span>Successful grants shown in the current service snapshot</span>
+                </div>
+                <div className="client-success-stat">
+                  <strong>5 Destinations</strong>
+                  <span>Canada, Australia, Germany, UK and New Zealand</span>
+                </div>
+                <div className="client-success-stat">
+                  <strong>End-to-End</strong>
+                  <span>Profile, documents, application and post-submission guidance</span>
+                </div>
+              </div>
+
+              <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                <a href="#contact" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '11px 18px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
+                  Book a Consultation <ArrowRightIcon />
+                </a>
+                <a href="#calculator" className="btn btn-secondary" style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '11px 18px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
+                  Assess My Profile <ArrowRightIcon />
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* FLOATING WHATSAPP BUTTON */}
       <a
         className="whatsapp-float"
-        href="https://wa.me/917027466559?text=Hello%20Cloyster%20Visas,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
+        href="https://wa.me/917027466559?text=Hello%20CloysterVisa,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Chat on WhatsApp"
@@ -1553,7 +1985,7 @@ export default function App() {
         <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '30px', marginBottom: '40px' }}>
 
           <div>
-            <a href="#" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', marginBottom: '15px' }} aria-label="Cloyster Visas home">
+            <a href="#" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', marginBottom: '15px' }} aria-label="CloysterVisa home">
               <LogoImage footer />
             </a>
             <p style={{ fontSize: '0.9rem', lineHeight: '1.6', color: 'var(--text-muted)' }}>
@@ -1575,11 +2007,18 @@ export default function App() {
           <div>
             <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Popular Destinations</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem' }}>
-              <li><a href="#destinations" onClick={() => setActiveTab('canada')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="ca" size={16} /> Canada Express Entry</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('germany')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="de" size={16} /> Germany Opportunity Card</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('australia')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="au" size={16} /> Australia GSM</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('uk')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="gb" size={16} /> UK Skilled Worker</a></li>
-              <li><a href="#destinations" onClick={() => setActiveTab('nz')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}><Flag code="nz" size={16} /> New Zealand SMC</a></li>
+              {countries.map((c) => (
+                <li key={c.id}>
+                  <a
+                    href="#destinations"
+                    onClick={() => setActiveTab(c.id)}
+                    style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                  >
+                    <img src={c.flag} alt={`${c.name} Flag`} className="flag-icon" />
+                    <span>{c.name} Pathway</span>
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -1592,7 +2031,7 @@ export default function App() {
               📞 <a href="tel:+917027466559" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>7027466559</a>
             </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              💬 WhatsApp: <a href="https://wa.me/917027466559?text=Hello%20Cloyster%20Visas" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
+              💬 WhatsApp: <a href="https://wa.me/917027466559?text=Hello%20CloysterVisa" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
             </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
               ✉️ Email: <a className="office-email" href="mailto:cloysterimmigration@gmail.com" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>cloysterimmigration@gmail.com</a>
@@ -1605,7 +2044,7 @@ export default function App() {
         </div>
 
         <div className="container" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          <p>© {new Date().getFullYear()} Cloyster Visas Advisory Services. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} CloysterVisa Advisory Services. All Rights Reserved.</p>
         </div>
       </footer>
     </div>
