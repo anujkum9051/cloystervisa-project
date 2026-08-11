@@ -88,6 +88,7 @@ const staticCountriesData = [
     name: 'Canada',
     code: 'ca',
     flag: 'https://flagcdn.com/w40/ca.png',
+    pathwayFlag: 'https://flagcdn.com/ca.svg',
     title: 'Immigrate to Canada via Express Entry & PNPs',
     desc: 'Canada offers some of the world\'s most welcoming immigration programs. Whether you want to apply for Permanent Residency (PR), study at top universities, or obtain a work permit, Canada provides stable career pathways and an exceptional quality of life.',
     successRate: '94%',
@@ -797,6 +798,69 @@ export default function App() {
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
 
+    /* Canada pathway image: use the real Canadian flag inside the existing card */
+    .country-pathway-visual {
+      width: 100%;
+      aspect-ratio: 2 / 1;
+      min-height: 220px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      background: #ffffff;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .country-pathway-visual img.country-pathway-main-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0;
+      object-fit: cover;
+    }
+
+    .country-pathway-badge {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      z-index: 2;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: rgba(7, 12, 22, 0.86);
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,0.16);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.22);
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .country-pathway-badge .flag-icon {
+      width: 25px;
+      height: 17px;
+      flex: 0 0 auto;
+    }
+
+    @media (max-width: 760px) {
+      .country-pathway-visual {
+        min-height: 190px;
+      }
+
+      .country-pathway-badge {
+        top: 12px;
+        left: 12px;
+        padding: 8px 11px;
+        font-size: 0.84rem;
+      }
+    }
+
     @media (max-width: 1100px) and (min-width: 901px) {
       footer > .container:first-child {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -1162,21 +1226,21 @@ export default function App() {
             <div className="glass-panel" style={{ padding: '35px' }}>
               <div className="country-display-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
                 <div className="country-image-wrapper">
-                  {/* FIXED IMAGE DISPLAY FORMAT (No cutoffs) */}
-                  <img
-                    src={currentCountry.image}
-                    alt={currentCountry.name}
-                    className="country-img"
-                    style={{
-                      width: '100%',
-                      borderRadius: '12px',
-                      height: '250px',
-                      objectFit: 'cover'
-                    }}
-                  />
-                  <div className="country-flag-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '14px' }}>
-                    <img src={currentCountry.flag} alt={`${currentCountry.name} Flag`} className="flag-icon" style={{ width: '24px', height: '17px' }} />
-                    <span style={{ fontWeight: '700', color: 'var(--text-primary)', fontSize: '1.05rem' }}>{currentCountry.name} Pathway</span>
+                  <div className="country-pathway-visual">
+                    <img
+                      src={currentCountry.id === 'canada' ? currentCountry.pathwayFlag : currentCountry.image}
+                      alt={currentCountry.id === 'canada' ? 'Canada flag' : `${currentCountry.name} destination`}
+                      className="country-pathway-main-image"
+                    />
+
+                    <div className="country-pathway-badge">
+                      <img
+                        src={currentCountry.flag}
+                        alt={`${currentCountry.name} Flag`}
+                        className="flag-icon"
+                      />
+                      <span>{currentCountry.name} Pathway</span>
+                    </div>
                   </div>
                 </div>
 
