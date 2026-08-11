@@ -123,6 +123,7 @@ const staticCountriesData = [
     name: 'Germany',
     code: 'de',
     flag: 'https://flagcdn.com/w40/de.png',
+    pathwayFlag: 'https://flagcdn.com/de.svg',
     title: 'Work & Live in Germany with Opportunity Card',
     desc: 'Germany\'s new Opportunity Card (Chancenkarte) makes job hunting in Europe easier than ever. Skilled professionals can relocate to Germany to secure employment in engineering, IT, healthcare, and other highly demanded fields.',
     successRate: '88%',
@@ -325,10 +326,26 @@ export default function App() {
       --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
     }
 
+    * {
+      box-sizing: border-box;
+    }
+
     body {
       background-color: var(--bg-main);
       color: var(--text-primary);
       transition: background-color 0.3s ease, color 0.3s ease;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
     .cloyster-logo-image {
@@ -520,6 +537,14 @@ export default function App() {
 
     .hero-sec {
       margin-top: 0 !important;
+      padding: 40px 0;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 40px;
+      align-items: center;
     }
 
     @media (min-width: 901px) {
@@ -529,6 +554,10 @@ export default function App() {
 
       .hero-content {
         padding-top: 0 !important;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1.1fr 0.9fr;
       }
     }
 
@@ -798,7 +827,6 @@ export default function App() {
       box-shadow: 0 1px 3px rgba(0,0,0,0.2);
     }
 
-    /* Canada pathway image: use the real Canadian flag inside the existing card */
     .country-pathway-visual {
       width: 100%;
       aspect-ratio: 2 / 1;
@@ -848,7 +876,62 @@ export default function App() {
       flex: 0 0 auto;
     }
 
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 24px;
+      height: 18px;
+      cursor: pointer;
+      z-index: 1002;
+    }
+
+    .hamburger span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background-color: var(--text-primary);
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+
+    /* --- RESPONSIVE BREAKPOINTS & MOBILE FIXES --- */
+
+    @media (max-width: 900px) {
+      .hamburger {
+        display: flex;
+      }
+
+      .nav-menu {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 280px;
+        height: 100vh;
+        background: var(--bg-card);
+        flex-direction: column;
+        padding: 80px 30px 30px;
+        box-shadow: -5px 0 25px rgba(0,0,0,0.5);
+        transition: right 0.3s ease;
+        align-items: flex-start !important;
+        z-index: 1001;
+      }
+
+      .nav-menu.open {
+        right: 0;
+      }
+
+      .nav-actions .btn-primary {
+        display: none;
+      }
+    }
+
     @media (max-width: 760px) {
+      .container {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
       .country-pathway-visual {
         min-height: 190px;
       }
@@ -859,16 +942,7 @@ export default function App() {
         padding: 8px 11px;
         font-size: 0.84rem;
       }
-    }
 
-    @media (max-width: 1100px) and (min-width: 901px) {
-      footer > .container:first-child {
-        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-        column-gap: 34px !important;
-      }
-    }
-
-    @media (max-width: 760px) {
       .roadmap-line {
         left: 19px;
         transform: none;
@@ -904,7 +978,7 @@ export default function App() {
       }
 
       .roadmap-cta .country-next-step-actions .btn {
-        flex: 1 1 190px;
+        flex: 1 1 100%;
         justify-content: center;
       }
 
@@ -915,9 +989,27 @@ export default function App() {
       .client-success-stats {
         grid-template-columns: 1fr;
       }
+
+      .country-stats-row {
+        grid-template-columns: 1fr !important;
+      }
     }
 
     @media (max-width: 640px) {
+      .hero-title {
+        font-size: 2.1rem !important;
+      }
+
+      .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .hero-buttons .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
       .cloyster-logo-image {
         width: 150px;
         height: auto;
@@ -933,7 +1025,7 @@ export default function App() {
       }
 
       .hero-trust-line {
-        justify-content: center;
+        justify-content: flex-start;
         font-size: 0.78rem;
         gap: 7px 12px;
       }
@@ -944,10 +1036,11 @@ export default function App() {
 
       .country-next-step-actions {
         width: 100%;
+        flex-direction: column;
       }
 
       .country-next-step-actions .btn {
-        flex: 1 1 180px;
+        width: 100%;
         justify-content: center;
       }
 
@@ -955,6 +1048,7 @@ export default function App() {
         min-height: 42px;
         padding: 8px 12px !important;
         gap: 3px;
+        font-size: 0.8rem !important;
       }
 
       .navbar {
@@ -973,6 +1067,22 @@ export default function App() {
 
       .office-support-block .office-email {
         font-size: 13px;
+      }
+
+      .phone-input-row {
+        grid-template-columns: 85px minmax(0, 1fr) !important;
+      }
+
+      .whatsapp-float {
+        width: 48px !important;
+        height: 48px !important;
+        bottom: 20px !important;
+        right: 20px !important;
+      }
+      
+      .whatsapp-float svg {
+        width: 24px;
+        height: 24px;
       }
     }
   `
@@ -1007,7 +1117,7 @@ export default function App() {
             <LogoImage />
           </a>
 
-          <div className={`nav-menu ${mobileMenuOpen ? 'open' : ''}`} style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
+          <div className={`nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
             <a href="#about" className="nav-link" onClick={() => setMobileMenuOpen(false)}>About Us</a>
             <a href="#destinations" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Destinations</a>
             <a href="#services" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Services</a>
@@ -1039,9 +1149,9 @@ export default function App() {
               Check Your Eligibility
             </a>
             <div className="hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              <span style={{ transform: mobileMenuOpen ? 'rotate(45deg) translate(6px, 6px)' : 'none' }}></span>
+              <span style={{ transform: mobileMenuOpen ? 'rotate(45deg) translate(5px, 6px)' : 'none' }}></span>
               <span style={{ opacity: mobileMenuOpen ? '0' : '1' }}></span>
-              <span style={{ transform: mobileMenuOpen ? 'rotate(-45deg) translate(6px, -6px)' : 'none' }}></span>
+              <span style={{ transform: mobileMenuOpen ? 'rotate(-45deg) translate(5px, -6px)' : 'none' }}></span>
             </div>
           </div>
         </div>
@@ -1228,8 +1338,8 @@ export default function App() {
                 <div className="country-image-wrapper">
                   <div className="country-pathway-visual">
                     <img
-                      src={currentCountry.id === 'canada' ? currentCountry.pathwayFlag : currentCountry.image}
-                      alt={currentCountry.id === 'canada' ? 'Canada flag' : `${currentCountry.name} destination`}
+                      src={['canada', 'germany'].includes(currentCountry.id) ? currentCountry.pathwayFlag : currentCountry.image}
+                      alt={['canada', 'germany'].includes(currentCountry.id) ? `${currentCountry.name} flag` : `${currentCountry.name} destination`}
                       className="country-pathway-main-image"
                     />
 
@@ -1308,7 +1418,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
+          <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
             <div className="service-card glass-panel" style={{ padding: '28px' }}>
               <h3 className="service-title" style={{ color: 'var(--text-primary)', marginBottom: '10px' }}>1. Visa Consultation</h3>
               <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
@@ -1509,7 +1619,7 @@ export default function App() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000,
+          zIndex: 1200,
           padding: '20px'
         }}>
           <div className="glass-panel" style={{
@@ -1728,7 +1838,7 @@ export default function App() {
                     ? "🎉 Strong Score! You meet the standard points benchmark for PR considerations."
                     : "👍 Good Score! Regional nominations or specific PNP options can boost your profile."}
                 </p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
                   <button className="btn btn-secondary" onClick={() => setCalcStep(1)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Recalculate</button>
                   <a href="#contact" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '10px 18px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>Book a Consultation</a>
                 </div>
@@ -1749,7 +1859,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="glass-panel" style={{ maxWidth: '650px', margin: '0 auto', padding: '40px' }}>
+          <div className="glass-panel" style={{ maxWidth: '650px', margin: '0 auto', padding: '30px' }}>
             {bookingSubmitted ? (
               <div style={{ textAlign: 'center', padding: '20px 0' }}>
                 <h3 style={{ color: '#22c55e', fontSize: '1.6rem', marginBottom: '10px' }}>
@@ -1780,7 +1890,7 @@ export default function App() {
                   />
                 </div>
 
-                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
                   <div className="form-group">
                     <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px' }}>Email Address</label>
                     <input
@@ -1794,7 +1904,7 @@ export default function App() {
                   </div>
                   <div className="form-group">
                     <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px' }}>Phone Number</label>
-                    <div className="phone-input-row" style={{ display: 'grid', gridTemplateColumns: '105px minmax(0, 1fr)', gap: '8px' }}>
+                    <div className="phone-input-row" style={{ display: 'grid', gridTemplateColumns: '95px minmax(0, 1fr)', gap: '8px' }}>
                       <select
                         required
                         className="select-control"
@@ -2037,7 +2147,7 @@ export default function App() {
               ✉️ Email: <a className="office-email" href="mailto:cloysterimmigration@gmail.com" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>cloysterimmigration@gmail.com</a>
             </p>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '12px' }}>
-              Available Monday – Saturday (9:00 AM – 6:00 PM)
+              Available Monday – Sunday (9:00 AM – 9:00 PM)
             </p>
           </div>
 
