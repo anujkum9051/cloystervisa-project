@@ -3,6 +3,8 @@ import emailjs from '@emailjs/browser'
 import cloysterLogo from './cloyster-logo.png'
 
 // Custom SVG Icons & Components
+// The header logo is intentionally transparent so it sits directly on
+// the dark navigation without the old white card/background.
 const LogoImage = ({ className = '', footer = false }) => (
   <img
     src={cloysterLogo}
@@ -81,14 +83,12 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
-// Destination Countries Data with Flags
+// Destination Countries Data
 const staticCountriesData = [
   {
     id: 'canada',
     name: 'Canada',
     code: 'ca',
-    flag: 'https://flagcdn.com/w40/ca.png',
-    pathwayFlag: 'https://flagcdn.com/ca.svg',
     title: 'Immigrate to Canada via Express Entry & PNPs',
     desc: 'Canada offers some of the world\'s most welcoming immigration programs. Whether you want to apply for Permanent Residency (PR), study at top universities, or obtain a work permit, Canada provides stable career pathways and an exceptional quality of life.',
     successRate: '94%',
@@ -99,13 +99,12 @@ const staticCountriesData = [
       { name: 'Provincial Nominee Programs (PNP)', tag: 'Regional' },
       { name: 'Post-Graduation Work Permit (PGWP)', tag: 'Study first' }
     ],
-    image: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=800&q=80'
+    image: 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Flag_of_Canada.svg'
   },
   {
     id: 'australia',
     name: 'Australia',
     code: 'au',
-    flag: 'https://flagcdn.com/w40/au.png',
     title: 'Explore General Skilled Migration in Australia',
     desc: 'With a booming economy and a demand for skilled professionals, Australia offers competitive visa pathways. The General Skilled Migration (GSM) program allows eligible workers to live and work permanently without needing a sponsor.',
     successRate: '91%',
@@ -116,14 +115,12 @@ const staticCountriesData = [
       { name: 'Skilled Nominated Visa (Subclass 190)', tag: 'State Sponsor' },
       { name: 'Skilled Work Regional Visa (Subclass 491)', tag: 'Regional' }
     ],
-    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=600&q=80'
   },
   {
     id: 'germany',
     name: 'Germany',
     code: 'de',
-    flag: 'https://flagcdn.com/w40/de.png',
-    pathwayFlag: 'https://flagcdn.com/de.svg',
     title: 'Work & Live in Germany with Opportunity Card',
     desc: 'Germany\'s new Opportunity Card (Chancenkarte) makes job hunting in Europe easier than ever. Skilled professionals can relocate to Germany to secure employment in engineering, IT, healthcare, and other highly demanded fields.',
     successRate: '88%',
@@ -134,13 +131,12 @@ const staticCountriesData = [
       { name: 'German EU Blue Card', tag: 'Fast Track' },
       { name: 'Vocational Training (Ausbildung)', tag: 'Entry Level' }
     ],
-    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=600&q=80'
   },
   {
     id: 'uk',
     name: 'United Kingdom',
     code: 'gb',
-    flag: 'https://flagcdn.com/w40/gb.png',
     title: 'UK Skilled Worker & Expansion Visas',
     desc: 'The UK\'s points-based system offers attractive visas for global talent. Relocate quickly as a skilled worker or establish a branch of your business using the UK Expansion Worker pathway.',
     successRate: '92%',
@@ -151,13 +147,12 @@ const staticCountriesData = [
       { name: 'UK Global Talent Visa', tag: 'Elite Tech/Arts' },
       { name: 'UK Scale-up Visa', tag: 'Fast Growth' }
     ],
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=600&q=80'
   },
   {
     id: 'nz',
     name: 'New Zealand',
     code: 'nz',
-    flag: 'https://flagcdn.com/w40/nz.png',
     title: 'New Zealand Skilled Migrant Category',
     desc: 'Experience exceptional work-life balance in New Zealand. The Skilled Migrant Category Resident Visa allows skilled specialists to work and live in New Zealand permanently.',
     successRate: '89%',
@@ -168,7 +163,7 @@ const staticCountriesData = [
       { name: 'Green List Straight to Residence', tag: 'Fast Track' },
       { name: 'Accredited Employer Work Visa', tag: 'Work' }
     ],
-    image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=600&q=80'
   }
 ]
 
@@ -300,6 +295,10 @@ export default function App() {
   const currentCountry = countries.find((c) => c.id === activeTab)
 
   const visualPolishStyles = `
+    /* =========================================================
+       CLOYSTER VISAS — FULL LIGHT/DARK THEMING & POLISHED STYLES
+       ========================================================= */
+
     :root {
       --bg-main: #060b13;
       --bg-card: #0f172a;
@@ -791,77 +790,6 @@ export default function App() {
       word-break: break-word;
     }
 
-    .flag-icon {
-      width: 20px;
-      height: 14px;
-      object-fit: cover;
-      border-radius: 2px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-    }
-
-    /* Canada pathway image: use the real Canadian flag inside the existing card */
-    .country-pathway-visual {
-      width: 100%;
-      aspect-ratio: 2 / 1;
-      min-height: 220px;
-      position: relative;
-      overflow: hidden;
-      border-radius: 14px;
-      border: 1px solid var(--border-color);
-      background: #ffffff;
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.22);
-    }
-
-    .country-pathway-visual img.country-pathway-main-image {
-      display: block;
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      border: 0;
-      border-radius: 0;
-      object-fit: cover;
-    }
-
-    .country-pathway-badge {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      z-index: 2;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
-      border-radius: 999px;
-      background: rgba(7, 12, 22, 0.86);
-      color: #ffffff;
-      border: 1px solid rgba(255,255,255,0.16);
-      box-shadow: 0 8px 18px rgba(0,0,0,0.22);
-      backdrop-filter: blur(7px);
-      -webkit-backdrop-filter: blur(7px);
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .country-pathway-badge .flag-icon {
-      width: 25px;
-      height: 17px;
-      flex: 0 0 auto;
-    }
-
-    @media (max-width: 760px) {
-      .country-pathway-visual {
-        min-height: 190px;
-      }
-
-      .country-pathway-badge {
-        top: 12px;
-        left: 12px;
-        padding: 8px 11px;
-        font-size: 0.84rem;
-      }
-    }
-
     @media (max-width: 1100px) and (min-width: 901px) {
       footer > .container:first-child {
         grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -976,560 +904,6 @@ export default function App() {
         font-size: 13px;
       }
     }
-
-    /* =========================================================
-       MOBILE PROFESSIONAL LAYOUT
-       Keeps the existing desktop design/font/content intact.
-       These rules only improve fit and spacing on small screens.
-       ========================================================= */
-    html, body, #root {
-      max-width: 100%;
-      overflow-x: hidden !important;
-    }
-
-    img {
-      max-width: 100%;
-    }
-
-    @media (max-width: 760px) {
-      /* Header: compact, clean and stable on phones */
-      .announcement-bar {
-        min-height: 48px !important;
-        padding: 8px 14px !important;
-        font-size: 0.82rem !important;
-        line-height: 1.35 !important;
-      }
-
-      .navbar {
-        position: sticky !important;
-        top: 0 !important;
-        z-index: 1000 !important;
-      }
-
-      .nav-container {
-        position: relative !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        padding: 10px 14px !important;
-        gap: 10px !important;
-      }
-
-      .cloyster-logo-image {
-        width: 126px !important;
-        max-width: 126px !important;
-        height: auto !important;
-      }
-
-      .nav-container .logo-link {
-        min-width: 0 !important;
-        flex: 0 1 auto !important;
-      }
-
-      .nav-actions {
-        gap: 8px !important;
-        margin-left: auto !important;
-      }
-
-      .nav-actions > .btn.btn-primary {
-        display: none !important;
-      }
-
-      .theme-toggle {
-        width: 46px !important;
-        height: 42px !important;
-        padding: 8px !important;
-      }
-
-      .hamburger {
-        display: flex !important;
-        width: 44px !important;
-        height: 42px !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        gap: 5px !important;
-        cursor: pointer !important;
-      }
-
-      .hamburger span {
-        display: block !important;
-        width: 30px !important;
-        height: 3px !important;
-        border-radius: 999px !important;
-        background: var(--text-primary) !important;
-      }
-
-      .nav-menu {
-        display: none !important;
-      }
-
-      .nav-menu.open {
-        position: absolute !important;
-        top: 100% !important;
-        left: 0 !important;
-        right: 0 !important;
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 0 !important;
-        padding: 10px 14px 14px !important;
-        background: var(--bg-card) !important;
-        border-bottom: 1px solid var(--border-color) !important;
-        box-shadow: 0 18px 30px rgba(0,0,0,.28) !important;
-      }
-
-      .nav-menu.open .nav-link {
-        display: block !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-        padding: 13px 12px !important;
-        border-radius: 8px !important;
-      }
-
-      .nav-menu.open .highlight-consult-link {
-        margin-top: 4px !important;
-        text-align: center !important;
-      }
-
-      /* Hero: remove the desktop-sized overflow and large empty area */
-      .hero-sec {
-        padding: 34px 0 44px !important;
-        overflow: hidden !important;
-      }
-
-      .hero-grid {
-        display: grid !important;
-        grid-template-columns: minmax(0, 1fr) !important;
-        gap: 28px !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-      }
-
-      .hero-content {
-        width: 100% !important;
-        min-width: 0 !important;
-        text-align: left !important;
-      }
-
-      .hero-badge {
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-        justify-content: flex-start !important;
-        flex-wrap: wrap !important;
-        gap: 5px !important;
-        padding: 8px 10px !important;
-      }
-
-      .hero-badge-tag {
-        margin-right: 2px !important;
-      }
-
-      .hero-title {
-        font-size: clamp(2.15rem, 10vw, 2.65rem) !important;
-        line-height: 1.08 !important;
-        letter-spacing: -0.035em !important;
-        margin: 20px 0 16px !important;
-        max-width: 100% !important;
-        overflow-wrap: normal !important;
-        word-break: normal !important;
-      }
-
-      .hero-desc {
-        font-size: 1rem !important;
-        line-height: 1.65 !important;
-        max-width: 100% !important;
-        margin: 0 0 22px !important;
-      }
-
-      .hero-buttons {
-        width: 100% !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        gap: 10px !important;
-      }
-
-      .hero-buttons .btn {
-        width: 100% !important;
-        max-width: 380px !important;
-        box-sizing: border-box !important;
-        justify-content: center !important;
-        margin: 0 auto !important;
-        min-height: 50px !important;
-      }
-
-      .hero-trust-line {
-        justify-content: flex-start !important;
-        gap: 8px 14px !important;
-        margin-top: 18px !important;
-        font-size: 0.78rem !important;
-      }
-
-      .hero-trust-item {
-        white-space: nowrap !important;
-      }
-
-      .hero-content > div:last-child {
-        margin-top: 22px !important;
-      }
-
-      .hero-content > div:last-child > div {
-        justify-content: flex-start !important;
-      }
-
-      .destination-chip {
-        font-size: 0.84rem !important;
-        padding: 7px 11px !important;
-      }
-
-      /* Hero visual: preserve the feature cards without the desktop-sized gap */
-      .hero-visual {
-        width: 100% !important;
-        min-width: 0 !important;
-        margin: 0 !important;
-      }
-
-      .globe-placeholder {
-        min-height: 0 !important;
-        height: auto !important;
-        padding: 0 !important;
-      }
-
-      .globe-circle-1,
-      .globe-circle-2 {
-        display: none !important;
-      }
-
-      .hero-card-floating,
-      .hero-card-1,
-      .hero-card-2 {
-        position: relative !important;
-        top: auto !important;
-        right: auto !important;
-        bottom: auto !important;
-        left: auto !important;
-        transform: none !important;
-        width: 100% !important;
-        max-width: 390px !important;
-        margin: 0 auto 12px !important;
-        box-sizing: border-box !important;
-      }
-
-      .hero-visual .globe-placeholder > .glass-panel:not(.hero-card-floating) {
-        position: relative !important;
-        left: auto !important;
-        bottom: auto !important;
-        width: 100% !important;
-        max-width: 390px !important;
-        margin: 0 auto !important;
-        box-sizing: border-box !important;
-      }
-
-      /* Section spacing and typography */
-      .section-padding {
-        padding-top: 46px !important;
-        padding-bottom: 46px !important;
-      }
-
-      .section-header {
-        margin-bottom: 28px !important;
-      }
-
-      .section-title {
-        font-size: 1.8rem !important;
-        line-height: 1.2 !important;
-      }
-
-      .section-desc {
-        font-size: 0.95rem !important;
-        line-height: 1.6 !important;
-      }
-
-      /* Destination/pathway card */
-      .country-display-grid {
-        grid-template-columns: minmax(0, 1fr) !important;
-        gap: 22px !important;
-      }
-
-      .country-image-wrapper {
-        width: 100% !important;
-        min-width: 0 !important;
-      }
-
-      .country-pathway-visual {
-        width: 100% !important;
-        aspect-ratio: 2 / 1 !important;
-        min-height: 0 !important;
-        max-height: none !important;
-      }
-
-      /* Canada/Germany pathway flag is a flag, not a landscape photo.
-         Keep the whole flag visible inside the box. */
-      .country-pathway-visual img.country-pathway-main-image[src$=".svg"] {
-        object-fit: contain !important;
-        object-position: center !important;
-        background: #ffffff !important;
-      }
-
-      .country-pathway-badge {
-        top: 10px !important;
-        left: 10px !important;
-        padding: 8px 10px !important;
-        font-size: 0.82rem !important;
-      }
-
-      .country-info-box {
-        width: 100% !important;
-        min-width: 0 !important;
-      }
-
-      .country-title {
-        font-size: 1.25rem !important;
-        line-height: 1.35 !important;
-      }
-
-      .country-desc {
-        font-size: 0.94rem !important;
-        line-height: 1.65 !important;
-      }
-
-      .country-stats-row {
-        grid-template-columns: 1fr !important;
-        gap: 10px !important;
-      }
-
-      .c-stat-card {
-        padding: 14px !important;
-        text-align: left !important;
-      }
-
-      .pathway-item {
-        min-width: 0 !important;
-        flex-wrap: wrap !important;
-        padding: 13px 12px !important;
-        border: 1px solid var(--border-color) !important;
-        border-radius: 10px !important;
-        margin-bottom: 9px !important;
-        box-sizing: border-box !important;
-      }
-
-      .pathway-name {
-        min-width: 0 !important;
-        overflow-wrap: anywhere !important;
-        font-size: 0.9rem !important;
-      }
-
-      .pathway-tag {
-        margin-left: auto !important;
-      }
-
-      .country-next-step {
-        align-items: stretch !important;
-      }
-
-      .country-next-step-actions {
-        width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-      }
-
-      .country-next-step-actions .btn {
-        width: 100% !important;
-        justify-content: center !important;
-        box-sizing: border-box !important;
-      }
-
-      /* Advisory service cards */
-      .services-grid {
-        grid-template-columns: 1fr !important;
-        gap: 14px !important;
-      }
-
-      .service-card,
-      .glass-panel {
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-      }
-
-      .service-card {
-        padding: 24px !important;
-      }
-
-      .service-title {
-        font-size: 1.12rem !important;
-        line-height: 1.35 !important;
-      }
-
-      .service-desc {
-        font-size: 0.9rem !important;
-        line-height: 1.65 !important;
-      }
-
-      /* Roadmap: number sits beside the card instead of covering its heading */
-      .roadmap-section {
-        padding: 54px 0 !important;
-        overflow: hidden !important;
-      }
-
-      .roadmap-timeline {
-        width: 100% !important;
-        padding: 4px 0 !important;
-        box-sizing: border-box !important;
-      }
-
-      .roadmap-line {
-        left: 16px !important;
-        width: 2px !important;
-        transform: none !important;
-      }
-
-      .roadmap-step,
-      .roadmap-step-right {
-        width: 100% !important;
-        margin-left: 0 !important;
-        padding: 16px 0 16px 42px !important;
-        box-sizing: border-box !important;
-      }
-
-      .roadmap-card {
-        padding: 26px 20px !important;
-        min-height: 0 !important;
-        border-radius: 16px !important;
-      }
-
-      .roadmap-step-number,
-      .roadmap-step-right .roadmap-step-number {
-        left: -20px !important;
-        right: auto !important;
-        top: 24px !important;
-        transform: none !important;
-        width: 36px !important;
-        height: 36px !important;
-        box-shadow: 0 0 0 5px var(--bg-main), 0 0 14px rgba(37,99,235,.28) !important;
-      }
-
-      .roadmap-kicker {
-        margin-left: 0 !important;
-        font-size: 0.68rem !important;
-      }
-
-      .roadmap-card h3 {
-        font-size: 1.18rem !important;
-        line-height: 1.3 !important;
-        margin-bottom: 9px !important;
-      }
-
-      .roadmap-card p {
-        font-size: 0.9rem !important;
-        line-height: 1.65 !important;
-      }
-
-      .roadmap-cta {
-        margin-top: 28px !important;
-        padding: 22px 18px !important;
-      }
-
-      .roadmap-cta .country-next-step-actions {
-        flex-direction: column !important;
-      }
-
-      .roadmap-cta .country-next-step-actions .btn {
-        width: 100% !important;
-      }
-
-      /* Calculator and booking forms */
-      .calculator-box,
-      #contact .glass-panel {
-        padding: 22px 18px !important;
-      }
-
-      .calc-grid,
-      .phone-input-row {
-        grid-template-columns: 1fr !important;
-      }
-
-      .calc-step-content .btn {
-        min-height: 44px !important;
-      }
-
-      /* Client success */
-      .client-success-section {
-        padding: 54px 0 60px !important;
-      }
-
-      .client-success-panel {
-        padding: 30px 20px !important;
-      }
-
-      .client-success-panel h3 {
-        font-size: 1.3rem !important;
-        line-height: 1.45 !important;
-      }
-
-      .client-success-panel > p {
-        font-size: 0.92rem !important;
-        line-height: 1.65 !important;
-      }
-
-      .client-success-stats {
-        grid-template-columns: 1fr !important;
-      }
-
-      /* Footer */
-      footer {
-        padding: 42px 0 22px !important;
-      }
-
-      footer > .container:first-child {
-        grid-template-columns: 1fr !important;
-        gap: 28px !important;
-      }
-
-      /* Floating WhatsApp: smaller and kept clear of the screen edge */
-      .whatsapp-float {
-        width: 52px !important;
-        height: 52px !important;
-        right: 14px !important;
-        bottom: 16px !important;
-      }
-
-      .whatsapp-float svg {
-        width: 25px !important;
-        height: 25px !important;
-      }
-    }
-
-    @media (max-width: 380px) {
-      .cloyster-logo-image {
-        width: 116px !important;
-        max-width: 116px !important;
-      }
-
-      .theme-toggle {
-        width: 42px !important;
-      }
-
-      .hamburger {
-        width: 40px !important;
-      }
-
-      .hamburger span {
-        width: 28px !important;
-      }
-
-      .hero-title {
-        font-size: 2rem !important;
-      }
-
-      .hero-desc {
-        font-size: 0.94rem !important;
-      }
-
-      .destination-chip {
-        font-size: 0.8rem !important;
-      }
-    }
-
   `
 
   return (
@@ -1639,12 +1013,11 @@ export default function App() {
                 Supported Destination Programs
               </p>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                {countries.map((c) => (
-                  <span key={c.id} className="glass-panel destination-chip">
-                    <img src={c.flag} alt={`${c.name} Flag`} className="flag-icon" />
-                    {c.name}
-                  </span>
-                ))}
+                <span className="glass-panel destination-chip">Canada</span>
+                <span className="glass-panel destination-chip">Australia</span>
+                <span className="glass-panel destination-chip">Germany</span>
+                <span className="glass-panel destination-chip">UK</span>
+                <span className="glass-panel destination-chip">New Zealand</span>
               </div>
             </div>
           </div>
@@ -1751,7 +1124,6 @@ export default function App() {
             </p>
           </div>
 
-          {/* DESTINATION TAB BUTTONS WITH FLAGS */}
           <div className="explorer-tabs" style={{ display: 'flex', gap: '10px', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '30px' }}>
             {countries.map((country) => (
               <button
@@ -1767,12 +1139,10 @@ export default function App() {
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '8px',
                   fontWeight: '600'
                 }}
               >
-                <img src={country.flag} alt={`${country.name} Flag`} className="flag-icon" />
-                <span>{country.name}</span>
+                <span style={{ marginLeft: '6px' }}>{country.name}</span>
               </button>
             ))}
           </div>
@@ -1781,21 +1151,9 @@ export default function App() {
             <div className="glass-panel" style={{ padding: '35px' }}>
               <div className="country-display-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
                 <div className="country-image-wrapper">
-                  <div className="country-pathway-visual">
-                    <img
-                      src={['canada', 'germany'].includes(currentCountry.id) ? currentCountry.pathwayFlag : currentCountry.image}
-                      alt={['canada', 'germany'].includes(currentCountry.id) ? `${currentCountry.name} flag` : `${currentCountry.name} destination`}
-                      className="country-pathway-main-image"
-                    />
-
-                    <div className="country-pathway-badge">
-                      <img
-                        src={currentCountry.flag}
-                        alt={`${currentCountry.name} Flag`}
-                        className="flag-icon"
-                      />
-                      <span>{currentCountry.name} Pathway</span>
-                    </div>
+                  <img src={currentCountry.image} alt={currentCountry.name} className="country-img" style={{ width: '100%', borderRadius: '12px', height: '240px', objectFit: 'cover' }} />
+                  <div className="country-flag-badge" style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px' }}>
+                    <span style={{ fontWeight: '700', color: 'var(--text-primary)' }}>{currentCountry.name} Pathway</span>
                   </div>
                 </div>
 
@@ -2150,11 +1508,11 @@ export default function App() {
                       value={calcData.destination}
                       onChange={(e) => setCalcData({ ...calcData, destination: e.target.value })}
                     >
-                      <option value="canada">🇨🇦 Canada (Express Entry)</option>
-                      <option value="australia">🇦🇺 Australia (General Skilled Migration)</option>
-                      <option value="germany">🇩🇪 Germany (Opportunity Card)</option>
-                      <option value="uk">🇬🇧 United Kingdom (Skilled Worker)</option>
-                      <option value="nz">🇳🇿 New Zealand (SMC)</option>
+                      <option value="canada">Canada (Express Entry)</option>
+                      <option value="australia">Australia (General Skilled Migration)</option>
+                      <option value="germany">Germany (Opportunity Card)</option>
+                      <option value="uk">United Kingdom (Skilled Worker)</option>
+                      <option value="nz">New Zealand (SMC)</option>
                     </select>
                   </div>
                   <div className="form-group">
@@ -2385,11 +1743,11 @@ export default function App() {
                     value={bookingData.destination}
                     onChange={(e) => setBookingData({ ...bookingData, destination: e.target.value })}
                   >
-                    <option value="canada">🇨🇦 Canada</option>
-                    <option value="australia">🇦🇺 Australia</option>
-                    <option value="germany">🇩🇪 Germany</option>
-                    <option value="uk">🇬🇧 United Kingdom</option>
-                    <option value="nz">🇳🇿 New Zealand</option>
+                    <option value="canada">Canada</option>
+                    <option value="australia">Australia</option>
+                    <option value="germany">Germany</option>
+                    <option value="uk">United Kingdom</option>
+                    <option value="nz">New Zealand</option>
                   </select>
                 </div>
 
@@ -2562,18 +1920,11 @@ export default function App() {
           <div>
             <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Popular Destinations</h4>
             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem' }}>
-              {countries.map((c) => (
-                <li key={c.id}>
-                  <a
-                    href="#destinations"
-                    onClick={() => setActiveTab(c.id)}
-                    style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
-                  >
-                    <img src={c.flag} alt={`${c.name} Flag`} className="flag-icon" />
-                    <span>{c.name} Pathway</span>
-                  </a>
-                </li>
-              ))}
+              <li><a href="#destinations" onClick={() => setActiveTab('canada')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>Canada Express Entry</a></li>
+              <li><a href="#destinations" onClick={() => setActiveTab('germany')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>Germany Opportunity Card</a></li>
+              <li><a href="#destinations" onClick={() => setActiveTab('australia')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>Australia GSM</a></li>
+              <li><a href="#destinations" onClick={() => setActiveTab('uk')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>UK Skilled Worker</a></li>
+              <li><a href="#destinations" onClick={() => setActiveTab('nz')} style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>New Zealand SMC</a></li>
             </ul>
           </div>
 
