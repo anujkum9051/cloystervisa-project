@@ -1117,30 +1117,94 @@ export default function App() {
         font-size: 0.84rem;
       }
 
+      /*
+       * MOBILE ROADMAP
+       * Keep the desktop left/right alternating layout on phones.
+       * The center line stays in the middle and every numbered circle
+       * is anchored directly to that line. Cards never become 100% wide,
+       * so the visual rhythm remains left -> right -> left -> right.
+       */
+      .roadmap-section {
+        overflow: hidden;
+      }
+
+      .roadmap-timeline {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        padding: 4px 0 8px;
+        overflow: visible;
+      }
+
       .roadmap-line {
-        left: 19px;
-        transform: none;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        top: 0;
+        bottom: 0;
       }
 
       .roadmap-step,
       .roadmap-step-right {
-        width: 100%;
+        width: 50%;
         margin-left: 0;
-        padding: 18px 0 18px 58px;
+        box-sizing: border-box;
+        padding: 14px 0;
+      }
+
+      .roadmap-step-left {
+        padding-left: 0;
+        padding-right: 12px;
+      }
+
+      .roadmap-step-right {
+        margin-left: 50%;
+        padding-left: 12px;
+        padding-right: 0;
+      }
+
+      .roadmap-card {
+        width: 100%;
+        min-height: 0;
+        padding: 18px 16px;
+        overflow-wrap: anywhere;
       }
 
       .roadmap-step-number,
       .roadmap-step-right .roadmap-step-number {
-        left: 0;
-        right: auto;
-        top: 32px;
-        transform: none;
-        width: 36px;
-        height: 36px;
+        top: 50%;
+        transform: translateY(-50%);
+        left: auto;
+        right: -19px;
+        width: 34px;
+        height: 34px;
+        min-width: 34px;
+        font-size: 0.82rem;
+        border-width: 2px;
+        box-shadow: 0 0 0 4px var(--bg-main), 0 0 14px rgba(37,99,235,.28);
       }
 
-      .roadmap-card {
-        padding: 24px 22px;
+      .roadmap-step-right .roadmap-step-number {
+        left: -19px;
+        right: auto;
+        box-shadow: 0 0 0 4px var(--bg-main), 0 0 14px rgba(34,197,94,.22);
+      }
+
+      .roadmap-kicker {
+        font-size: 0.62rem;
+        letter-spacing: 0.9px;
+        margin-bottom: 6px;
+      }
+
+      .roadmap-card h3 {
+        font-size: 0.98rem;
+        line-height: 1.3;
+        margin-bottom: 7px;
+      }
+
+      .roadmap-card p {
+        font-size: 0.76rem;
+        line-height: 1.5;
       }
 
       .roadmap-cta {
@@ -1166,6 +1230,85 @@ export default function App() {
 
       .country-stats-row {
         grid-template-columns: 1fr !important;
+      }
+    }
+
+    /* Extra-small phones: keep the same alternating timeline while
+       giving cards a little more usable text space. */
+    @media (max-width: 420px) {
+      .roadmap-step-left {
+        padding-right: 9px;
+      }
+
+      .roadmap-step-right {
+        padding-left: 9px;
+      }
+
+      .roadmap-card {
+        padding: 16px 13px;
+        border-radius: 12px;
+      }
+
+      .roadmap-step-number,
+      .roadmap-step-right .roadmap-step-number {
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        right: -18px;
+        font-size: 0.76rem;
+      }
+
+      .roadmap-step-right .roadmap-step-number {
+        left: -18px;
+        right: auto;
+      }
+
+      .roadmap-card h3 {
+        font-size: 0.9rem;
+      }
+
+      .roadmap-card p {
+        font-size: 0.71rem;
+        line-height: 1.45;
+      }
+
+      .roadmap-kicker {
+        font-size: 0.58rem;
+      }
+    }
+
+    @media (max-width: 340px) {
+      .roadmap-step-left {
+        padding-right: 7px;
+      }
+
+      .roadmap-step-right {
+        padding-left: 7px;
+      }
+
+      .roadmap-card {
+        padding: 14px 11px;
+      }
+
+      .roadmap-card h3 {
+        font-size: 0.84rem;
+      }
+
+      .roadmap-card p {
+        font-size: 0.67rem;
+      }
+
+      .roadmap-step-number,
+      .roadmap-step-right .roadmap-step-number {
+        width: 30px;
+        height: 30px;
+        min-width: 30px;
+        right: -17px;
+      }
+
+      .roadmap-step-right .roadmap-step-number {
+        left: -17px;
+        right: auto;
       }
     }
 
