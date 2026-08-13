@@ -1,6 +1,16 @@
 import { useState, useEffect } from 'react'
 import emailjs from '@emailjs/browser'
 import cloysterLogo from './cloyster-logo.png'
+import instagramQr from './cloyster-instagram-qr.png'
+
+// EmailJS configuration
+// IMPORTANT: The EmailJS template below should be the template that sends
+// the consultation request to cloysterimmigration@gmail.com.
+// Its Auto-Reply is configured in the EmailJS dashboard to send the
+// Consultation Confirmation template back to the customer.
+const EMAILJS_SERVICE_ID = 'service_o0l0r0k'
+const EMAILJS_ADMIN_TEMPLATE_ID = 'template_45hewnn'
+const EMAILJS_PUBLIC_KEY = 'zmQ_nh-t65cKtN45G'
 
 // Custom SVG Icons & Components
 const LogoImage = ({ className = '', footer = false }) => (
@@ -72,6 +82,21 @@ const GlobeIcon = () => (
     <circle cx="12" cy="12" r="10" />
     <line x1="2" y1="12" x2="22" y2="12" />
     <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+  </svg>
+)
+
+
+const LinkedInIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+    <path d="M6.94 8.5H3.5V20h3.44V8.5ZM5.22 3A2.02 2.02 0 1 0 5.2 7.04 2.02 2.02 0 0 0 5.22 3ZM20.5 13.41c0-3.47-1.85-5.09-4.32-5.09-1.99 0-2.88 1.09-3.38 1.86V8.5H9.36V20h3.44v-5.7c0-1.5.28-2.95 2.14-2.95 1.83 0 1.85 1.71 1.85 3.05V20h3.71v-6.59Z" />
+  </svg>
+)
+
+const InstagramIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="3" y="3" width="18" height="18" rx="5" />
+    <circle cx="12" cy="12" r="4" />
+    <circle cx="17.3" cy="6.8" r="1" fill="currentColor" stroke="none" />
   </svg>
 )
 
@@ -172,6 +197,29 @@ const staticCountriesData = [
   }
 ]
 
+
+// Team data from the latest CloysterVisa update.
+// Add real team-member photos/links here later without changing the Team section.
+const TEAM_MEMBERS = [
+  {
+    id: 'niyati-nahadiya',
+    name: 'Niyati Nahadiya',
+    role: 'Team Member',
+    image: '',
+    linkedin: 'https://www.linkedin.com/in/niyati-nahadiya-226b6204/'
+  },
+  // Add future team members in the same format:
+  // {
+  //   id: 'member-name',
+  //   name: 'Full Name',
+  //   role: 'Designation',
+  //   image: '/team/member-name.jpg',
+  //   linkedin: 'https://www.linkedin.com/in/.../'
+  // }
+]
+
+const INSTAGRAM_URL = 'https://www.instagram.com/cloystervisa/'
+
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -268,22 +316,38 @@ export default function App() {
 
     setIsSubmitting(true)
 
+    const fullPhoneNumber = `${bookingData.countryCode} ${bookingData.phone}`
+
+    // Keep both variable names so the EmailJS admin template and the
+    // customer auto-reply template receive the same customer details.
     const templateParams = {
+      name: bookingData.fullName,
+      email: bookingData.email,
+      phone: fullPhoneNumber,
+      destination: bookingData.destination.toUpperCase(),
+      preferred_consultation_time: bookingData.consultationTime,
+      message: bookingData.message,
+      consent: bookingData.consent ? 'Yes' : 'No',
+
+      // Existing EmailJS template variables
       from_name: bookingData.fullName,
       from_email: bookingData.email,
-      phone_number: `${bookingData.countryCode} ${bookingData.phone}`,
+      phone_number: fullPhoneNumber,
       target_destination: bookingData.destination.toUpperCase(),
-      preferred_consultation_time: bookingData.consultationTime,
-      consent: bookingData.consent ? 'Yes' : 'No',
-      message: bookingData.message
+
+      // Used by EmailJS as the reply address.
+      reply_to: bookingData.email
     }
 
+    // Send ONE request to the office template.
+    // EmailJS Auto-Reply (configured in the dashboard) sends the
+    // confirmation email automatically to {{from_email}}.
     emailjs
       .send(
-        'service_o0l0r0k',
-        'template_45hewnn',
+        EMAILJS_SERVICE_ID,
+        EMAILJS_ADMIN_TEMPLATE_ID,
         templateParams,
-        'zmQ_nh-t65cKtN45G'
+        EMAILJS_PUBLIC_KEY
       )
       .then((response) => {
         console.log('SUCCESS!', response.status, response.text)
@@ -895,6 +959,116 @@ export default function App() {
       transition: all 0.3s ease;
     }
 
+
+
+    /* --- SOCIAL + TEAM UPDATE --- */
+    .team-section {
+      background: var(--bg-alt);
+      padding: 84px 0 90px;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 22px;
+      max-width: 980px;
+      margin: 0 auto;
+    }
+
+    .team-card {
+      padding: 26px;
+      text-align: center;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .team-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(59,130,246,.45);
+      box-shadow: 0 18px 40px rgba(0,0,0,.22);
+    }
+
+    .team-avatar {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      margin: 0 auto 18px;
+      object-fit: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(37,99,235,.22), rgba(34,197,94,.16));
+      border: 2px solid rgba(59,130,246,.35);
+      color: var(--text-primary);
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    .team-social-link,
+    .social-icon-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-main);
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: all .2s ease;
+    }
+
+    .team-social-link:hover,
+    .social-icon-link:hover {
+      color: var(--accent-blue);
+      border-color: var(--accent-blue);
+      transform: translateY(-2px);
+    }
+
+    .footer-social-block {
+      min-width: 0;
+    }
+
+    .footer-social-links {
+      display: flex;
+      gap: 9px;
+      margin: 0 0 16px;
+    }
+
+    .instagram-qr-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      border-radius: 14px;
+      max-width: 330px;
+    }
+
+    .instagram-qr-card img {
+      width: 92px;
+      height: 92px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 8px;
+      padding: 5px;
+      flex: 0 0 auto;
+    }
+
+    .instagram-qr-card strong {
+      display: block;
+      color: var(--text-primary);
+      margin-bottom: 5px;
+      font-size: .92rem;
+    }
+
+    .instagram-qr-card span {
+      color: var(--text-muted);
+      font-size: .78rem;
+      line-height: 1.45;
+    }
+
     /* --- RESPONSIVE BREAKPOINTS & MOBILE FIXES --- */
 
     @media (max-width: 900px) {
@@ -996,6 +1170,20 @@ export default function App() {
     }
 
     @media (max-width: 640px) {
+
+      .team-section {
+        padding: 64px 0 70px;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+      }
+
+      .instagram-qr-card {
+        max-width: 100%;
+      }
+
       .hero-title {
         font-size: 2.1rem !important;
       }
@@ -1121,6 +1309,7 @@ export default function App() {
             <a href="#about" className="nav-link" onClick={() => setMobileMenuOpen(false)}>About Us</a>
             <a href="#destinations" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Destinations</a>
             <a href="#services" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Services</a>
+            <a href="#team" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Our Team</a>
             <a href="#calculator" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Eligibility Check</a>
             <a
               href="#contact"
@@ -2009,6 +2198,67 @@ export default function App() {
         </div>
       </section>
 
+
+
+      {/* MEET OUR TEAM — latest client update */}
+      <section id="team" className="team-section">
+        <div className="container">
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '42px' }}>
+            <span className="section-tag" style={{ background: 'rgba(37,99,235,0.12)', color: '#60a5fa', padding: '7px 14px', borderRadius: '999px', fontSize: '0.8rem', fontWeight: '700', letterSpacing: '1px' }}>
+              OUR TEAM
+            </span>
+            <h2 className="section-title text-gradient" style={{ fontSize: '2.45rem', margin: '16px 0 12px' }}>
+              Meet Our Team
+            </h2>
+            <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '720px', margin: '0 auto', lineHeight: '1.7' }}>
+              Meet the people behind CloysterVisa and connect with our immigration support team.
+            </p>
+          </div>
+
+          <div className="team-grid">
+            {TEAM_MEMBERS.map((member) => {
+              const initials = member.name
+                .split(' ')
+                .map((part) => part[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase()
+
+              return (
+                <article key={member.id} className="team-card glass-panel">
+                  {member.image ? (
+                    <img className="team-avatar" src={member.image} alt={`${member.name} - ${member.role}`} />
+                  ) : (
+                    <div className="team-avatar" aria-label={`${member.name} profile placeholder`}>
+                      {initials}
+                    </div>
+                  )}
+
+                  <h3 style={{ margin: '0 0 6px', color: 'var(--text-primary)', fontSize: '1.2rem' }}>
+                    {member.name}
+                  </h3>
+                  <p style={{ margin: '0 0 18px', color: 'var(--text-secondary)', fontSize: '.9rem' }}>
+                    {member.role}
+                  </p>
+
+                  {member.linkedin && (
+                    <a
+                      className="team-social-link"
+                      href={member.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Open ${member.name}'s LinkedIn profile`}
+                    >
+                      <LinkedInIcon />
+                    </a>
+                  )}
+                </article>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* CLIENT SUCCESS — kept at the bottom, immediately before the footer */}
       <section id="client-success" className="client-success-section">
         <div className="container">
@@ -2109,6 +2359,7 @@ export default function App() {
               <li><a href="#about" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>About Us</a></li>
               <li><a href="#destinations" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Destinations</a></li>
               <li><a href="#services" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Advisory Services</a></li>
+              <li><a href="#team" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Meet Our Team</a></li>
               <li><a href="#calculator" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Eligibility Points Check</a></li>
               <li><a href="#contact" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600' }}>Book a Consultation</a></li>
             </ul>
@@ -2130,6 +2381,42 @@ export default function App() {
                 </li>
               ))}
             </ul>
+          </div>
+
+
+
+          <div className="footer-social-block">
+            <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Connect With Us</h4>
+            <div className="footer-social-links">
+              <a
+                className="social-icon-link"
+                href="https://www.linkedin.com/in/niyati-nahadiya-226b6204/"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="CloysterVisa LinkedIn"
+                title="LinkedIn"
+              >
+                <LinkedInIcon />
+              </a>
+              <a
+                className="social-icon-link"
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="CloysterVisa Instagram"
+                title="Instagram"
+              >
+                <InstagramIcon />
+              </a>
+            </div>
+
+            <div className="instagram-qr-card">
+              <img src={instagramQr} alt="QR code to follow CloysterVisa on Instagram" />
+              <div>
+                <strong>Follow @cloystervisa</strong>
+                <span>Scan the QR code to open our Instagram profile.</span>
+              </div>
+            </div>
           </div>
 
           <div className="office-support-block">
