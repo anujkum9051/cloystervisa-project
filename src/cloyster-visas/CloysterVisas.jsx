@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import emailjs from '@emailjs/browser'
 import cloysterLogo from './cloyster-logo.png'
 import instagramQr from './cloyster-instagram-qr.png'
+import Team from './Team'
 
 // EmailJS configuration
 // IMPORTANT: The EmailJS template below should be the template that sends
@@ -2344,63 +2345,7 @@ export default function App() {
 
 
       {/* MEET OUR TEAM — latest client update */}
-      <section id="team" className="team-section">
-        <div className="container">
-          <div className="section-header" style={{ textAlign: 'center', marginBottom: '42px' }}>
-            <span className="section-tag" style={{ background: 'rgba(37,99,235,0.12)', color: '#60a5fa', padding: '7px 14px', borderRadius: '999px', fontSize: '0.8rem', fontWeight: '700', letterSpacing: '1px' }}>
-              OUR TEAM
-            </span>
-            <h2 className="section-title text-gradient" style={{ fontSize: '2.45rem', margin: '16px 0 12px' }}>
-              Meet Our Team
-            </h2>
-            <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '720px', margin: '0 auto', lineHeight: '1.7' }}>
-              Meet the people behind CloysterVisa and connect with our immigration support team.
-            </p>
-          </div>
-
-          <div className="team-grid">
-            {TEAM_MEMBERS.map((member) => {
-              const initials = member.name
-                .split(' ')
-                .map((part) => part[0])
-                .join('')
-                .slice(0, 2)
-                .toUpperCase()
-
-              return (
-                <article key={member.id} className="team-card glass-panel">
-                  {member.image ? (
-                    <img className="team-avatar" src={member.image} alt={`${member.name} - ${member.role}`} />
-                  ) : (
-                    <div className="team-avatar" aria-label={`${member.name} profile placeholder`}>
-                      {initials}
-                    </div>
-                  )}
-
-                  <h3 style={{ margin: '0 0 6px', color: 'var(--text-primary)', fontSize: '1.2rem' }}>
-                    {member.name}
-                  </h3>
-                  <p style={{ margin: '0 0 18px', color: 'var(--text-secondary)', fontSize: '.9rem' }}>
-                    {member.role}
-                  </p>
-
-                  {member.linkedin && (
-                    <a
-                      className="team-social-link"
-                      href={member.linkedin}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Open ${member.name}'s LinkedIn profile`}
-                    >
-                      <LinkedInIcon />
-                    </a>
-                  )}
-                </article>
-              )
-            })}
-          </div>
-        </div>
-      </section>
+      <Team />
 
       {/* CLIENT SUCCESS — kept at the bottom, immediately before the footer */}
       <section id="client-success" className="client-success-section">
