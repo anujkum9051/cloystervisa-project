@@ -2,7 +2,10 @@ import { useState, useEffect } from 'react'
 import emailjs from '@emailjs/browser'
 import cloysterLogo from './cloyster-logo.png'
 import instagramQr from './cloyster-instagram-qr.png'
+import googleBusinessQr from './google-business-qr-only.png'
 import Team from './Team'
+import AnnouncementBar from './AnnouncementBar'
+import ThemeToggle from './ThemeToggle'
 
 // EmailJS configuration
 // IMPORTANT: The EmailJS template below should be the template that sends
@@ -20,19 +23,6 @@ const LogoImage = ({ className = '', footer = false }) => (
     alt="CloysterVisa"
     className={`cloyster-logo-image ${footer ? 'cloyster-logo-footer' : ''} ${className}`}
   />
-)
-
-const SunIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <circle cx="12" cy="12" r="4" />
-    <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42" />
-  </svg>
-)
-
-const MoonIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="M20.5 14.5A8.5 8.5 0 0 1 9.5 3.5 8.5 8.5 0 1 0 20.5 14.5Z" />
-  </svg>
 )
 
 const ScaleIcon = () => (
@@ -54,6 +44,14 @@ const ReceiptIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z" />
     <path d="M9 8h6M9 12h6M9 16h3" />
+  </svg>
+)
+
+
+const ClockIcon = () => (
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 2" />
   </svg>
 )
 
@@ -224,7 +222,7 @@ const INSTAGRAM_URL = 'https://www.instagram.com/cloystervisa/'
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [theme, setTheme] = useState('dark')
+  
 
   const countries = staticCountriesData
 
@@ -268,13 +266,24 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
+  // Keep the browser/SPA document metadata aligned with the CloysterVisa brand.
+  // The same title should also be set in index.html for search engines on first load.
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-  }, [theme])
+    document.title = 'CloysterVisa | Immigration & Visa Consultancy'
 
-  const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'))
-  }
+    const setMeta = (selector, attribute, value) => {
+      let element = document.head.querySelector(selector)
+      if (!element) {
+        element = document.createElement('meta')
+        element.setAttribute(attribute, selector.includes('property=') ? selector.match(/property=\"([^\"]+)\"/)?.[1] || '' : selector.match(/name=\"([^\"]+)\"/)?.[1] || '')
+        document.head.appendChild(element)
+      }
+      element.setAttribute('content', value)
+    }
+
+    setMeta('meta[name=\"description\"]', 'name', 'CloysterVisa immigration consultancy for Canada, Australia, Germany, UK and New Zealand visa pathways, eligibility assessment and consultation.')
+    setMeta('meta[property=\"og:title\"]', 'property', 'CloysterVisa | Immigration & Visa Consultancy')
+  }, [])
 
   // Calculate Eligibility Score Client-Side
   const runCalculation = () => {
@@ -1070,6 +1079,19 @@ export default function App() {
       line-height: 1.45;
     }
 
+    .google-qr-card {
+      margin-top: 12px;
+    }
+
+    .google-qr-card img {
+      width: 92px !important;
+      height: 92px !important;
+      object-fit: contain !important;
+      background: #fff !important;
+      border-radius: 8px !important;
+      padding: 5px !important;
+    }
+
     /* --- RESPONSIVE BREAKPOINTS & MOBILE FIXES --- */
 
     @media (max-width: 900px) {
@@ -1423,24 +1445,11 @@ export default function App() {
     <div style={{ backgroundColor: 'var(--bg-main)', minHeight: '100vh' }}>
       <style dangerouslySetInnerHTML={{ __html: visualPolishStyles }} />
 
+
       {/* TOP ANNOUNCEMENT BAR */}
-      <div
-        className="announcement-bar"
-        style={{
-          background: 'linear-gradient(90deg, #0f172a 0%, #1e293b 100%)',
-          color: '#f8fafc',
-          padding: '10px 15px',
-          textAlign: 'center',
-          fontSize: '0.9rem',
-          fontWeight: '500',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
-        }}
-      >
-        🔥 <strong>Germany Opportunity Card — Assessments Live</strong> —{' '}
-        <a href="#calculator" style={{ color: '#60a5fa', textDecoration: 'underline', fontWeight: '600' }}>
-          Explore Eligibility →
-        </a>
-      </div>
+
+        <AnnouncementBar />
+
 
       {/* HEADER & NAVBAR */}
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
@@ -1475,9 +1484,7 @@ export default function App() {
           </div>
 
           <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button className="theme-toggle" onClick={toggleTheme} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
-              {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-            </button>
+            <ThemeToggle />
             <a href="#calculator" className="btn btn-primary" style={{ padding: '10px 18px', borderRadius: '8px', background: 'var(--accent-blue)', color: '#fff', textDecoration: 'none', fontWeight: '600' }}>
               Check Your Eligibility
             </a>
@@ -1496,8 +1503,7 @@ export default function App() {
         <div className="container hero-grid">
           <div className="hero-content">
             <div className="hero-badge animate-pulse-glow" style={{ background: 'var(--bg-card)', borderColor: 'var(--accent-blue)' }}>
-              <span className="hero-badge-tag" style={{ background: '#2563eb', color: '#fff', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem', marginRight: '8px' }}>CloysterVisa</span>
-              <span style={{ color: 'var(--text-secondary)' }}>Immigration Made Simple</span>
+              <span style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>Immigration Made Simple Since 2020</span>
             </div>
 
             <h1 className="hero-title text-gradient" style={{ fontSize: '2.8rem', lineHeight: '1.2', margin: '16px 0' }}>
@@ -1558,7 +1564,7 @@ export default function App() {
                 </div>
                 <div className="floating-info">
                   <h4 style={{ color: 'var(--text-primary)', margin: 0 }}>Visa Approval Status</h4>
-                  <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.85rem' }}>128+ Successful Grants This Month</p>
+                  <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.85rem' }}>128+ Total Visa Approvals</p>
                 </div>
               </div>
 
@@ -1622,6 +1628,16 @@ export default function App() {
               </h3>
               <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6' }}>
                 No hidden costs or false promises. Clear milestone-based service fee quotes upfront with full evaluation reports.
+              </p>
+            </div>
+
+            <div className="glass-panel" style={{ padding: '35px' }}>
+              <div className="clean-feature-icon"><ClockIcon /></div>
+              <h3 style={{ fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px', color: 'var(--text-primary)' }}>
+                Extended Support Hours
+              </h3>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6' }}>
+                We're available when it matters most — 7 days a week, 9 AM to 9 PM IST. Connect with us after your work hours, without waiting for the next business day.
               </p>
             </div>
           </div>
@@ -2373,7 +2389,7 @@ export default function App() {
               <div className="client-success-stats">
                 <div className="client-success-stat">
                   <strong>128+</strong>
-                  <span>Successful grants shown in the current service snapshot</span>
+                  <span>Total visa approvals</span>
                 </div>
                 <div className="client-success-stat">
                   <strong>5 Destinations</strong>
@@ -2450,6 +2466,8 @@ export default function App() {
               <li><a href="#team" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Meet Our Team</a></li>
               <li><a href="#calculator" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Eligibility Points Check</a></li>
               <li><a href="#contact" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600' }}>Book a Consultation</a></li>
+              <li><a href="/privacy-policy" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Privacy Policy</a></li>
+              <li><a href="/terms-of-service" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Terms of Service</a></li>
             </ul>
           </div>
 
@@ -2505,6 +2523,13 @@ export default function App() {
                 <span>Scan the QR code to open our Instagram profile.</span>
               </div>
             </div>
+            <div className="instagram-qr-card google-qr-card">
+              <img src={googleBusinessQr} alt="Google Business Profile QR code" />
+              <div>
+                <strong>Check us out on Google</strong>
+                <span>Scan the QR code to open our Google Business Profile.</span>
+              </div>
+            </div>
           </div>
 
           <div className="office-support-block">
@@ -2516,10 +2541,13 @@ export default function App() {
               📞 <a href="tel:+917027466559" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>7027466559</a>
             </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
+              📞 Additional: <a href="tel:+919266515362" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>9266515362</a>
+            </p>
+            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
               💬 WhatsApp: <a href="https://wa.me/917027466559?text=Hello%20CloysterVisa" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
             </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              ✉️ Email: <a className="office-email" href="mailto:cloysterimmigration@gmail.com" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>cloysterimmigration@gmail.com</a>
+              ✉️ Email: <a className="office-email" href="mailto:info@cloystervisa.com" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>info@cloystervisa.com</a>
             </p>
             <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '12px' }}>
               Available Monday – Sunday (9:00 AM – 9:00 PM)
