@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import emailjs from '@emailjs/browser'
 import cloysterLogo from './cloyster-logo.png'
+import cloysterLogoLight from './cloyster-logo-light.png'
 import instagramQr from './cloyster-instagram-qr.png'
 import googleBusinessQr from './google-business-qr-only.png'
 import Team from './Team'
@@ -18,11 +19,19 @@ const EMAILJS_PUBLIC_KEY = 'zmQ_nh-t65cKtN45G'
 
 // Custom SVG Icons & Components
 const LogoImage = ({ className = '', footer = false }) => (
-  <img
-    src={cloysterLogo}
-    alt="CloysterVisa"
-    className={`cloyster-logo-image ${footer ? 'cloyster-logo-footer' : ''} ${className}`}
-  />
+  <span className={`cloyster-logo-switch ${className}`}>
+    <img
+      src={cloysterLogo}
+      alt="CloysterVisa"
+      className={`cloyster-logo-image cloyster-logo-dark ${footer ? 'cloyster-logo-footer' : ''}`}
+    />
+    <img
+      src={cloysterLogoLight}
+      alt="CloysterVisa"
+      aria-hidden="true"
+      className={`cloyster-logo-image cloyster-logo-light ${footer ? 'cloyster-logo-footer' : ''}`}
+    />
+  </span>
 )
 
 const ScaleIcon = () => (
@@ -99,6 +108,15 @@ const InstagramIcon = ({ size = 18 }) => (
   </svg>
 )
 
+const GoogleIcon = ({ size = 18 }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" aria-hidden="true">
+    <path fill="currentColor" d="M21.35 12.27c0-.72-.06-1.41-.18-2.07H12v3.92h5.23a4.47 4.47 0 0 1-1.94 2.93v2.43h3.14c1.84-1.69 2.92-4.18 2.92-7.21Z"/>
+    <path fill="currentColor" d="M12 21.5c2.63 0 4.84-.87 6.45-2.36l-3.14-2.43c-.87.58-1.98.92-3.31.92-2.54 0-4.69-1.72-5.46-4.03H3.3v2.51A9.75 9.75 0 0 0 12 21.5Z"/>
+    <path fill="currentColor" d="M6.54 13.6a5.86 5.86 0 0 1 0-3.2V7.89H3.3a9.75 9.75 0 0 0 0 8.22l3.24-2.51Z"/>
+    <path fill="currentColor" d="M12 6.37c1.43 0 2.72.49 3.73 1.45l2.79-2.79C16.83 3.46 14.63 2.5 12 2.5a9.75 9.75 0 0 0-8.7 5.39l3.24 2.51C7.31 8.09 9.46 6.37 12 6.37Z"/>
+  </svg>
+)
+
 const WhatsAppIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
@@ -123,7 +141,13 @@ const staticCountriesData = [
       { name: 'Provincial Nominee Programs (PNP)', tag: 'Regional' },
       { name: 'Post-Graduation Work Permit (PGWP)', tag: 'Study first' }
     ],
-    image: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=800&q=80',
+    whyChoose: [
+      'Express Entry: point-based, no job offer required',
+      'Provincial Nominee Programs widen eligibility',
+      'Free healthcare and strong social benefits',
+      'Direct pathway to permanent residency'
+    ]
   },
   {
     id: 'australia',
@@ -140,7 +164,13 @@ const staticCountriesData = [
       { name: 'Skilled Nominated Visa (Subclass 190)', tag: 'State Sponsor' },
       { name: 'Skilled Work Regional Visa (Subclass 491)', tag: 'Regional' }
     ],
-    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1523482580672-f109ba8cb9be?auto=format&fit=crop&w=800&q=80',
+    whyChoose: [
+      'GSM: no employer sponsor required for skilled visas',
+      'High demand for skilled professionals',
+      'Strong economy and high quality of life',
+      'Permanent residency without sponsorship'
+    ]
   },
   {
     id: 'germany',
@@ -158,7 +188,13 @@ const staticCountriesData = [
       { name: 'German EU Blue Card', tag: 'Fast Track' },
       { name: 'Vocational Training (Ausbildung)', tag: 'Entry Level' }
     ],
-    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=800&q=80',
+    whyChoose: [
+      'No employer sponsorship needed (Opportunity Card)',
+      'High quality of life and healthcare',
+      'Clear path to EU citizenship',
+      'Strong job market in tech and engineering'
+    ]
   },
   {
     id: 'uk',
@@ -175,7 +211,13 @@ const staticCountriesData = [
       { name: 'UK Global Talent Visa', tag: 'Elite Tech/Arts' },
       { name: 'UK Scale-up Visa', tag: 'Fast Growth' }
     ],
-    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=800&q=80',
+    whyChoose: [
+      'Points-based Skilled Worker routes for eligible professionals',
+      'Global Talent pathway for recognised leaders and specialists',
+      'Large international job market and established industries',
+      'Access to a diverse, globally connected economy'
+    ]
   },
   {
     id: 'nz',
@@ -192,7 +234,13 @@ const staticCountriesData = [
       { name: 'Green List Straight to Residence', tag: 'Fast Track' },
       { name: 'Accredited Employer Work Visa', tag: 'Work' }
     ],
-    image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=800&q=80'
+    image: 'https://images.unsplash.com/photo-1507699622108-4be3abd695ad?auto=format&fit=crop&w=800&q=80',
+    whyChoose: [
+      'Skilled Migrant Category: points-based residency',
+      'Green List roles fast-track work to residency',
+      'Safe, welcoming, and family-friendly environment',
+      'Balanced lifestyle with strong work protections'
+    ]
   }
 ]
 
@@ -218,6 +266,8 @@ const TEAM_MEMBERS = [
 ]
 
 const INSTAGRAM_URL = 'https://www.instagram.com/cloystervisa/'
+const LINKEDIN_URL = 'https://www.linkedin.com/company/cloystervisa/?viewAsMember=true'
+const GOOGLE_BUSINESS_URL = 'https://local.google.com/place?placeid=ChIJxWcEuEQdDTkRz5rn0njVtBg&utm_medium=noren&utm_source=gbp&utm_campaign=2026'
 
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -433,6 +483,26 @@ export default function App() {
       border-radius: 0 !important;
       box-shadow: none !important;
       flex: 0 0 auto;
+    }
+
+    .cloyster-logo-switch {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      width: auto;
+      min-width: 0;
+    }
+
+    .cloyster-logo-light {
+      display: none !important;
+    }
+
+    [data-theme="light"] .cloyster-logo-dark {
+      display: none !important;
+    }
+
+    [data-theme="light"] .cloyster-logo-light {
+      display: block !important;
     }
 
     .cloyster-logo-footer {
@@ -765,6 +835,31 @@ export default function App() {
       color: #22c55e;
     }
 
+    /* --- CONSULTATION SECTION: lighter, calmer visual treatment --- */
+    .consultation-section {
+      background: linear-gradient(180deg, #111c2d 0%, #0f1a2a 100%) !important;
+      border-top: 1px solid rgba(59, 130, 246, 0.08);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.08);
+    }
+
+    .consultation-panel {
+      background: #172337 !important;
+      border: 1px solid #2a3a52 !important;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18) !important;
+    }
+
+    [data-theme="light"] .consultation-section {
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+      border-top: 1px solid #e2e8f0;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    [data-theme="light"] .consultation-panel {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.07) !important;
+    }
+
     .client-success-section {
       background: var(--bg-alt);
       padding: 84px 0 90px;
@@ -903,8 +998,9 @@ export default function App() {
 
     .country-pathway-visual {
       width: 100%;
-      aspect-ratio: 2 / 1;
-      min-height: 220px;
+      height: clamp(270px, 24vw, 330px);
+      min-height: 270px;
+      aspect-ratio: auto;
       position: relative;
       overflow: hidden;
       border-radius: 14px;
@@ -922,6 +1018,90 @@ export default function App() {
       border: 0;
       border-radius: 0;
       object-fit: cover;
+    }
+
+    .country-image-wrapper {
+      display: block !important;
+      width: 100%;
+      min-width: 0;
+    }
+
+    .country-why-card {
+      display: block !important;
+      visibility: visible !important;
+      height: auto !important;
+      min-height: 0 !important;
+      overflow: visible !important;
+      width: 100%;
+      margin-top: 14px;
+      padding: 22px 22px 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-card);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.16);
+      position: relative;
+      z-index: 1;
+    }
+
+    .country-why-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: var(--accent-blue);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .country-why-kicker .flag-icon {
+      width: 22px;
+      height: 15px;
+    }
+
+    .country-why-card h4 {
+      display: block !important;
+      visibility: visible !important;
+      margin: 0 0 14px;
+      color: var(--text-primary) !important;
+      font-size: 1.25rem;
+      line-height: 1.25;
+    }
+
+    .country-why-list {
+      display: grid !important;
+      visibility: visible !important;
+      gap: 11px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .country-why-list li {
+      display: grid !important;
+      visibility: visible !important;
+      grid-template-columns: 20px minmax(0, 1fr);
+      gap: 9px;
+      align-items: start;
+      color: var(--text-secondary) !important;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .country-why-list li::before {
+      content: '✓';
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.28);
+      color: #22c55e;
+      font-size: 0.72rem;
+      font-weight: 900;
     }
 
     .country-pathway-badge {
@@ -1056,6 +1236,19 @@ export default function App() {
       max-width: 330px;
     }
 
+    .footer-qr-link {
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .footer-qr-link:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59,130,246,.45);
+      box-shadow: 0 14px 30px rgba(0,0,0,.18);
+    }
+
     .instagram-qr-card img {
       width: 92px;
       height: 92px;
@@ -1130,7 +1323,20 @@ export default function App() {
       }
 
       .country-pathway-visual {
-        min-height: 190px;
+        height: 240px;
+        min-height: 240px;
+      }
+
+      .country-why-card {
+        padding: 19px 17px 18px;
+      }
+
+      .country-why-card h4 {
+        font-size: 1.12rem;
+      }
+
+      .country-why-list li {
+        font-size: 0.84rem;
       }
 
       .country-pathway-badge {
@@ -1335,6 +1541,122 @@ export default function App() {
       }
     }
 
+    /* DESTINATION EXPLORER — CLEAN TWO-COLUMN LAYOUT */
+    .country-destination-shell {
+      width: 100%;
+      overflow: visible !important;
+    }
+
+    .country-display-grid {
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 30px;
+      align-items: start;
+      overflow: visible !important;
+    }
+
+    .country-image-wrapper {
+      width: 100%;
+      min-width: 0;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      overflow: visible !important;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .country-pathway-visual {
+      flex: 0 0 auto;
+    }
+
+    .destination-why-panel {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      overflow: visible !important;
+      position: relative;
+      margin-top: 14px;
+      padding: 22px 22px 20px;
+      box-sizing: border-box;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      box-shadow: 0 10px 24px rgba(0,0,0,.16);
+    }
+
+    .destination-why-panel h4 {
+      display: block !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      margin: 0 0 14px;
+      padding: 0;
+      color: var(--text-primary) !important;
+      font-size: 1.25rem;
+      line-height: 1.3;
+      font-weight: 800;
+    }
+
+    .destination-why-panel ul {
+      display: grid !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      gap: 11px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .destination-why-panel li {
+      display: grid !important;
+      visibility: visible !important;
+      opacity: 1 !important;
+      grid-template-columns: 20px minmax(0, 1fr);
+      gap: 9px;
+      align-items: start;
+      margin: 0;
+      padding: 0;
+      color: var(--text-secondary) !important;
+      font-size: .9rem;
+      line-height: 1.5;
+    }
+
+    .country-info-box {
+      width: 100%;
+      min-width: 0;
+      height: auto !important;
+      min-height: 0 !important;
+      max-height: none !important;
+      overflow: visible !important;
+    }
+
+    @media (min-width: 901px) {
+      .country-destination-shell {
+        padding: 30px !important;
+      }
+
+      .country-display-grid {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+        align-items: start !important;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .country-destination-shell {
+        padding: 24px !important;
+      }
+
+      .country-display-grid {
+        grid-template-columns: 1fr !important;
+      }
+    }
+
     @media (max-width: 640px) {
 
       .team-section {
@@ -1437,6 +1759,129 @@ export default function App() {
       .whatsapp-float svg {
         width: 24px;
         height: 24px;
+      }
+    }
+
+    /* --- LIGHT/DAY MODE POLISH --- */
+    [data-theme="light"] body {
+      background: var(--bg-main) !important;
+      color: var(--text-primary) !important;
+    }
+
+    [data-theme="light"] .navbar,
+    [data-theme="light"] .nav-menu {
+      background: #ffffff !important;
+      color: var(--text-primary) !important;
+    }
+
+    [data-theme="light"] .nav-link {
+      color: #334155 !important;
+    }
+
+    [data-theme="light"] .nav-link:hover {
+      color: var(--accent-blue) !important;
+    }
+
+    [data-theme="light"] .hero-sec,
+    [data-theme="light"] .roadmap-section,
+    [data-theme="light"] .team-section {
+      background: #f8fafc !important;
+    }
+
+    [data-theme="light"] .hero-mesh {
+      opacity: .18 !important;
+    }
+
+    [data-theme="light"] .glass-panel,
+    [data-theme="light"] .country-why-card,
+    [data-theme="light"] .destination-why-panel,
+    [data-theme="light"] .roadmap-card,
+    [data-theme="light"] .roadmap-cta,
+    [data-theme="light"] .team-card {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 10px 25px -5px rgba(15, 23, 42, .08) !important;
+    }
+
+    [data-theme="light"] .select-control,
+    [data-theme="light"] input,
+    [data-theme="light"] textarea,
+    [data-theme="light"] select {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    [data-theme="light"] input::placeholder,
+    [data-theme="light"] textarea::placeholder {
+      color: #64748b !important;
+      opacity: 1 !important;
+    }
+
+    [data-theme="light"] .country-stats-row .c-stat-card,
+    [data-theme="light"] .c-stat-card {
+      background: #f8fafc !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    [data-theme="light"] .country-pathway-visual {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, .08) !important;
+    }
+
+    [data-theme="light"] .country-pathway-badge {
+      background: rgba(15, 23, 42, .86) !important;
+      color: #ffffff !important;
+    }
+
+    [data-theme="light"] .country-next-step-actions .btn-secondary,
+    [data-theme="light"] .roadmap-cta .btn-secondary {
+      background: #ffffff !important;
+      color: #0f172a !important;
+      border-color: #cbd5e1 !important;
+    }
+
+    [data-theme="light"] footer {
+      background: #f1f5f9 !important;
+      color: #334155 !important;
+      border-top-color: #e2e8f0 !important;
+    }
+
+    [data-theme="light"] footer h4 {
+      color: #0f172a !important;
+    }
+
+    [data-theme="light"] footer a,
+    [data-theme="light"] footer p {
+      color: #475569;
+    }
+
+    [data-theme="light"] .consultation-section {
+      background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%) !important;
+    }
+
+    [data-theme="light"] .consultation-panel {
+      background: #ffffff !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    [data-theme="light"] .client-success-section {
+      background: #f1f5f9 !important;
+    }
+
+    [data-theme="light"] .client-success-stat {
+      background: rgba(37, 99, 235, .045) !important;
+      border-color: #e2e8f0 !important;
+    }
+
+    [data-theme="light"] .modal-overlay {
+      background-color: rgba(15, 23, 42, .45) !important;
+    }
+
+    @media (max-width: 900px) {
+      [data-theme="light"] .nav-menu {
+        box-shadow: -5px 0 25px rgba(15, 23, 42, .15) !important;
       }
     }
   `
@@ -1601,7 +2046,7 @@ export default function App() {
           </div>
 
           <div className="services-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
-            <div className="glass-panel" style={{ padding: '35px' }}>
+            <div className="glass-panel country-destination-shell" style={{ padding: '30px' }}>
               <div className="clean-feature-icon"><ScaleIcon /></div>
               <h3 style={{ fontSize: '1.3rem', fontWeight: '700', marginBottom: '10px', color: 'var(--text-primary)' }}>
                 Legal Representation
@@ -1683,12 +2128,12 @@ export default function App() {
 
           {currentCountry && (
             <div className="glass-panel" style={{ padding: '35px' }}>
-              <div className="country-display-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
+              <div className="country-display-grid">
                 <div className="country-image-wrapper">
                   <div className="country-pathway-visual">
                     <img
-                      src={['canada', 'germany'].includes(currentCountry.id) ? currentCountry.pathwayFlag : currentCountry.image}
-                      alt={['canada', 'germany'].includes(currentCountry.id) ? `${currentCountry.name} flag` : `${currentCountry.name} destination`}
+                      src={currentCountry.image}
+                      alt={`${currentCountry.name} destination`}
                       className="country-pathway-main-image"
                     />
 
@@ -1698,8 +2143,117 @@ export default function App() {
                         alt={`${currentCountry.name} Flag`}
                         className="flag-icon"
                       />
-                      <span>{currentCountry.name} Pathway</span>
+                      <span>{currentCountry.code.toUpperCase()} {currentCountry.name}</span>
                     </div>
+                  </div>
+
+                  <div
+                    className="destination-why-panel"
+                    aria-label={`Why choose ${currentCountry.name}`}
+                    style={{
+                      display: 'block',
+                      visibility: 'visible',
+                      opacity: 1,
+                      width: '100%',
+                      minHeight: '240px',
+                      height: 'auto',
+                      marginTop: '14px',
+                      padding: '24px',
+                      boxSizing: 'border-box',
+                      background: 'var(--bg-card)',
+                      border: '1px solid var(--border-color)',
+                      borderRadius: '14px',
+                      boxShadow: '0 10px 24px rgba(0,0,0,.16)',
+                      position: 'relative',
+                      zIndex: 5,
+                      overflow: 'visible'
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        marginBottom: '10px',
+                        color: 'var(--accent-blue)',
+                        fontSize: '0.78rem',
+                        fontWeight: 800,
+                        letterSpacing: '0.8px',
+                        textTransform: 'uppercase'
+                      }}
+                    >
+                      <img
+                        src={currentCountry.flag}
+                        alt=""
+                        className="flag-icon"
+                        aria-hidden="true"
+                        style={{ width: '22px', height: '15px', flex: '0 0 auto' }}
+                      />
+                      <span>{currentCountry.code.toUpperCase()} {currentCountry.name}</span>
+                    </div>
+
+                    <h4
+                      style={{
+                        display: 'block',
+                        visibility: 'visible',
+                        opacity: 1,
+                        margin: '0 0 16px',
+                        padding: 0,
+                        color: 'var(--text-primary)',
+                        fontSize: '1.3rem',
+                        lineHeight: 1.3,
+                        fontWeight: 800
+                      }}
+                    >
+                      Why choose {currentCountry.name}?
+                    </h4>
+
+                    <ul
+                      style={{
+                        display: 'grid',
+                        visibility: 'visible',
+                        opacity: 1,
+                        gap: '12px',
+                        margin: 0,
+                        padding: 0,
+                        listStyle: 'none'
+                      }}
+                    >
+                      {currentCountry.whyChoose.map((reason, index) => (
+                        <li
+                          key={index}
+                          style={{
+                            display: 'grid',
+                            gridTemplateColumns: '22px minmax(0, 1fr)',
+                            gap: '10px',
+                            alignItems: 'start',
+                            margin: 0,
+                            padding: 0,
+                            color: 'var(--text-secondary)',
+                            fontSize: '0.92rem',
+                            lineHeight: 1.55
+                          }}
+                        >
+                          <span
+                            aria-hidden="true"
+                            style={{
+                              width: '20px',
+                              height: '20px',
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              borderRadius: '50%',
+                              background: 'rgba(34,197,94,.12)',
+                              border: '1px solid rgba(34,197,94,.28)',
+                              color: '#22c55e',
+                              fontSize: '0.72rem',
+                              fontWeight: 900
+                            }}
+                          >✓</span>
+                          <span>{reason}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
 
@@ -1957,7 +2511,7 @@ export default function App() {
 
       {/* DEDICATED MODAL FOR SERVICE DETAILS */}
       {activeModal && (
-        <div style={{
+        <div className="modal-overlay" style={{
           position: 'fixed',
           top: 0,
           left: 0,
@@ -2198,7 +2752,7 @@ export default function App() {
       </section>
 
       {/* BOOKING / CONSULTATION FORM */}
-      <section id="contact" className="section-padding" style={{ background: 'var(--bg-alt)', padding: '60px 0' }}>
+      <section id="contact" className="section-padding consultation-section" style={{ background: 'var(--bg-alt)', padding: '60px 0' }}>
         <div className="container">
           <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
             <span className="section-tag" style={{ background: 'var(--bg-card)', color: 'var(--accent-blue)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>Direct Legal Support</span>
@@ -2208,7 +2762,7 @@ export default function App() {
             </p>
           </div>
 
-          <div className="glass-panel" style={{ maxWidth: '650px', margin: '0 auto', padding: '30px' }}>
+          <div className="glass-panel consultation-panel" style={{ maxWidth: '650px', margin: '0 auto', padding: '30px' }}>
             {bookingSubmitted ? (
               <div style={{ textAlign: 'center', padding: '20px 0' }}>
                 <h3 style={{ color: '#22c55e', fontSize: '1.6rem', marginBottom: '10px' }}>
@@ -2306,11 +2860,14 @@ export default function App() {
                     onChange={(e) => setBookingData({ ...bookingData, consultationTime: e.target.value })}
                   >
                     <option value="">Select a preferred time</option>
-                    <option value="9:00 AM - 11:00 AM">9:00 AM - 11:00 AM</option>
-                    <option value="11:00 AM - 1:00 PM">11:00 AM - 1:00 PM</option>
-                    <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
-                    <option value="4:00 PM - 6:00 PM">4:00 PM - 6:00 PM</option>
+                    <option value="9:00 AM - 11:00 AM IST / 10:30 PM - 12:30 AM ET (previous day)">9:00 AM - 11:00 AM IST / 10:30 PM - 12:30 AM ET (previous day)</option>
+                    <option value="11:00 AM - 1:00 PM IST / 12:30 AM - 2:30 AM ET">11:00 AM - 1:00 PM IST / 12:30 AM - 2:30 AM ET</option>
+                    <option value="2:00 PM - 4:00 PM IST / 3:30 AM - 5:30 AM ET">2:00 PM - 4:00 PM IST / 3:30 AM - 5:30 AM ET</option>
+                    <option value="4:00 PM - 6:00 PM IST / 5:30 AM - 7:30 AM ET">4:00 PM - 6:00 PM IST / 5:30 AM - 7:30 AM ET</option>
                   </select>
+                  <div style={{ marginTop: '7px', color: 'var(--text-muted)', fontSize: '0.76rem', lineHeight: '1.45' }}>
+                    Times are shown in India Standard Time (IST) and U.S. Eastern Time (ET).
+                  </div>
                 </div>
 
                 <div className="form-group">
@@ -2496,7 +3053,7 @@ export default function App() {
             <div className="footer-social-links">
               <a
                 className="social-icon-link"
-                href="https://www.linkedin.com/in/niyati-nahadiya-226b6204/"
+                href={LINKEDIN_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="CloysterVisa LinkedIn"
@@ -2514,22 +3071,44 @@ export default function App() {
               >
                 <InstagramIcon />
               </a>
+              <a
+                className="social-icon-link"
+                href={GOOGLE_BUSINESS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="CloysterVisa Google Business Profile"
+                title="Google Business Profile"
+              >
+                <GoogleIcon />
+              </a>
             </div>
 
-            <div className="instagram-qr-card">
+            <a
+              className="instagram-qr-card footer-qr-link"
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open CloysterVisa Instagram profile"
+            >
               <img src={instagramQr} alt="QR code to follow CloysterVisa on Instagram" />
               <div>
                 <strong>Follow @cloystervisa</strong>
-                <span>Scan the QR code to open our Instagram profile.</span>
+                <span>Scan or click to open our Instagram profile.</span>
               </div>
-            </div>
-            <div className="instagram-qr-card google-qr-card">
+            </a>
+            <a
+              className="instagram-qr-card google-qr-card footer-qr-link"
+              href={GOOGLE_BUSINESS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Open CloysterVisa Google Business Profile"
+            >
               <img src={googleBusinessQr} alt="Google Business Profile QR code" />
               <div>
                 <strong>Check us out on Google</strong>
-                <span>Scan the QR code to open our Google Business Profile.</span>
+                <span>Scan or click to open our Google Business Profile.</span>
               </div>
-            </div>
+            </a>
           </div>
 
           <div className="office-support-block">
