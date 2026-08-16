@@ -117,6 +117,54 @@ const GoogleIcon = ({ size = 18 }) => (
   </svg>
 )
 
+
+const FooterLineIcon = ({ type, size = 18 }) => {
+  const common = {
+    width: size,
+    height: size,
+    viewBox: '0 0 24 24',
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: '1.7',
+    strokeLinecap: 'round',
+    strokeLinejoin: 'round',
+    'aria-hidden': 'true'
+  }
+
+  if (type === 'location') {
+    return (
+      <svg {...common}>
+        <path d="M20 10.5c0 5.1-8 11-8 11s-8-5.9-8-11a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10.5" r="2.6" />
+      </svg>
+    )
+  }
+
+  if (type === 'phone') {
+    return (
+      <svg {...common}>
+        <path d="M6.7 3.5 9.2 6 7.6 8.8a14.7 14.7 0 0 0 7.6 7.6L18 14.8l2.5 2.5-1.5 3.1c-.4.8-1.2 1.2-2.1 1.1C9.8 20.5 3.5 14.2 2.5 7.1c-.1-.9.3-1.7 1.1-2.1l3.1-1.5Z" />
+      </svg>
+    )
+  }
+
+  if (type === 'message') {
+    return (
+      <svg {...common}>
+        <path d="M20 11.5a7 7 0 0 1-7 7H8l-4 2 1.5-3.3A7 7 0 1 1 20 11.5Z" />
+        <path d="M8 11.5h.01M12 11.5h.01M16 11.5h.01" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg {...common}>
+      <rect x="3" y="5" width="18" height="14" rx="2" />
+      <path d="m4.5 7 7.5 5.5L19.5 7" />
+    </svg>
+  )
+}
+
 const WhatsAppIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
     <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.572-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
@@ -272,6 +320,7 @@ const GOOGLE_BUSINESS_URL = 'https://local.google.com/place?placeid=ChIJxWcEuEQd
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [openNavDropdown, setOpenNavDropdown] = useState(null)
   
 
   const countries = staticCountriesData
@@ -422,6 +471,20 @@ export default function App() {
   }
 
   const currentCountry = countries.find((c) => c.id === activeTab)
+
+  const openDestination = (countryId) => {
+    setActiveTab(countryId)
+    setOpenNavDropdown(null)
+    setMobileMenuOpen(false)
+    window.setTimeout(() => {
+      document.getElementById('destinations')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }, 0)
+  }
+
+  const closeNav = () => {
+    setOpenNavDropdown(null)
+    setMobileMenuOpen(false)
+  }
 
   const visualPolishStyles = `
     :root {
@@ -688,6 +751,414 @@ export default function App() {
       font-weight: 500;
     }
 
+    .nav-dropdown {
+      position: relative;
+    }
+
+    .nav-dropdown-toggle {
+      border: 0;
+      background: transparent;
+      cursor: pointer;
+      font: inherit;
+      padding: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-chevron {
+      font-size: 0.9rem;
+      line-height: 1;
+      transform: translateY(-1px);
+      transition: transform .2s ease;
+    }
+
+    .nav-dropdown.open .nav-chevron {
+      transform: rotate(180deg) translateY(1px);
+    }
+
+    .nav-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 14px);
+      left: 50%;
+      min-width: 225px;
+      padding: 8px;
+      transform: translateX(-50%) translateY(-5px);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      box-shadow: 0 18px 40px rgba(0,0,0,.22);
+      transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+      z-index: 1200;
+    }
+
+    .nav-dropdown:hover .nav-dropdown-menu,
+    .nav-dropdown.open .nav-dropdown-menu {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .nav-dropdown-menu button,
+    .nav-dropdown-menu a {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 10px 11px;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      text-decoration: none;
+      text-align: left;
+      font: inherit;
+      font-size: .84rem;
+      cursor: pointer;
+    }
+
+    .nav-dropdown-menu button:hover,
+    .nav-dropdown-menu a:hover {
+      background: rgba(37,99,235,.09);
+      color: var(--text-primary);
+    }
+
+    .nav-dropdown-menu .flag-icon {
+      width: 20px;
+      height: 14px;
+      flex: 0 0 auto;
+    }
+
+    /* --- HERO WORKFLOW VISUAL --- */
+    .hero-workflow {
+      position: relative;
+      min-height: 420px;
+      padding: 28px;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(37,99,235,.12), transparent 36%),
+        var(--bg-card) !important;
+    }
+
+    .hero-workflow::before {
+      content: '';
+      position: absolute;
+      width: 280px;
+      height: 280px;
+      right: -120px;
+      bottom: -150px;
+      border: 1px solid rgba(59,130,246,.12);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-workflow-top {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .hero-workflow-kicker {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--accent-blue);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: 1.15px;
+    }
+
+    .hero-workflow-top h3 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.28rem;
+      line-height: 1.25;
+    }
+
+    .hero-workflow-globe {
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      background: rgba(37,99,235,.09);
+      border: 1px solid rgba(59,130,246,.18);
+    }
+
+    .hero-workflow-globe svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .hero-workflow-track {
+      position: relative;
+      margin-top: 26px;
+      padding: 0 0 2px;
+    }
+
+    .hero-workflow-line {
+      position: absolute;
+      left: 25px;
+      width: 1px;
+      border-left: 1px dashed rgba(59,130,246,.38);
+      z-index: 0;
+    }
+
+    .hero-workflow-line-one {
+      top: 74px;
+      height: 18px;
+    }
+
+    .hero-workflow-line-two {
+      top: 174px;
+      height: 18px;
+    }
+
+    .hero-workflow-card {
+      position: relative;
+      z-index: 1;
+      min-height: 76px;
+      display: grid;
+      grid-template-columns: 34px minmax(0, 1fr) 30px;
+      align-items: center;
+      gap: 12px;
+      padding: 13px 14px;
+      margin-bottom: 18px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(15,23,42,.72);
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .hero-workflow-card:hover {
+      transform: translateX(4px);
+      border-color: rgba(59,130,246,.42);
+      box-shadow: 0 10px 24px rgba(0,0,0,.16);
+    }
+
+    .hero-workflow-card-two {
+      margin-left: 18px;
+    }
+
+    .hero-workflow-card-three {
+      margin-left: 36px;
+      margin-bottom: 0;
+    }
+
+    .hero-workflow-number {
+      width: 34px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #93c5fd;
+      background: rgba(37,99,235,.12);
+      border: 1px solid rgba(59,130,246,.25);
+      font-size: .68rem;
+      font-weight: 800;
+    }
+
+    .hero-workflow-card strong {
+      display: block;
+      color: var(--text-primary);
+      font-size: .88rem;
+      margin-bottom: 3px;
+    }
+
+    .hero-workflow-card span {
+      display: block;
+      color: var(--text-secondary);
+      font-size: .73rem;
+      line-height: 1.42;
+    }
+
+    .hero-workflow-check {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #22c55e;
+      background: rgba(34,197,94,.1);
+      border: 1px solid rgba(34,197,94,.2);
+    }
+
+    .hero-workflow-check svg {
+      width: 15px;
+      height: 15px;
+    }
+
+    .hero-proof-row {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 22px;
+      padding-top: 17px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .hero-proof-badge {
+      width: 30px;
+      height: 30px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #22c55e;
+      background: rgba(34,197,94,.1);
+      border: 1px solid rgba(34,197,94,.22);
+      font-size: .82rem;
+      font-weight: 900;
+    }
+
+    .hero-proof-row strong {
+      display: block;
+      color: var(--text-primary);
+      font-size: .84rem;
+      margin-bottom: 2px;
+    }
+
+    .hero-proof-row span {
+      display: block;
+      color: var(--text-muted);
+      font-size: .72rem;
+    }
+
+    .destination-chip {
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      font: inherit;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    }
+
+    .destination-chip:hover,
+    .destination-chip.active {
+      transform: translateY(-2px);
+      border-color: rgba(59,130,246,.48) !important;
+      background: rgba(37,99,235,.09) !important;
+      box-shadow: 0 8px 20px rgba(0,0,0,.14);
+    }
+
+    .destination-chip-arrow {
+      margin-left: 1px;
+      color: var(--accent-blue);
+      font-size: .78rem;
+      opacity: .7;
+      transition: transform .18s ease, opacity .18s ease;
+    }
+
+    .destination-chip:hover .destination-chip-arrow,
+    .destination-chip.active .destination-chip-arrow {
+      opacity: 1;
+      transform: translate(2px, -2px);
+    }
+
+    [data-theme="light"] .hero-workflow-card {
+      background: rgba(248,250,252,.9);
+    }
+
+    [data-theme="light"] .nav-dropdown-menu {
+      box-shadow: 0 18px 40px rgba(15,23,42,.12);
+    }
+
+    .hero-sec .hero-buttons .btn-secondary {
+      background: transparent !important;
+    }
+
+    @media (max-width: 900px) {
+      .nav-dropdown {
+        width: 100%;
+      }
+
+      .nav-dropdown-toggle {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 0;
+      }
+
+      .nav-dropdown-menu {
+        position: static;
+        min-width: 0;
+        width: 100%;
+        margin-top: 8px;
+        padding: 4px;
+        transform: none !important;
+        box-shadow: none;
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        display: none;
+      }
+
+      .nav-dropdown.open .nav-dropdown-menu {
+        display: block;
+      }
+
+      .nav-dropdown-menu button,
+      .nav-dropdown-menu a {
+        padding: 9px 10px;
+      }
+
+      .hero-workflow {
+        min-height: 390px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-workflow {
+        padding: 22px;
+        min-height: 360px;
+      }
+
+      .hero-workflow-card {
+        grid-template-columns: 31px minmax(0, 1fr) 27px;
+        gap: 9px;
+        padding: 11px;
+        min-height: 72px;
+      }
+
+      .hero-workflow-card-two {
+        margin-left: 10px;
+      }
+
+      .hero-workflow-card-three {
+        margin-left: 20px;
+      }
+
+      .hero-workflow-line {
+        left: 22px;
+      }
+
+      .hero-workflow-line-one {
+        top: 70px;
+      }
+
+      .hero-workflow-line-two {
+        top: 164px;
+      }
+
+      .hero-workflow-card strong {
+        font-size: .8rem;
+      }
+
+      .hero-workflow-card span {
+        font-size: .67rem;
+      }
+    }
+
     .nav-link:hover {
       color: var(--accent-blue);
     }
@@ -714,365 +1185,7 @@ export default function App() {
       }
 
       .hero-grid {
-        grid-template-columns: 1.08fr 0.92fr;
-      }
-    }
-
-    /* --- HERO VISUAL: restrained professional mobility graphic --- */
-    .hero-visual {
-      width: 100%;
-      min-width: 0;
-    }
-
-    .hero-mobility-visual {
-      position: relative;
-      width: 100%;
-      min-height: 440px;
-      padding: 30px;
-      border: 1px solid var(--border-color);
-      border-radius: 22px;
-      background:
-        radial-gradient(circle at 70% 42%, rgba(37, 99, 235, 0.12), transparent 44%),
-        var(--bg-card);
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
-      overflow: hidden;
-    }
-
-    .hero-mobility-visual::before {
-      content: '';
-      position: absolute;
-      width: 360px;
-      height: 360px;
-      border-radius: 50%;
-      top: 88px;
-      right: -54px;
-      border: 1px solid rgba(59, 130, 246, 0.16);
-      pointer-events: none;
-    }
-
-    .hero-mobility-visual::after {
-      content: '';
-      position: absolute;
-      width: 250px;
-      height: 250px;
-      border-radius: 50%;
-      top: 143px;
-      right: 1px;
-      border: 1px dashed rgba(59, 130, 246, 0.13);
-      pointer-events: none;
-    }
-
-    .hero-mobility-header {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 20px;
-    }
-
-    .hero-mobility-kicker {
-      display: block;
-      margin-bottom: 7px;
-      color: var(--accent-blue);
-      font-size: 0.7rem;
-      font-weight: 800;
-      letter-spacing: 1.25px;
-    }
-
-    .hero-mobility-header h3 {
-      margin: 0 0 7px;
-      color: var(--text-primary);
-      font-size: clamp(1.15rem, 2vw, 1.45rem);
-      line-height: 1.25;
-    }
-
-    .hero-mobility-header p {
-      margin: 0;
-      max-width: 360px;
-      color: var(--text-secondary);
-      font-size: 0.86rem;
-      line-height: 1.55;
-    }
-
-    .hero-mobility-icon {
-      width: 46px;
-      height: 46px;
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 13px;
-      color: var(--accent-blue);
-      background: rgba(37, 99, 235, 0.1);
-      border: 1px solid rgba(59, 130, 246, 0.2);
-    }
-
-    .hero-mobility-icon svg {
-      width: 25px;
-      height: 25px;
-    }
-
-    .hero-mobility-map {
-      position: relative;
-      z-index: 1;
-      height: 255px;
-      margin-top: 6px;
-      overflow: hidden;
-    }
-
-    .hero-map-orbit {
-      position: absolute;
-      left: 58%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-      border: 1px solid rgba(59, 130, 246, 0.15);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .hero-map-orbit-one {
-      width: 210px;
-      height: 210px;
-    }
-
-    .hero-map-orbit-two {
-      width: 150px;
-      height: 150px;
-      border-color: rgba(34, 197, 94, 0.12);
-    }
-
-    .hero-map-orbit-three {
-      width: 90px;
-      height: 90px;
-      border-style: dashed;
-    }
-
-    .hero-map-route {
-      position: absolute;
-      left: 58%;
-      top: 50%;
-      width: 142px;
-      height: 1px;
-      transform-origin: left center;
-      background: linear-gradient(90deg, rgba(59, 130, 246, 0.72), rgba(59, 130, 246, 0.05));
-      opacity: 0.8;
-    }
-
-    .hero-map-route-one {
-      transform: rotate(-31deg);
-    }
-
-    .hero-map-route-two {
-      transform: rotate(17deg);
-    }
-
-    .hero-map-route-three {
-      transform: rotate(137deg);
-    }
-
-    .hero-map-dot {
-      position: absolute;
-      z-index: 2;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent-blue);
-      border: 2px solid var(--bg-card);
-      box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.11);
-    }
-
-    .hero-map-dot-center {
-      left: calc(58% - 5px);
-      top: calc(50% - 5px);
-      width: 14px;
-      height: 14px;
-      background: #22c55e;
-      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.12);
-    }
-
-    .hero-map-dot-ca {
-      left: 74%;
-      top: 31%;
-    }
-
-    .hero-map-dot-au {
-      left: 82%;
-      top: 56%;
-    }
-
-    .hero-map-dot-de {
-      left: 48%;
-      top: 69%;
-    }
-
-    .hero-map-dot-uk {
-      left: 40%;
-      top: 39%;
-    }
-
-    .hero-map-label {
-      position: absolute;
-      z-index: 2;
-      padding: 5px 9px;
-      border: 1px solid var(--border-color);
-      border-radius: 999px;
-      background: rgba(15, 23, 42, 0.78);
-      color: var(--text-secondary);
-      font-size: 0.7rem;
-      font-weight: 700;
-      white-space: nowrap;
-      backdrop-filter: blur(7px);
-      -webkit-backdrop-filter: blur(7px);
-    }
-
-    .hero-map-label-ca {
-      left: 77%;
-      top: 26%;
-    }
-
-    .hero-map-label-au {
-      left: 85%;
-      top: 52%;
-    }
-
-    .hero-map-label-de {
-      left: 51%;
-      top: 65%;
-    }
-
-    .hero-map-label-uk {
-      left: 43%;
-      top: 35%;
-    }
-
-    .hero-mobility-proof {
-      position: relative;
-      z-index: 3;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 4px;
-      padding: 13px 15px;
-      border: 1px solid var(--border-color);
-      border-radius: 13px;
-      background: var(--bg-main);
-    }
-
-    .hero-mobility-proof-icon {
-      width: 34px;
-      height: 34px;
-      flex: 0 0 auto;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      color: #22c55e;
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.22);
-      font-weight: 900;
-    }
-
-    .hero-mobility-proof strong {
-      display: block;
-      margin-bottom: 2px;
-      color: var(--text-primary);
-      font-size: 0.88rem;
-    }
-
-    .hero-mobility-proof span {
-      display: block;
-      color: var(--text-muted);
-      font-size: 0.74rem;
-      line-height: 1.4;
-    }
-
-    [data-theme="light"] .hero-mobility-visual {
-      background:
-        radial-gradient(circle at 70% 42%, rgba(37, 99, 235, 0.08), transparent 44%),
-        #ffffff;
-      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
-    }
-
-    [data-theme="light"] .hero-map-label {
-      background: rgba(255, 255, 255, 0.9);
-    }
-
-    @media (max-width: 900px) {
-      .hero-mobility-visual {
-        min-height: 390px;
-      }
-
-      .hero-mobility-map {
-        height: 220px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .hero-mobility-visual {
-        min-height: 350px;
-        padding: 22px;
-        border-radius: 18px;
-      }
-
-      .hero-mobility-header p {
-        font-size: 0.8rem;
-      }
-
-      .hero-mobility-map {
-        height: 190px;
-      }
-
-      .hero-map-orbit-one {
-        width: 165px;
-        height: 165px;
-      }
-
-      .hero-map-orbit-two {
-        width: 118px;
-        height: 118px;
-      }
-
-      .hero-map-orbit-three {
-        width: 72px;
-        height: 72px;
-      }
-
-      .hero-map-label {
-        padding: 4px 7px;
-        font-size: 0.62rem;
-      }
-
-      .hero-map-dot-ca {
-        left: 72%;
-      }
-
-      .hero-map-dot-au {
-        left: 80%;
-      }
-
-      .hero-map-dot-de {
-        left: 46%;
-      }
-
-      .hero-map-dot-uk {
-        left: 38%;
-      }
-
-      .hero-map-label-ca {
-        left: 75%;
-      }
-
-      .hero-map-label-au {
-        left: 83%;
-      }
-
-      .hero-map-label-de {
-        left: 49%;
-      }
-
-      .hero-map-label-uk {
-        left: 41%;
+        grid-template-columns: 1.1fr 0.9fr;
       }
     }
 
@@ -1521,6 +1634,375 @@ export default function App() {
     }
 
 
+
+
+    /* --- PROFESSIONAL FOOTER UPDATE --- */
+    .site-footer {
+      background: var(--bg-alt) !important;
+      border-top: 1px solid var(--border-color) !important;
+      padding: 54px 0 0 !important;
+      color: var(--text-secondary);
+    }
+
+    .footer-main-grid {
+      display: grid !important;
+      grid-template-columns: 1.15fr .85fr 1fr 1.25fr !important;
+      gap: 42px 46px !important;
+      align-items: start !important;
+      margin-bottom: 42px !important;
+    }
+
+    .footer-brand-column,
+    .footer-column {
+      min-width: 0;
+    }
+
+    .footer-logo-link {
+      display: inline-flex !important;
+      align-items: center;
+      text-decoration: none;
+      margin-bottom: 16px;
+    }
+
+    .footer-logo-link .cloyster-logo-footer {
+      width: 190px !important;
+    }
+
+    .footer-description {
+      max-width: 290px;
+      margin: 0;
+      color: var(--text-muted);
+      font-size: .9rem;
+      line-height: 1.65;
+    }
+
+    .footer-heading {
+      color: var(--text-primary) !important;
+      font-size: 1rem !important;
+      font-weight: 700 !important;
+      margin: 0 0 16px !important;
+      line-height: 1.3;
+    }
+
+    .footer-link-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      font-size: .9rem;
+    }
+
+    .footer-link-list a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+
+    .footer-link-list a:hover,
+    .footer-destination-link:hover,
+    .footer-contact-item a:hover,
+    .footer-legal-links a:hover {
+      color: var(--accent-blue) !important;
+    }
+
+    .footer-accent-link {
+      color: var(--accent-blue) !important;
+      font-weight: 600;
+    }
+
+    .footer-destination-list {
+      gap: 11px;
+    }
+
+    .footer-destination-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--text-secondary) !important;
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+
+    .footer-destination-link .flag-icon {
+      width: 20px;
+      height: 14px;
+      flex: 0 0 auto;
+    }
+
+    .footer-contact-item {
+      display: grid;
+      grid-template-columns: 20px minmax(0, 1fr);
+      gap: 9px;
+      align-items: start;
+      margin: 0 0 11px;
+      color: var(--text-muted);
+      font-size: .88rem;
+      line-height: 1.55;
+    }
+
+    .footer-contact-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      color: var(--accent-blue);
+      margin-top: 1px;
+    }
+
+    .footer-contact-item a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+
+    .footer-green-link {
+      color: #22c55e !important;
+      font-weight: 500;
+    }
+
+    .footer-hours {
+      margin: 14px 0 0;
+      color: var(--text-muted);
+      font-size: .82rem;
+      line-height: 1.5;
+    }
+
+    .footer-connect-block {
+      grid-column: 1 / -1;
+      border-top: 1px solid var(--border-color);
+      padding-top: 26px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .footer-connect-header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      min-width: 0;
+    }
+
+    .footer-connect-kicker {
+      display: block;
+      color: var(--accent-blue);
+      font-size: .68rem;
+      font-weight: 800;
+      letter-spacing: 1.25px;
+      margin-bottom: 5px;
+    }
+
+    .footer-connect-heading {
+      margin-bottom: 0 !important;
+    }
+
+    .footer-social-links {
+      display: flex;
+      gap: 8px;
+      margin: 0 !important;
+    }
+
+    .footer-qr-grid {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .footer-qr-compact {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      width: 190px;
+      min-height: 74px;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      border-radius: 12px;
+      color: inherit;
+      text-decoration: none;
+      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+    }
+
+    .footer-qr-compact:hover {
+      transform: translateY(-2px);
+      border-color: rgba(59,130,246,.45);
+      box-shadow: 0 10px 24px rgba(0,0,0,.14);
+    }
+
+    .footer-qr-compact img {
+      width: 58px !important;
+      height: 58px !important;
+      object-fit: contain !important;
+      background: #fff !important;
+      border-radius: 7px !important;
+      padding: 3px !important;
+      flex: 0 0 auto;
+    }
+
+    .footer-qr-compact span {
+      min-width: 0;
+    }
+
+    .footer-qr-compact strong,
+    .footer-qr-compact small {
+      display: block;
+    }
+
+    .footer-qr-compact strong {
+      color: var(--text-primary);
+      font-size: .82rem;
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+
+    .footer-qr-compact small {
+      color: var(--text-muted);
+      font-size: .72rem;
+      line-height: 1.35;
+    }
+
+    .footer-bottom {
+      width: 100%;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .footer-bottom-inner {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding-top: 16px;
+      padding-bottom: 16px;
+    }
+
+    .footer-bottom-inner p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: .78rem;
+      line-height: 1.5;
+    }
+
+    .footer-legal-links {
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 9px;
+      flex-wrap: wrap;
+      font-size: .78rem;
+    }
+
+    .footer-legal-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+
+    .footer-legal-links span {
+      color: var(--border-color);
+    }
+
+    [data-theme="light"] .footer-contact-item,
+    [data-theme="light"] .footer-description,
+    [data-theme="light"] .footer-hours,
+    [data-theme="light"] .footer-bottom-inner p,
+    [data-theme="light"] .footer-legal-links a {
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 1000px) {
+      .footer-main-grid {
+        grid-template-columns: 1.1fr .9fr 1fr !important;
+        gap: 34px 30px !important;
+      }
+
+      .office-support-block {
+        grid-column: 1 / -1;
+      }
+
+      .footer-connect-block {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .site-footer {
+        padding-top: 42px !important;
+      }
+
+      .footer-main-grid {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 32px 24px !important;
+      }
+
+      .footer-brand-column {
+        grid-column: 1 / -1;
+      }
+
+      .office-support-block,
+      .footer-connect-block {
+        grid-column: 1 / -1;
+      }
+
+      .footer-connect-block {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+
+      .footer-connect-header {
+        justify-content: space-between;
+      }
+
+      .footer-qr-grid {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .footer-qr-compact {
+        flex: 1 1 180px;
+      }
+
+      .footer-bottom-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        padding-top: 18px;
+        padding-bottom: 18px;
+      }
+
+      .footer-legal-links {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .footer-main-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .footer-brand-column,
+      .office-support-block,
+      .footer-connect-block {
+        grid-column: 1;
+      }
+
+      .footer-connect-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .footer-qr-grid {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .footer-qr-compact {
+        width: 100%;
+      }
+    }
 
     /* --- SOCIAL + TEAM UPDATE --- */
     .team-section {
@@ -2276,35 +2758,65 @@ export default function App() {
           </a>
 
           <div className={`nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
-            <a href="#about" className="nav-link" onClick={() => setMobileMenuOpen(false)}>About Us</a>
-            <a href="#destinations" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Destinations</a>
-            <a href="#services" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Services</a>
-            <a href="#team" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Our Team</a>
-            <a href="#calculator" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Eligibility Check</a>
-            <a
-              href="#contact"
-              className="nav-link highlight-consult-link"
-              onClick={() => setMobileMenuOpen(false)}
-              style={{
-                background: 'rgba(37, 99, 235, 0.15)',
-                color: '#3b82f6',
-                padding: '6px 14px',
-                borderRadius: '20px',
-                border: '1px solid #2563eb',
-                fontWeight: '600'
-              }}
-            >
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
-                Book a Consultation <CalendarIcon />
-              </span>
-            </a>
+            <a href="#about" className="nav-link" onClick={closeNav}>About Us</a>
+
+            <div className={`nav-dropdown ${openNavDropdown === 'destinations' ? 'open' : ''}`}>
+              <button
+                type="button"
+                className="nav-link nav-dropdown-toggle"
+                aria-expanded={openNavDropdown === 'destinations'}
+                onClick={() => setOpenNavDropdown(openNavDropdown === 'destinations' ? null : 'destinations')}
+              >
+                Destinations
+                <span className="nav-chevron" aria-hidden="true">⌄</span>
+              </button>
+              <div className="nav-dropdown-menu">
+                <button type="button" onClick={() => openDestination('canada')}>
+                  <img src={countries.find((c) => c.id === 'canada')?.flag} alt="" className="flag-icon" />
+                  Canada
+                </button>
+                <button type="button" onClick={() => openDestination('australia')}>
+                  <img src={countries.find((c) => c.id === 'australia')?.flag} alt="" className="flag-icon" />
+                  Australia
+                </button>
+                <button type="button" onClick={() => openDestination('germany')}>
+                  <img src={countries.find((c) => c.id === 'germany')?.flag} alt="" className="flag-icon" />
+                  Germany
+                </button>
+                <button type="button" onClick={() => openDestination('uk')}>
+                  <img src={countries.find((c) => c.id === 'uk')?.flag} alt="" className="flag-icon" />
+                  United Kingdom
+                </button>
+                <button type="button" onClick={() => openDestination('nz')}>
+                  <img src={countries.find((c) => c.id === 'nz')?.flag} alt="" className="flag-icon" />
+                  New Zealand
+                </button>
+              </div>
+            </div>
+
+            <div className={`nav-dropdown ${openNavDropdown === 'services' ? 'open' : ''}`}>
+              <button
+                type="button"
+                className="nav-link nav-dropdown-toggle"
+                aria-expanded={openNavDropdown === 'services'}
+                onClick={() => setOpenNavDropdown(openNavDropdown === 'services' ? null : 'services')}
+              >
+                Services
+                <span className="nav-chevron" aria-hidden="true">⌄</span>
+              </button>
+              <div className="nav-dropdown-menu">
+                <a href="#services" onClick={closeNav}>Visa Consultation</a>
+                <a href="#services" onClick={closeNav}>Document & Application Support</a>
+                <a href="#services" onClick={closeNav}>Interview Preparation</a>
+                <a href="#services" onClick={closeNav}>Post-Submission Guidance</a>
+              </div>
+            </div>
+
+            <a href="#team" className="nav-link" onClick={closeNav}>Our Team</a>
           </div>
 
           <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <ThemeToggle />
-            <a href="#calculator" className="btn btn-primary" style={{ padding: '10px 18px', borderRadius: '8px', background: 'var(--accent-blue)', color: '#fff', textDecoration: 'none', fontWeight: '600' }}>
-              Check Your Eligibility
-            </a>
             <div className="hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               <span style={{ transform: mobileMenuOpen ? 'rotate(45deg) translate(5px, 6px)' : 'none' }}></span>
               <span style={{ opacity: mobileMenuOpen ? '0' : '1' }}></span>
@@ -2320,7 +2832,7 @@ export default function App() {
         <div className="container hero-grid">
           <div className="hero-content">
             <div className="hero-badge animate-pulse-glow" style={{ background: 'var(--bg-card)', borderColor: 'var(--accent-blue)' }}>
-              <span style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>Immigration Made Simple Since 2020</span>
+              <span style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>128+ Visa Approvals & Growing</span>
             </div>
 
             <h1 className="hero-title text-gradient" style={{ fontSize: '2.8rem', lineHeight: '1.2', margin: '16px 0' }}>
@@ -2351,54 +2863,71 @@ export default function App() {
               </p>
               <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                 {countries.map((c) => (
-                  <span key={c.id} className="glass-panel destination-chip">
-                    <img src={c.flag} alt={`${c.name} Flag`} className="flag-icon" />
-                    {c.name}
-                  </span>
+                  <button
+                    key={c.id}
+                    type="button"
+                    className={`glass-panel destination-chip ${activeTab === c.id ? 'active' : ''}`}
+                    onClick={() => openDestination(c.id)}
+                    aria-label={`Explore ${c.name} immigration pathway`}
+                  >
+                    <img src={c.flag} alt="" className="flag-icon" />
+                    <span>{c.name}</span>
+                    <span className="destination-chip-arrow" aria-hidden="true">↗</span>
+                  </button>
                 ))}
               </div>
             </div>
           </div>
 
           <div className="hero-visual">
-            <div className="hero-mobility-visual" aria-label="Global mobility overview">
-              <div className="hero-mobility-header">
+            <div className="hero-workflow glass-panel">
+              <div className="hero-workflow-top">
                 <div>
-                  <span className="hero-mobility-kicker">GLOBAL MOBILITY</span>
-                  <h3>One destination. A clear pathway.</h3>
-                  <p>Professional guidance for work, study and permanent residency.</p>
+                  <span className="hero-workflow-kicker">YOUR IMMIGRATION JOURNEY</span>
+                  <h3>From profile to destination.</h3>
                 </div>
-                <div className="hero-mobility-icon">
+                <div className="hero-workflow-globe">
                   <GlobeIcon />
                 </div>
               </div>
 
-              <div className="hero-mobility-map" aria-hidden="true">
-                <div className="hero-map-orbit hero-map-orbit-one"></div>
-                <div className="hero-map-orbit hero-map-orbit-two"></div>
-                <div className="hero-map-orbit hero-map-orbit-three"></div>
+              <div className="hero-workflow-track">
+                <div className="hero-workflow-line hero-workflow-line-one"></div>
+                <div className="hero-workflow-line hero-workflow-line-two"></div>
 
-                <div className="hero-map-route hero-map-route-one"></div>
-                <div className="hero-map-route hero-map-route-two"></div>
-                <div className="hero-map-route hero-map-route-three"></div>
+                <div className="hero-workflow-card hero-workflow-card-one">
+                  <div className="hero-workflow-number">01</div>
+                  <div>
+                    <strong>Profile Assessment</strong>
+                    <span>Review your goals, credentials and eligibility.</span>
+                  </div>
+                  <div className="hero-workflow-check"><CheckIcon /></div>
+                </div>
 
-                <span className="hero-map-dot hero-map-dot-center"></span>
-                <span className="hero-map-dot hero-map-dot-ca"></span>
-                <span className="hero-map-dot hero-map-dot-au"></span>
-                <span className="hero-map-dot hero-map-dot-de"></span>
-                <span className="hero-map-dot hero-map-dot-uk"></span>
+                <div className="hero-workflow-card hero-workflow-card-two">
+                  <div className="hero-workflow-number">02</div>
+                  <div>
+                    <strong>Pathway Strategy</strong>
+                    <span>Match your profile to the right visa route.</span>
+                  </div>
+                  <div className="hero-workflow-check"><CheckIcon /></div>
+                </div>
 
-                <span className="hero-map-label hero-map-label-ca">Canada</span>
-                <span className="hero-map-label hero-map-label-au">Australia</span>
-                <span className="hero-map-label hero-map-label-de">Germany</span>
-                <span className="hero-map-label hero-map-label-uk">United Kingdom</span>
+                <div className="hero-workflow-card hero-workflow-card-three">
+                  <div className="hero-workflow-number">03</div>
+                  <div>
+                    <strong>Application Support</strong>
+                    <span>Documents, filing and post-submission guidance.</span>
+                  </div>
+                  <div className="hero-workflow-check"><CheckIcon /></div>
+                </div>
               </div>
 
-              <div className="hero-mobility-proof">
-                <div className="hero-mobility-proof-icon">✓</div>
+              <div className="hero-proof-row">
+                <div className="hero-proof-badge">✓</div>
                 <div>
                   <strong>128+ Visa Approvals</strong>
-                  <span>Structured support from assessment to relocation</span>
+                  <span>Across 5 destination pathways</span>
                 </div>
               </div>
             </div>
@@ -3374,39 +3903,42 @@ export default function App() {
       </a>
 
       {/* FOOTER */}
-      <footer>
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '30px', marginBottom: '40px' }}>
+      <footer className="site-footer">
+        <div className="container footer-main-grid">
 
-          <div>
-            <a href="#" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', marginBottom: '15px' }} aria-label="CloysterVisa home">
+          {/* 1. Brand */}
+          <div className="footer-brand-column">
+            <a href="#" className="footer-logo-link" aria-label="CloysterVisa home">
               <LogoImage footer />
             </a>
-            <p style={{ fontSize: '0.9rem', lineHeight: '1.6', color: 'var(--text-muted)' }}>
+            <p className="footer-description">
               Immigration Made Simple. Providing streamlined pathways for PR, work permits, and global education.
             </p>
           </div>
 
-          <div>
-            <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Quick Links</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem' }}>
-              <li><a href="#about" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>About Us</a></li>
-              <li><a href="#destinations" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Destinations</a></li>
-              <li><a href="#services" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Advisory Services</a></li>
-              <li><a href="#team" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Meet Our Team</a></li>
-              <li><a href="#calculator" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Eligibility Points Check</a></li>
-              <li><a href="#contact" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600' }}>Book a Consultation</a></li>
+          {/* 2. Quick Links */}
+          <div className="footer-column">
+            <h4 className="footer-heading">Quick Links</h4>
+            <ul className="footer-link-list">
+              <li><a href="#about">About Us</a></li>
+              <li><a href="#destinations">Destinations</a></li>
+              <li><a href="#services">Advisory Services</a></li>
+              <li><a href="#team">Meet Our Team</a></li>
+              <li><a href="#calculator">Eligibility Points Check</a></li>
+              <li><a href="#contact" className="footer-accent-link">Book a Consultation</a></li>
             </ul>
           </div>
 
-          <div>
-            <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Popular Destinations</h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px', fontSize: '0.9rem' }}>
+          {/* 3. Popular Destinations */}
+          <div className="footer-column">
+            <h4 className="footer-heading">Popular Destinations</h4>
+            <ul className="footer-link-list footer-destination-list">
               {countries.map((c) => (
                 <li key={c.id}>
                   <a
                     href="#destinations"
                     onClick={() => setActiveTab(c.id)}
-                    style={{ color: 'var(--text-secondary)', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+                    className="footer-destination-link"
                   >
                     <img src={c.flag} alt={`${c.name} Flag`} className="flag-icon" />
                     <span>{c.name} Pathway</span>
@@ -3416,109 +3948,141 @@ export default function App() {
             </ul>
           </div>
 
+          {/* 4. Office Support — kept in the same top row */}
+          <div className="office-support-block footer-column">
+            <h4 className="footer-heading">Office Support</h4>
 
-
-          <div className="footer-social-block">
-            <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Connect With Us</h4>
-            <div className="footer-social-links">
-              <a
-                className="social-icon-link"
-                href={LINKEDIN_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="CloysterVisa LinkedIn"
-                title="LinkedIn"
-              >
-                <LinkedInIcon />
-              </a>
-              <a
-                className="social-icon-link"
-                href={INSTAGRAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="CloysterVisa Instagram"
-                title="Instagram"
-              >
-                <InstagramIcon />
-              </a>
-              <a
-                className="social-icon-link"
-                href={GOOGLE_BUSINESS_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="CloysterVisa Google Business Profile"
-                title="Google Business Profile"
-              >
-                <GoogleIcon />
-              </a>
-            </div>
-
-            <a
-              className="instagram-qr-card footer-qr-link"
-              href={INSTAGRAM_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Open CloysterVisa Instagram profile"
-            >
-              <img src={instagramQr} alt="QR code to follow CloysterVisa on Instagram" />
-              <div>
-                <strong>Follow @cloystervisa</strong>
-                <span>Scan or click to open our Instagram profile.</span>
-              </div>
-            </a>
-            <a
-              className="instagram-qr-card google-qr-card footer-qr-link"
-              href={GOOGLE_BUSINESS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Open CloysterVisa Google Business Profile"
-            >
-              <img src={googleBusinessQr} alt="Google Business Profile QR code" />
-              <div>
-                <strong>Check us out on Google</strong>
-                <span>Scan or click to open our Google Business Profile.</span>
-              </div>
-            </a>
-          </div>
-
-          <div className="office-support-block">
-            <h4 style={{ color: 'var(--text-primary)', fontSize: '1rem', fontWeight: '700', marginBottom: '15px' }}>Office Support</h4>
-            <p style={{ fontSize: '0.88rem', lineHeight: '1.55', marginBottom: '10px', color: 'var(--text-secondary)' }}>
-              📍 Room No. 2, 3rd Floor, A-66, Block A, Sector 7 Dwarka, Dwarka, New Delhi, Delhi-110077
+            <p className="footer-contact-item">
+              <span className="footer-contact-icon"><FooterLineIcon type="location" /></span>
+              <span>Room No. 2, 3rd Floor, A-66, Block A, Sector 7 Dwarka, Dwarka, New Delhi, Delhi-110077</span>
             </p>
-            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-  📞{' '}
-  <a
-    href="tel:+917027466559"
-    style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}
-  >
-    7027466559
-  </a>
-  {', '}
-  <a
-    href="tel:+919266515362"
-    style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}
-  >
-    9266515362
-  </a>
-</p>
-            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              💬 WhatsApp: <a href="https://wa.me/917027466559?text=Hello%20CloysterVisa" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
+
+            <p className="footer-contact-item">
+              <span className="footer-contact-icon"><FooterLineIcon type="phone" /></span>
+              <span>
+                <a href="tel:+917027466559">7027466559</a>,{' '}
+                <a href="tel:+919266515362">9266515362</a>
+              </span>
             </p>
-            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              ✉️ Email: <a className="office-email" href="mailto:info@cloystervisa.com" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>info@cloystervisa.com</a>
+
+            <p className="footer-contact-item">
+              <span className="footer-contact-icon"><FooterLineIcon type="message" /></span>
+              <span>
+                WhatsApp:{' '}
+                <a
+                  href="https://wa.me/917027466559?text=Hello%20CloysterVisa"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="footer-green-link"
+                >
+                  Instant Support Chat
+                </a>
+              </span>
             </p>
-            <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginTop: '12px' }}>
+
+            <p className="footer-contact-item">
+              <span className="footer-contact-icon"><FooterLineIcon type="email" /></span>
+              <span>
+                <a className="office-email" href="mailto:info@cloystervisa.com">
+                  info@cloystervisa.com
+                </a>
+              </span>
+            </p>
+
+            <p className="footer-hours">
               Available Monday – Sunday (9:00 AM – 9:00 PM)
             </p>
           </div>
 
+          {/* Connect block sits below the four-column row */}
+          <div className="footer-connect-block">
+            <div className="footer-connect-header">
+              <div>
+                <span className="footer-connect-kicker">STAY CONNECTED</span>
+                <h4 className="footer-heading footer-connect-heading">Connect With Us</h4>
+              </div>
+
+              <div className="footer-social-links">
+                <a
+                  className="social-icon-link"
+                  href={LINKEDIN_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="CloysterVisa LinkedIn"
+                  title="LinkedIn"
+                >
+                  <LinkedInIcon />
+                </a>
+                <a
+                  className="social-icon-link"
+                  href={INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="CloysterVisa Instagram"
+                  title="Instagram"
+                >
+                  <InstagramIcon />
+                </a>
+                <a
+                  className="social-icon-link"
+                  href={GOOGLE_BUSINESS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="CloysterVisa Google Business Profile"
+                  title="Google Business Profile"
+                >
+                  <GoogleIcon />
+                </a>
+              </div>
+            </div>
+
+            <div className="footer-qr-grid">
+              <a
+                className="footer-qr-compact footer-qr-link"
+                href={INSTAGRAM_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open CloysterVisa Instagram profile"
+              >
+                <img src={instagramQr} alt="QR code to follow CloysterVisa on Instagram" />
+                <span>
+                  <strong>Instagram</strong>
+                  <small>@cloystervisa</small>
+                </span>
+              </a>
+
+              <a
+                className="footer-qr-compact footer-qr-link"
+                href={GOOGLE_BUSINESS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open CloysterVisa Google Business Profile"
+              >
+                <img src={googleBusinessQr} alt="Google Business Profile QR code" />
+                <span>
+                  <strong>Google Business</strong>
+                  <small>View our profile</small>
+                </span>
+              </a>
+            </div>
+          </div>
         </div>
 
-        <div className="container" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          <p>© {new Date().getFullYear()} CloysterVisa Advisory Services. All Rights Reserved. Privacy Policy. Terms of Service.</p>
+        {/* Dedicated professional bottom bar */}
+        <div className="footer-bottom">
+          <div className="container footer-bottom-inner">
+            <p>© 2026 CLOYSTER VISA. All rights reserved.</p>
+            <nav className="footer-legal-links" aria-label="Legal links">
+              <a href="#privacy-policy">Privacy Policy</a>
+              <span aria-hidden="true">|</span>
+              <a href="#terms-conditions">Terms &amp; Conditions</a>
+              <span aria-hidden="true">|</span>
+              <a href="#immigration-disclaimer">Immigration Disclaimer</a>
+            </nav>
+          </div>
         </div>
       </footer>
+
     </div>
   )
 }
