@@ -13,7 +13,7 @@ const TEAM_MEMBERS = [
     specialization:
       'Specializes in Canada Express Entry and skilled worker pathways.',
     photo: niyatiPhoto,
-    linkedin: 'https://www.linkedin.com/in/niyati-nahadiya-226b6204/'
+    linkedin: 'https://www.linkedin.com/company/cloystervisa/?viewAsMember=true'
   },
   {
     id: 'prabhat-kumar',
