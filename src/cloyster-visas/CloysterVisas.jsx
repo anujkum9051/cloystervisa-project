@@ -522,6 +522,19 @@ export default function App() {
 
     .nav-container .logo-link {
       min-width: 178px;
+      margin-right: 18px;
+      flex-shrink: 0;
+    }
+
+    /* Keep all desktop navigation items compact and evenly spaced. */
+    @media (min-width: 901px) {
+      .nav-container .nav-menu {
+        gap: 18px !important;
+      }
+
+      .nav-container .nav-actions {
+        gap: 8px !important;
+      }
     }
 
     .theme-toggle {
@@ -701,7 +714,365 @@ export default function App() {
       }
 
       .hero-grid {
-        grid-template-columns: 1.1fr 0.9fr;
+        grid-template-columns: 1.08fr 0.92fr;
+      }
+    }
+
+    /* --- HERO VISUAL: restrained professional mobility graphic --- */
+    .hero-visual {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .hero-mobility-visual {
+      position: relative;
+      width: 100%;
+      min-height: 440px;
+      padding: 30px;
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      background:
+        radial-gradient(circle at 70% 42%, rgba(37, 99, 235, 0.12), transparent 44%),
+        var(--bg-card);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+    }
+
+    .hero-mobility-visual::before {
+      content: '';
+      position: absolute;
+      width: 360px;
+      height: 360px;
+      border-radius: 50%;
+      top: 88px;
+      right: -54px;
+      border: 1px solid rgba(59, 130, 246, 0.16);
+      pointer-events: none;
+    }
+
+    .hero-mobility-visual::after {
+      content: '';
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      top: 143px;
+      right: 1px;
+      border: 1px dashed rgba(59, 130, 246, 0.13);
+      pointer-events: none;
+    }
+
+    .hero-mobility-header {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .hero-mobility-kicker {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--accent-blue);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 1.25px;
+    }
+
+    .hero-mobility-header h3 {
+      margin: 0 0 7px;
+      color: var(--text-primary);
+      font-size: clamp(1.15rem, 2vw, 1.45rem);
+      line-height: 1.25;
+    }
+
+    .hero-mobility-header p {
+      margin: 0;
+      max-width: 360px;
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      line-height: 1.55;
+    }
+
+    .hero-mobility-icon {
+      width: 46px;
+      height: 46px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 13px;
+      color: var(--accent-blue);
+      background: rgba(37, 99, 235, 0.1);
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .hero-mobility-icon svg {
+      width: 25px;
+      height: 25px;
+    }
+
+    .hero-mobility-map {
+      position: relative;
+      z-index: 1;
+      height: 255px;
+      margin-top: 6px;
+      overflow: hidden;
+    }
+
+    .hero-map-orbit {
+      position: absolute;
+      left: 58%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero-map-orbit-one {
+      width: 210px;
+      height: 210px;
+    }
+
+    .hero-map-orbit-two {
+      width: 150px;
+      height: 150px;
+      border-color: rgba(34, 197, 94, 0.12);
+    }
+
+    .hero-map-orbit-three {
+      width: 90px;
+      height: 90px;
+      border-style: dashed;
+    }
+
+    .hero-map-route {
+      position: absolute;
+      left: 58%;
+      top: 50%;
+      width: 142px;
+      height: 1px;
+      transform-origin: left center;
+      background: linear-gradient(90deg, rgba(59, 130, 246, 0.72), rgba(59, 130, 246, 0.05));
+      opacity: 0.8;
+    }
+
+    .hero-map-route-one {
+      transform: rotate(-31deg);
+    }
+
+    .hero-map-route-two {
+      transform: rotate(17deg);
+    }
+
+    .hero-map-route-three {
+      transform: rotate(137deg);
+    }
+
+    .hero-map-dot {
+      position: absolute;
+      z-index: 2;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-blue);
+      border: 2px solid var(--bg-card);
+      box-shadow: 0 0 0 5px rgba(37, 99, 235, 0.11);
+    }
+
+    .hero-map-dot-center {
+      left: calc(58% - 5px);
+      top: calc(50% - 5px);
+      width: 14px;
+      height: 14px;
+      background: #22c55e;
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.12);
+    }
+
+    .hero-map-dot-ca {
+      left: 74%;
+      top: 31%;
+    }
+
+    .hero-map-dot-au {
+      left: 82%;
+      top: 56%;
+    }
+
+    .hero-map-dot-de {
+      left: 48%;
+      top: 69%;
+    }
+
+    .hero-map-dot-uk {
+      left: 40%;
+      top: 39%;
+    }
+
+    .hero-map-label {
+      position: absolute;
+      z-index: 2;
+      padding: 5px 9px;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.78);
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      font-weight: 700;
+      white-space: nowrap;
+      backdrop-filter: blur(7px);
+      -webkit-backdrop-filter: blur(7px);
+    }
+
+    .hero-map-label-ca {
+      left: 77%;
+      top: 26%;
+    }
+
+    .hero-map-label-au {
+      left: 85%;
+      top: 52%;
+    }
+
+    .hero-map-label-de {
+      left: 51%;
+      top: 65%;
+    }
+
+    .hero-map-label-uk {
+      left: 43%;
+      top: 35%;
+    }
+
+    .hero-mobility-proof {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 4px;
+      padding: 13px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 13px;
+      background: var(--bg-main);
+    }
+
+    .hero-mobility-proof-icon {
+      width: 34px;
+      height: 34px;
+      flex: 0 0 auto;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      color: #22c55e;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.22);
+      font-weight: 900;
+    }
+
+    .hero-mobility-proof strong {
+      display: block;
+      margin-bottom: 2px;
+      color: var(--text-primary);
+      font-size: 0.88rem;
+    }
+
+    .hero-mobility-proof span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.74rem;
+      line-height: 1.4;
+    }
+
+    [data-theme="light"] .hero-mobility-visual {
+      background:
+        radial-gradient(circle at 70% 42%, rgba(37, 99, 235, 0.08), transparent 44%),
+        #ffffff;
+      box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+    }
+
+    [data-theme="light"] .hero-map-label {
+      background: rgba(255, 255, 255, 0.9);
+    }
+
+    @media (max-width: 900px) {
+      .hero-mobility-visual {
+        min-height: 390px;
+      }
+
+      .hero-mobility-map {
+        height: 220px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-mobility-visual {
+        min-height: 350px;
+        padding: 22px;
+        border-radius: 18px;
+      }
+
+      .hero-mobility-header p {
+        font-size: 0.8rem;
+      }
+
+      .hero-mobility-map {
+        height: 190px;
+      }
+
+      .hero-map-orbit-one {
+        width: 165px;
+        height: 165px;
+      }
+
+      .hero-map-orbit-two {
+        width: 118px;
+        height: 118px;
+      }
+
+      .hero-map-orbit-three {
+        width: 72px;
+        height: 72px;
+      }
+
+      .hero-map-label {
+        padding: 4px 7px;
+        font-size: 0.62rem;
+      }
+
+      .hero-map-dot-ca {
+        left: 72%;
+      }
+
+      .hero-map-dot-au {
+        left: 80%;
+      }
+
+      .hero-map-dot-de {
+        left: 46%;
+      }
+
+      .hero-map-dot-uk {
+        left: 38%;
+      }
+
+      .hero-map-label-ca {
+        left: 75%;
+      }
+
+      .hero-map-label-au {
+        left: 83%;
+      }
+
+      .hero-map-label-de {
+        left: 49%;
+      }
+
+      .hero-map-label-uk {
+        left: 41%;
       }
     }
 
@@ -1693,6 +2064,7 @@ export default function App() {
 
       .nav-container .logo-link {
         min-width: 150px;
+        margin-right: 0;
       }
 
       .cloyster-logo-footer {
@@ -1989,44 +2361,44 @@ export default function App() {
           </div>
 
           <div className="hero-visual">
-            <div className="globe-placeholder" style={{ minHeight: '380px', position: 'relative' }}>
-              <div className="globe-circle-1" style={{ borderColor: 'var(--border-color)' }}></div>
-              <div className="globe-circle-2" style={{ borderColor: 'var(--border-color)' }}></div>
-
-              <div className="hero-card-floating hero-card-1 glass-panel" style={{ padding: '16px', borderRadius: '12px', display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <div className="floating-icon">
+            <div className="hero-mobility-visual" aria-label="Global mobility overview">
+              <div className="hero-mobility-header">
+                <div>
+                  <span className="hero-mobility-kicker">GLOBAL MOBILITY</span>
+                  <h3>One destination. A clear pathway.</h3>
+                  <p>Professional guidance for work, study and permanent residency.</p>
+                </div>
+                <div className="hero-mobility-icon">
                   <GlobeIcon />
                 </div>
-                <div className="floating-info">
-                  <h4 style={{ color: 'var(--text-primary)', margin: 0 }}>Passport & Global Mobility</h4>
-                  <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.85rem' }}>Express Entry & Skilled Worker Pathways</p>
-                </div>
               </div>
 
-              <div className="hero-card-floating hero-card-2 glass-panel" style={{ padding: '16px', borderRadius: '12px', display: 'flex', gap: '12px', alignItems: 'center', marginTop: '16px' }}>
-                <div className="floating-icon" style={{ background: 'rgba(34, 197, 94, 0.2)', padding: '6px', borderRadius: '50%' }}>
-                  ✅
-                </div>
-                <div className="floating-info">
-                  <h4 style={{ color: 'var(--text-primary)', margin: 0 }}>Visa Approval Status</h4>
-                  <p style={{ color: 'var(--text-secondary)', margin: 0, fontSize: '0.85rem' }}>128+ Total Visa Approvals</p>
-                </div>
+              <div className="hero-mobility-map" aria-hidden="true">
+                <div className="hero-map-orbit hero-map-orbit-one"></div>
+                <div className="hero-map-orbit hero-map-orbit-two"></div>
+                <div className="hero-map-orbit hero-map-orbit-three"></div>
+
+                <div className="hero-map-route hero-map-route-one"></div>
+                <div className="hero-map-route hero-map-route-two"></div>
+                <div className="hero-map-route hero-map-route-three"></div>
+
+                <span className="hero-map-dot hero-map-dot-center"></span>
+                <span className="hero-map-dot hero-map-dot-ca"></span>
+                <span className="hero-map-dot hero-map-dot-au"></span>
+                <span className="hero-map-dot hero-map-dot-de"></span>
+                <span className="hero-map-dot hero-map-dot-uk"></span>
+
+                <span className="hero-map-label hero-map-label-ca">Canada</span>
+                <span className="hero-map-label hero-map-label-au">Australia</span>
+                <span className="hero-map-label hero-map-label-de">Germany</span>
+                <span className="hero-map-label hero-map-label-uk">United Kingdom</span>
               </div>
 
-              <div className="glass-panel" style={{
-                position: 'absolute',
-                bottom: '15px',
-                left: '20px',
-                padding: '12px 20px',
-                borderRadius: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px'
-              }}>
-                <span style={{ color: 'var(--accent-blue)', display: 'inline-flex' }}><GlobeIcon /></span>
+              <div className="hero-mobility-proof">
+                <div className="hero-mobility-proof-icon">✓</div>
                 <div>
-                  <h5 style={{ margin: 0, fontSize: '0.95rem', color: 'var(--text-primary)' }}>Seamless Relocation</h5>
-                  <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)' }}>Dedicated Assistance Worldwide</p>
+                  <strong>128+ Visa Approvals</strong>
+                  <span>Structured support from assessment to relocation</span>
                 </div>
               </div>
             </div>
@@ -3023,8 +3395,6 @@ export default function App() {
               <li><a href="#team" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Meet Our Team</a></li>
               <li><a href="#calculator" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Eligibility Points Check</a></li>
               <li><a href="#contact" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600' }}>Book a Consultation</a></li>
-              <li><a href="/privacy-policy" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Privacy Policy</a></li>
-              <li><a href="/terms-of-service" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>Terms of Service</a></li>
             </ul>
           </div>
 
@@ -3117,11 +3487,21 @@ export default function App() {
               📍 Room No. 2, 3rd Floor, A-66, Block A, Sector 7 Dwarka, Dwarka, New Delhi, Delhi-110077
             </p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              📞 <a href="tel:+917027466559" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>7027466559</a>
-            </p>
-            <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
-              📞 Additional: <a href="tel:+919266515362" style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}>9266515362</a>
-            </p>
+  📞{' '}
+  <a
+    href="tel:+917027466559"
+    style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}
+  >
+    7027466559
+  </a>
+  {', '}
+  <a
+    href="tel:+919266515362"
+    style={{ color: 'var(--text-secondary)', textDecoration: 'none' }}
+  >
+    9266515362
+  </a>
+</p>
             <p style={{ fontSize: '0.9rem', marginBottom: '8px' }}>
               💬 WhatsApp: <a href="https://wa.me/917027466559?text=Hello%20CloysterVisa" target="_blank" rel="noreferrer" style={{ color: '#22c55e', textDecoration: 'none' }}>Instant Support Chat</a>
             </p>
@@ -3136,7 +3516,7 @@ export default function App() {
         </div>
 
         <div className="container" style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-muted)' }}>
-          <p>© {new Date().getFullYear()} CloysterVisa Advisory Services. All Rights Reserved.</p>
+          <p>© {new Date().getFullYear()} CloysterVisa Advisory Services. All Rights Reserved. Privacy Policy. Terms of Service.</p>
         </div>
       </footer>
     </div>
