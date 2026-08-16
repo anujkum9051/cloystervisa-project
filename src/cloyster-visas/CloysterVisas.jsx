@@ -891,7 +891,7 @@ export default function App() {
       position: relative;
       width: min(100%, 520px);
       aspect-ratio: 1;
-      min-height: 480px;
+      height: auto;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1133,7 +1133,7 @@ export default function App() {
     @media (max-width: 900px) {
       .hero-orbit-stage {
         width: min(100%, 480px);
-        min-height: 450px;
+        height: auto;
       }
 
       .hero-orbit-ring-one,
@@ -1536,9 +1536,9 @@ export default function App() {
 
     .country-pathway-visual {
       width: 100%;
-      height: clamp(270px, 24vw, 330px);
-      min-height: 270px;
-      aspect-ratio: auto;
+      height: auto;
+      min-height: 0;
+      aspect-ratio: 16 / 10;
       position: relative;
       overflow: hidden;
       border-radius: 14px;
@@ -2230,8 +2230,9 @@ export default function App() {
       }
 
       .country-pathway-visual {
-        height: 240px;
-        min-height: 240px;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 16 / 10;
       }
 
       .country-why-card {
@@ -3116,6 +3117,414 @@ export default function App() {
       .pathway-tag {
         grid-column: 2;
         justify-self: start;
+      }
+    }
+    /* ==========================================================
+       FLUID RESPONSIVE SAFETY LAYER
+       - Keeps all mobile content in normal document flow.
+       - Uses auto sizing/aspect-ratio instead of fixed section heights.
+       - Stacks multi-column content below the 768px breakpoint.
+       - Preserves the existing desktop design above 768px.
+       ========================================================== */
+
+    @media (max-width: 767px) {
+      html,
+      body {
+        width: 100%;
+        max-width: 100%;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+      }
+
+      /* Prevent desktop positioning rules from creating mobile overlap. */
+      .hero-grid,
+      .country-display-grid,
+      .footer-main-grid,
+      .client-success-stats,
+      .calc-grid,
+      .team-grid {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      .hero-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 28px !important;
+        align-items: stretch !important;
+      }
+
+      .hero-content,
+      .hero-visual {
+        position: relative !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+      }
+
+      .hero-title,
+      .section-title {
+        font-size: clamp(1.85rem, 8vw, 2.35rem) !important;
+        line-height: 1.12 !important;
+        overflow-wrap: anywhere;
+      }
+
+      .hero-sec {
+        padding: 28px 0 42px !important;
+      }
+
+      .hero-orbit-stage {
+        width: 100% !important;
+        max-width: 440px !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: auto !important;
+        margin: 0 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        padding: 0 !important;
+      }
+
+      /* Mobile orbit becomes normal-flow cards: no absolute overlap,
+         no excessive vertical animation height, no hidden cards. */
+      .hero-orbit-ring,
+      .hero-orbit-center {
+        display: none !important;
+      }
+
+      .hero-orbit-item,
+      .hero-orbit-item-one,
+      .hero-orbit-item-two,
+      .hero-orbit-item-three {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+
+      .hero-orbit-card {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        transform: none !important;
+      }
+
+      .hero-orbit-card-inner,
+      .hero-orbit-item-two .hero-orbit-card-inner {
+        width: 100% !important;
+        min-height: fit-content !important;
+        height: auto !important;
+        animation: none !important;
+        transform: none !important;
+        padding: 12px 13px !important;
+      }
+
+      .hero-buttons {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+      }
+
+      .hero-buttons .btn {
+        width: 100% !important;
+        max-width: none !important;
+        justify-content: center !important;
+      }
+
+      /* Country destination: one predictable vertical flow. */
+      .country-destination-shell,
+      .country-display-grid,
+      .country-image-wrapper,
+      .country-info-box {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: 0 !important;
+      }
+
+      .country-display-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+      }
+
+      .country-image-wrapper,
+      .country-info-box {
+        display: contents !important;
+      }
+
+      .country-title { order: 1; }
+      .country-desc { order: 2; }
+      .country-pathway-visual { order: 3; }
+      .country-stats-row { order: 4; }
+      .destination-why-panel { order: 5; }
+      .country-pathways-list { order: 6; }
+      .country-next-step { order: 7; }
+
+      .country-pathway-visual {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 16 / 10;
+        margin-bottom: 16px !important;
+        overflow: visible !important;
+      }
+
+      .country-pathway-visual img.country-pathway-main-image {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 16 / 10;
+        object-fit: cover;
+        border-radius: 13px;
+      }
+
+      .country-stats-row {
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+      }
+
+      .c-stat-card {
+        min-width: 0 !important;
+        min-height: fit-content !important;
+        height: auto !important;
+        padding: 11px 7px !important;
+      }
+
+      .destination-why-panel,
+      .country-why-card,
+      .country-pathways-list {
+        width: 100% !important;
+        height: auto !important;
+        min-height: fit-content !important;
+        max-height: none !important;
+        overflow: visible !important;
+      }
+
+      .destination-why-panel {
+        margin-bottom: 18px !important;
+      }
+
+      .country-next-step {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 14px !important;
+      }
+
+      .country-next-step-actions {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      .country-next-step-actions .btn {
+        width: 100% !important;
+        justify-content: center !important;
+      }
+
+      /* All general feature/service/card grids become one column. */
+      .team-grid,
+      .client-success-stats,
+      .calc-grid,
+      .services-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+      }
+
+      .team-card,
+      .client-success-stat,
+      .calculator-box,
+      .roadmap-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: fit-content !important;
+      }
+
+      /* Roadmap: normal vertical flow on phones. */
+      .roadmap-section,
+      .roadmap-timeline {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow: visible !important;
+      }
+
+      .roadmap-line {
+        display: none !important;
+      }
+
+      .roadmap-step,
+      .roadmap-step-left,
+      .roadmap-step-right {
+        width: 100% !important;
+        margin-left: 0 !important;
+        padding: 0 0 18px !important;
+      }
+
+      .roadmap-step-number,
+      .roadmap-step-right .roadmap-step-number {
+        position: static !important;
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        margin-bottom: 10px !important;
+        transform: none !important;
+      }
+
+      /* Footer remains readable without a two-column squeeze. */
+      .footer-main-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 26px !important;
+      }
+
+      .footer-brand-column,
+      .office-support-block,
+      .footer-connect-block {
+        grid-column: 1 !important;
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .footer-connect-block {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 18px !important;
+      }
+
+      .footer-connect-header {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 14px !important;
+      }
+
+      .footer-qr-grid {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+      }
+
+      .footer-qr-compact {
+        width: 100% !important;
+        flex: 1 1 auto !important;
+      }
+
+      .footer-bottom-inner {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+      }
+
+      .footer-legal-links {
+        width: 100% !important;
+        flex-wrap: wrap !important;
+        gap: 6px 8px !important;
+      }
+
+      /* Form controls: prevent narrow 320px layouts from overflowing. */
+      .phone-input-row {
+        display: grid !important;
+        grid-template-columns: 82px minmax(0, 1fr) !important;
+        width: 100% !important;
+      }
+
+      input,
+      select,
+      textarea,
+      button {
+        max-width: 100%;
+      }
+
+      textarea {
+        min-height: 120px;
+        height: auto !important;
+      }
+
+      /* Keep dropdowns and mobile navigation inside the viewport. */
+      .nav-menu {
+        max-width: min(280px, 86vw) !important;
+        height: auto !important;
+        min-height: 100dvh !important;
+        overflow-y: auto !important;
+      }
+
+      .nav-dropdown-menu {
+        position: static !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        transform: none !important;
+        margin-top: 8px !important;
+      }
+
+      /* Avoid long words/URLs forcing horizontal scrolling. */
+      h1,
+      h2,
+      h3,
+      h4,
+      p,
+      a,
+      span,
+      li {
+        overflow-wrap: anywhere;
+      }
+
+      .glass-panel {
+        max-width: 100%;
+      }
+    }
+
+    @media (max-width: 479px) {
+      .container {
+        padding-left: 13px !important;
+        padding-right: 13px !important;
+      }
+
+      .hero-sec {
+        padding-top: 22px !important;
+      }
+
+      .hero-title {
+        font-size: clamp(1.72rem, 9vw, 2.05rem) !important;
+      }
+
+      .hero-orbit-stage {
+        max-width: 100% !important;
+      }
+
+      .country-stats-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+
+      .c-stat-card:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .destination-explorer-panel {
+        padding: 16px !important;
+      }
+
+      .footer-bottom-inner {
+        padding-left: 13px !important;
+        padding-right: 13px !important;
       }
     }
   `
