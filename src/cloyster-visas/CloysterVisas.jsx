@@ -2738,6 +2738,332 @@ export default function App() {
         box-shadow: -5px 0 25px rgba(15, 23, 42, .15) !important;
       }
     }
+
+
+    /* --- DESTINATION EXPLORER: MOBILE-FIRST CONTENT ORDER --- */
+    .country-title,
+    .country-desc,
+    .country-stats-row,
+    .country-pathways-list,
+    .country-next-step {
+      position: relative;
+    }
+
+    .country-stats-row {
+      align-items: stretch;
+    }
+
+    .c-stat-card {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 88px;
+    }
+
+    .c-stat-label {
+      color: var(--text-muted);
+      font-size: 0.68rem;
+      line-height: 1.35;
+      letter-spacing: 0.9px;
+      font-weight: 700;
+    }
+
+    .c-stat-value {
+      margin-top: 7px;
+      color: var(--accent-blue);
+      font-size: 1.05rem;
+      line-height: 1.2;
+      font-weight: 800;
+      white-space: normal;
+    }
+
+    .country-pathways-list h4 {
+      margin: 0 0 12px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      line-height: 1.35;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .pathway-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+      margin-bottom: 8px;
+      padding: 10px 12px;
+      color: var(--text-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: rgba(6, 11, 19, 0.24);
+    }
+
+    .pathway-check {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 22px;
+      height: 22px;
+      flex: 0 0 22px;
+      color: var(--accent-blue);
+      border-radius: 50%;
+      background: rgba(37, 99, 235, 0.10);
+      border: 1px solid rgba(59, 130, 246, 0.20);
+    }
+
+    .pathway-check svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .pathway-name {
+      flex: 1 1 auto;
+      min-width: 0;
+      line-height: 1.45;
+    }
+
+    .pathway-tag {
+      flex: 0 0 auto;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(37, 99, 235, 0.10);
+      color: var(--accent-blue);
+      font-size: 0.7rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .country-next-step {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .country-next-step-title {
+      margin: 0 0 5px;
+      color: var(--text-primary);
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .country-next-step-copy {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .country-next-step-actions {
+      display: flex;
+      flex: 0 0 auto;
+    }
+
+    .country-next-step-actions .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      background: var(--accent-blue) !important;
+      color: #fff !important;
+      border: 0 !important;
+      padding: 11px 16px !important;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .country-next-step-actions .btn:hover {
+      background: var(--accent-hover) !important;
+    }
+
+    [data-theme="light"] .pathway-item {
+      background: #f8fafc;
+    }
+
+    @media (max-width: 900px) {
+      .destination-explorer-panel {
+        padding: 24px !important;
+      }
+
+      .country-display-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+      }
+
+      .country-image-wrapper,
+      .country-info-box {
+        display: contents !important;
+      }
+
+      .country-title { order: 1; }
+      .country-desc { order: 2; }
+      .country-pathway-visual { order: 3; }
+      .country-stats-row { order: 4; }
+      .destination-why-panel { order: 5; }
+      .country-pathways-list { order: 6; }
+      .country-next-step { order: 7; }
+
+      .country-title {
+        width: 100%;
+        margin-top: 0 !important;
+        margin-bottom: 9px !important;
+      }
+
+      .country-desc {
+        width: 100%;
+        margin-bottom: 18px !important;
+      }
+
+      .country-pathway-visual {
+        width: 100%;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: 16 / 10;
+        margin-bottom: 16px;
+        border-radius: 14px;
+      }
+
+      .country-pathway-visual img.country-pathway-main-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .country-stats-row {
+        width: 100%;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+      }
+
+      .c-stat-card {
+        min-height: 82px;
+        padding: 10px 7px !important;
+        border-radius: 9px !important;
+      }
+
+      .c-stat-label {
+        font-size: 0.62rem;
+        letter-spacing: 0.65px;
+      }
+
+      .c-stat-value {
+        font-size: 0.92rem;
+        margin-top: 6px;
+      }
+
+      .destination-why-panel {
+        width: 100% !important;
+        min-height: 0 !important;
+        margin: 0 0 18px !important;
+        padding: 20px !important;
+        box-shadow: none !important;
+      }
+
+      .destination-why-panel h4 {
+        font-size: 1.15rem;
+        margin-bottom: 13px;
+      }
+
+      .destination-why-panel ul {
+        gap: 10px !important;
+      }
+
+      .destination-why-panel li {
+        font-size: 0.88rem !important;
+        line-height: 1.48 !important;
+      }
+
+      .country-pathways-list {
+        width: 100%;
+        margin-bottom: 0;
+      }
+
+      .pathway-item {
+        padding: 10px;
+        margin-bottom: 7px;
+        align-items: flex-start;
+      }
+
+      .pathway-name {
+        font-size: 0.86rem;
+      }
+
+      .pathway-tag {
+        font-size: 0.65rem;
+        padding: 3px 7px;
+      }
+
+      .country-next-step {
+        width: 100%;
+        align-items: stretch;
+        flex-direction: column;
+        gap: 14px;
+        margin-top: 18px;
+        padding-top: 18px;
+      }
+
+      .country-next-step-actions,
+      .country-next-step-actions .btn {
+        width: 100%;
+      }
+
+      .country-next-step-actions .btn {
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 479px) {
+      .destination-explorer-panel {
+        padding: 18px !important;
+        border-radius: 14px;
+      }
+
+      .country-stats-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+
+      .c-stat-card:last-child {
+        grid-column: 1 / -1;
+      }
+
+      .country-pathway-badge {
+        top: 12px;
+        left: 12px;
+        padding: 8px 11px;
+        font-size: 0.86rem;
+      }
+
+      .country-pathway-badge .flag-icon {
+        width: 22px;
+        height: 15px;
+      }
+
+      .destination-why-panel {
+        padding: 18px !important;
+      }
+
+      .pathway-item {
+        display: grid;
+        grid-template-columns: 22px minmax(0, 1fr);
+        gap: 8px;
+      }
+
+      .pathway-tag {
+        grid-column: 2;
+        justify-self: start;
+      }
+    }
   `
 
   return (
@@ -3028,7 +3354,7 @@ export default function App() {
           </div>
 
           {currentCountry && (
-            <div className="glass-panel" style={{ padding: '35px' }}>
+            <div className="glass-panel destination-explorer-panel" style={{ padding: '35px' }}>
               <div className="country-display-grid">
                 <div className="country-image-wrapper">
                   <div className="country-pathway-visual">
@@ -3044,113 +3370,22 @@ export default function App() {
                         alt={`${currentCountry.name} Flag`}
                         className="flag-icon"
                       />
-                      <span>{currentCountry.code.toUpperCase()} {currentCountry.name}</span>
+                      <span>{currentCountry.name}</span>
                     </div>
                   </div>
 
                   <div
                     className="destination-why-panel"
                     aria-label={`Why choose ${currentCountry.name}`}
-                    style={{
-                      display: 'block',
-                      visibility: 'visible',
-                      opacity: 1,
-                      width: '100%',
-                      minHeight: '240px',
-                      height: 'auto',
-                      marginTop: '14px',
-                      padding: '24px',
-                      boxSizing: 'border-box',
-                      background: 'var(--bg-card)',
-                      border: '1px solid var(--border-color)',
-                      borderRadius: '14px',
-                      boxShadow: '0 10px 24px rgba(0,0,0,.16)',
-                      position: 'relative',
-                      zIndex: 5,
-                      overflow: 'visible'
-                    }}
                   >
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        marginBottom: '10px',
-                        color: 'var(--accent-blue)',
-                        fontSize: '0.78rem',
-                        fontWeight: 800,
-                        letterSpacing: '0.8px',
-                        textTransform: 'uppercase'
-                      }}
-                    >
-                      <img
-                        src={currentCountry.flag}
-                        alt=""
-                        className="flag-icon"
-                        aria-hidden="true"
-                        style={{ width: '22px', height: '15px', flex: '0 0 auto' }}
-                      />
-                      <span>{currentCountry.code.toUpperCase()} {currentCountry.name}</span>
-                    </div>
-
-                    <h4
-                      style={{
-                        display: 'block',
-                        visibility: 'visible',
-                        opacity: 1,
-                        margin: '0 0 16px',
-                        padding: 0,
-                        color: 'var(--text-primary)',
-                        fontSize: '1.3rem',
-                        lineHeight: 1.3,
-                        fontWeight: 800
-                      }}
-                    >
+                    <h4>
                       Why choose {currentCountry.name}?
                     </h4>
 
-                    <ul
-                      style={{
-                        display: 'grid',
-                        visibility: 'visible',
-                        opacity: 1,
-                        gap: '12px',
-                        margin: 0,
-                        padding: 0,
-                        listStyle: 'none'
-                      }}
-                    >
+                    <ul>
                       {currentCountry.whyChoose.map((reason, index) => (
-                        <li
-                          key={index}
-                          style={{
-                            display: 'grid',
-                            gridTemplateColumns: '22px minmax(0, 1fr)',
-                            gap: '10px',
-                            alignItems: 'start',
-                            margin: 0,
-                            padding: 0,
-                            color: 'var(--text-secondary)',
-                            fontSize: '0.92rem',
-                            lineHeight: 1.55
-                          }}
-                        >
-                          <span
-                            aria-hidden="true"
-                            style={{
-                              width: '20px',
-                              height: '20px',
-                              display: 'inline-flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              borderRadius: '50%',
-                              background: 'rgba(34,197,94,.12)',
-                              border: '1px solid rgba(34,197,94,.28)',
-                              color: '#22c55e',
-                              fontSize: '0.72rem',
-                              fontWeight: 900
-                            }}
-                          >✓</span>
+                        <li key={index}>
+                          <span aria-hidden="true">✓</span>
                           <span>{reason}</span>
                         </li>
                       ))}
@@ -3159,48 +3394,113 @@ export default function App() {
                 </div>
 
                 <div className="country-info-box">
-                  <h3 className="country-title" style={{ color: 'var(--text-primary)', fontSize: '1.5rem', marginBottom: '10px' }}>{currentCountry.title}</h3>
-                  <p className="country-desc" style={{ color: 'var(--text-secondary)', lineHeight: '1.6', marginBottom: '20px' }}>{currentCountry.desc}</p>
+                  <h3
+                    className="country-title"
+                    style={{
+                      color: 'var(--text-primary)',
+                      fontSize: '1.5rem',
+                      marginBottom: '10px'
+                    }}
+                  >
+                    {currentCountry.title}
+                  </h3>
 
-                  <div className="country-stats-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px', marginBottom: '20px' }}>
-                    <div className="c-stat-card" style={{ background: 'var(--bg-main)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>SUCCESS RATE</div>
-                      <div className="c-stat-value" style={{ fontWeight: '800', color: '#22c55e' }}>{currentCountry.successRate}</div>
+                  <p
+                    className="country-desc"
+                    style={{
+                      color: 'var(--text-secondary)',
+                      lineHeight: '1.6',
+                      marginBottom: '20px'
+                    }}
+                  >
+                    {currentCountry.desc}
+                  </p>
+
+                  <div
+                    className="country-stats-row"
+                    style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(3, 1fr)',
+                      gap: '10px',
+                      marginBottom: '20px'
+                    }}
+                  >
+                    <div
+                      className="c-stat-card"
+                      style={{
+                        background: 'var(--bg-main)',
+                        padding: '12px',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border-color)'
+                      }}
+                    >
+                      <div className="c-stat-label">SUCCESS RATE</div>
+                      <div className="c-stat-value">{currentCountry.successRate}</div>
                     </div>
-                    <div className="c-stat-card highlighted" style={{ background: 'var(--bg-main)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>EST. PROCESSING TIME</div>
-                      <div className="c-stat-value" style={{ fontWeight: '800', color: 'var(--accent-blue)' }}>{currentCountry.processingTime}</div>
+
+                    <div
+                      className="c-stat-card highlighted"
+                      style={{
+                        background: 'var(--bg-main)',
+                        padding: '12px',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border-color)'
+                      }}
+                    >
+                      <div className="c-stat-label">EST. PROCESSING TIME</div>
+                      <div className="c-stat-value">{currentCountry.processingTime}</div>
                     </div>
-                    <div className="c-stat-card" style={{ background: 'var(--bg-main)', padding: '12px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
-                      <div className="c-stat-label" style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>MINIMUM POINTS THRESHOLD</div>
-                      <div className="c-stat-value" style={{ fontWeight: '800', color: 'var(--text-primary)' }}>{currentCountry.minPoints}</div>
+
+                    <div
+                      className="c-stat-card"
+                      style={{
+                        background: 'var(--bg-main)',
+                        padding: '12px',
+                        borderRadius: '8px',
+                        border: '1px solid var(--border-color)'
+                      }}
+                    >
+                      <div className="c-stat-label">MINIMUM POINTS THRESHOLD</div>
+                      <div className="c-stat-value">{currentCountry.minPoints}</div>
                     </div>
                   </div>
 
                   <div className="country-pathways-list">
-                    <h4 style={{ fontSize: '0.9rem', textTransform: 'uppercase', color: 'var(--text-primary)', letterSpacing: '1px', marginBottom: '10px' }}>
+                    <h4>
                       Primary Relocation Streams
                     </h4>
+
                     {currentCountry.pathways.map((pw, i) => (
-                      <div key={i} className="pathway-item" style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', color: 'var(--text-secondary)' }}>
-                        <CheckIcon />
-                        <span className="pathway-name" style={{ flexGrow: 1 }}>{pw.name}</span>
-                        <span className="pathway-tag" style={{ background: 'rgba(37,99,235,0.1)', color: 'var(--accent-blue)', padding: '2px 8px', borderRadius: '10px', fontSize: '0.75rem', fontWeight: '600' }}>{pw.tag}</span>
+                      <div key={i} className="pathway-item">
+                        <span className="pathway-check" aria-hidden="true">
+                          <CheckIcon />
+                        </span>
+                        <span className="pathway-name">{pw.name}</span>
+                        <span className="pathway-tag">{pw.tag}</span>
                       </div>
                     ))}
+
                     <div className="country-note">
                       * Estimates vary by pathway, application profile, and current processing conditions.
                     </div>
                   </div>
 
                   <div className="country-next-step">
-                    <p className="country-next-step-title">Not sure which pathway fits your profile?</p>
+                    <div>
+                      <p className="country-next-step-title">
+                        Ready to explore your {currentCountry.name} pathway?
+                      </p>
+                      <p className="country-next-step-copy">
+                        Check your eligibility to identify the most suitable route for your profile.
+                      </p>
+                    </div>
+
                     <div className="country-next-step-actions">
-                      <a href="#calculator" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '10px 16px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
-                        Check Your Eligibility <ArrowRightIcon />
-                      </a>
-                      <a href="#contact" className="btn btn-secondary" style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 16px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
-                        Talk to an Advisor <ArrowRightIcon />
+                      <a
+                        href="#calculator"
+                        className="btn btn-primary"
+                      >
+                        Check {currentCountry.name} Eligibility <ArrowRightIcon />
                       </a>
                     </div>
                   </div>
