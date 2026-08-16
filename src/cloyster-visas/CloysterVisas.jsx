@@ -600,6 +600,50 @@ export default function App() {
       }
     }
 
+    .nav-consultation-btn,
+    .nav-eligibility-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      min-height: 40px;
+      padding: 9px 14px;
+      border-radius: 9px;
+      text-decoration: none;
+      font-size: .82rem;
+      font-weight: 700;
+      line-height: 1;
+      white-space: nowrap;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease;
+    }
+
+    .nav-consultation-btn {
+      color: var(--text-primary);
+      background: transparent;
+      border: 1px solid rgba(59,130,246,.5);
+    }
+
+    .nav-consultation-btn:hover {
+      transform: translateY(-1px);
+      color: var(--text-primary);
+      border-color: var(--accent-blue);
+      background: rgba(37,99,235,.08);
+    }
+
+    .nav-eligibility-btn {
+      color: #fff;
+      background: var(--accent-blue);
+      border: 1px solid var(--accent-blue);
+      box-shadow: 0 6px 18px rgba(37,99,235,.18);
+    }
+
+    .nav-eligibility-btn:hover {
+      transform: translateY(-1px);
+      color: #fff;
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+    }
+
     .theme-toggle {
       color: var(--text-primary) !important;
       background: var(--bg-card) !important;
@@ -833,329 +877,339 @@ export default function App() {
       flex: 0 0 auto;
     }
 
-    /* --- HERO WORKFLOW VISUAL --- */
-    .hero-workflow {
+    /* --- HERO ORBIT CARDS --- */
+    .hero-visual {
       position: relative;
-      min-height: 420px;
-      padding: 28px;
-      overflow: hidden;
-      background:
-        radial-gradient(circle at 82% 12%, rgba(37,99,235,.12), transparent 36%),
-        var(--bg-card) !important;
-    }
-
-    .hero-workflow::before {
-      content: '';
-      position: absolute;
-      width: 280px;
-      height: 280px;
-      right: -120px;
-      bottom: -150px;
-      border: 1px solid rgba(59,130,246,.12);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .hero-workflow-top {
-      position: relative;
-      z-index: 2;
+      min-width: 0;
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .hero-workflow-kicker {
-      display: block;
-      margin-bottom: 7px;
-      color: var(--accent-blue);
-      font-size: .68rem;
-      font-weight: 800;
-      letter-spacing: 1.15px;
-    }
-
-    .hero-workflow-top h3 {
-      margin: 0;
-      color: var(--text-primary);
-      font-size: 1.28rem;
-      line-height: 1.25;
-    }
-
-    .hero-workflow-globe {
-      width: 42px;
-      height: 42px;
-      flex: 0 0 auto;
-      display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 12px;
-      background: rgba(37,99,235,.09);
-      border: 1px solid rgba(59,130,246,.18);
+      overflow: visible;
     }
 
-    .hero-workflow-globe svg {
-      width: 22px;
-      height: 22px;
-    }
-
-    .hero-workflow-track {
+    .hero-orbit-stage {
       position: relative;
-      margin-top: 26px;
-      padding: 0 0 2px;
+      width: min(100%, 520px);
+      aspect-ratio: 1;
+      min-height: 480px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      isolation: isolate;
     }
 
-    .hero-workflow-line {
+    .hero-orbit-ring {
       position: absolute;
-      left: 25px;
-      width: 1px;
-      border-left: 1px dashed rgba(59,130,246,.38);
+      left: 50%;
+      top: 50%;
+      width: var(--ring-size);
+      height: var(--ring-size);
+      transform: translate(-50%, -50%);
+      border: 1px solid rgba(59, 130, 246, var(--ring-opacity));
+      border-radius: 50%;
+      box-shadow: 0 0 22px rgba(37, 99, 235, var(--glow-opacity));
+      pointer-events: none;
       z-index: 0;
     }
 
-    .hero-workflow-line-one {
-      top: 74px;
-      height: 18px;
+    .hero-orbit-ring::before {
+      content: '';
+      position: absolute;
+      inset: 7%;
+      border: 1px solid rgba(147, 197, 253, .035);
+      border-radius: 50%;
     }
 
-    .hero-workflow-line-two {
-      top: 174px;
-      height: 18px;
+    .hero-orbit-ring-one {
+      --ring-size: 430px;
+      --ring-opacity: .19;
+      --glow-opacity: .08;
     }
 
-    .hero-workflow-card {
-      position: relative;
+    .hero-orbit-ring-two {
+      --ring-size: 340px;
+      --ring-opacity: .13;
+      --glow-opacity: .055;
+    }
+
+    .hero-orbit-ring-three {
+      --ring-size: 255px;
+      --ring-opacity: .10;
+      --glow-opacity: .04;
+    }
+
+    .hero-orbit-center {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 84px;
+      height: 84px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37,99,235,.14), rgba(37,99,235,.035) 55%, transparent 72%);
+      border: 1px solid rgba(59,130,246,.10);
+      box-shadow: 0 0 42px rgba(37,99,235,.10);
       z-index: 1;
-      min-height: 76px;
-      display: grid;
-      grid-template-columns: 34px minmax(0, 1fr) 30px;
-      align-items: center;
-      gap: 12px;
-      padding: 13px 14px;
-      margin-bottom: 18px;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      background: rgba(15,23,42,.72);
-      transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease;
+      pointer-events: none;
     }
 
-    .hero-workflow-card:hover {
-      transform: translateX(4px);
-      border-color: rgba(59,130,246,.42);
-      box-shadow: 0 10px 24px rgba(0,0,0,.16);
-    }
-
-    .hero-workflow-card-two {
-      margin-left: 18px;
-    }
-
-    .hero-workflow-card-three {
-      margin-left: 36px;
-      margin-bottom: 0;
-    }
-
-    .hero-workflow-number {
-      width: 34px;
-      height: 34px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+    .hero-orbit-center::before,
+    .hero-orbit-center::after {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 50%;
       border-radius: 50%;
-      color: #93c5fd;
-      background: rgba(37,99,235,.12);
-      border: 1px solid rgba(59,130,246,.25);
-      font-size: .68rem;
-      font-weight: 800;
+      transform: translate(-50%, -50%);
     }
 
-    .hero-workflow-card strong {
-      display: block;
-      color: var(--text-primary);
-      font-size: .88rem;
-      margin-bottom: 3px;
+    .hero-orbit-center::before {
+      width: 9px;
+      height: 9px;
+      background: var(--accent-blue);
+      box-shadow: 0 0 18px rgba(37,99,235,.65);
     }
 
-    .hero-workflow-card span {
-      display: block;
-      color: var(--text-secondary);
-      font-size: .73rem;
-      line-height: 1.42;
-    }
-
-    .hero-workflow-check {
-      width: 28px;
-      height: 28px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      color: #22c55e;
-      background: rgba(34,197,94,.1);
-      border: 1px solid rgba(34,197,94,.2);
-    }
-
-    .hero-workflow-check svg {
-      width: 15px;
-      height: 15px;
-    }
-
-    .hero-proof-row {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-top: 22px;
-      padding-top: 17px;
-      border-top: 1px solid var(--border-color);
-    }
-
-    .hero-proof-badge {
+    .hero-orbit-center::after {
       width: 30px;
       height: 30px;
-      flex: 0 0 auto;
+      border: 1px solid rgba(59,130,246,.20);
+    }
+
+    .hero-orbit-item {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: var(--orbit-size);
+      height: var(--orbit-size);
+      transform: translate(-50%, -50%);
+      transform-origin: center;
+      animation: heroCardOrbit var(--orbit-duration) linear infinite;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .hero-orbit-item-one {
+      --orbit-size: 430px;
+      --orbit-duration: 34s;
+    }
+
+    .hero-orbit-item-two {
+      --orbit-size: 340px;
+      --orbit-duration: 42s;
+      animation-direction: reverse;
+    }
+
+    .hero-orbit-item-three {
+      --orbit-size: 255px;
+      --orbit-duration: 30s;
+    }
+
+    .hero-orbit-card {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: min(245px, 48vw);
+      transform: translate(-50%, -50%);
+      pointer-events: auto;
+    }
+
+    .hero-orbit-card-inner {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-height: 76px;
+      padding: 13px 15px;
+      border: 1px solid rgba(59,130,246,.28);
+      border-radius: 15px;
+      background: rgba(15,23,42,.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow:
+        0 12px 30px rgba(0,0,0,.22),
+        0 0 24px rgba(37,99,235,.07),
+        inset 0 1px 0 rgba(255,255,255,.045);
+      transform: rotate(0deg);
+      animation: heroCardCounterRotate var(--orbit-duration) linear infinite;
+      transition: border-color .25s ease, box-shadow .25s ease, background .25s ease;
+    }
+
+    .hero-orbit-item-two .hero-orbit-card-inner {
+      animation-direction: reverse;
+    }
+
+    .hero-orbit-card:hover .hero-orbit-card-inner {
+      border-color: rgba(59,130,246,.50);
+      background: rgba(15,23,42,.86);
+      box-shadow:
+        0 16px 34px rgba(0,0,0,.26),
+        0 0 28px rgba(37,99,235,.14),
+        inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .hero-orbit-card-icon {
+      width: 38px;
+      height: 38px;
+      flex: 0 0 38px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      border-radius: 50%;
-      color: #22c55e;
-      background: rgba(34,197,94,.1);
-      border: 1px solid rgba(34,197,94,.22);
-      font-size: .82rem;
-      font-weight: 900;
+      border-radius: 11px;
+      color: #93c5fd;
+      background: rgba(37,99,235,.11);
+      border: 1px solid rgba(59,130,246,.22);
     }
 
-    .hero-proof-row strong {
+    .hero-orbit-card-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .hero-orbit-card-icon.success {
+      color: #4ade80;
+      background: rgba(34,197,94,.09);
+      border-color: rgba(34,197,94,.20);
+    }
+
+    .hero-orbit-card-copy {
+      min-width: 0;
+      text-align: left;
+    }
+
+    .hero-orbit-card-title {
       display: block;
+      margin: 0 0 3px;
       color: var(--text-primary);
-      font-size: .84rem;
-      margin-bottom: 2px;
+      font-size: .86rem;
+      line-height: 1.25;
+      font-weight: 750;
     }
 
-    .hero-proof-row span {
+    .hero-orbit-card-subtitle {
       display: block;
-      color: var(--text-muted);
-      font-size: .72rem;
+      color: var(--text-secondary);
+      font-size: .68rem;
+      line-height: 1.4;
     }
 
-    .destination-chip {
-      cursor: pointer;
-      border: 1px solid var(--border-color);
-      font: inherit;
-      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease;
+    @keyframes heroCardOrbit {
+      from {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      to {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
     }
 
-    .destination-chip:hover,
-    .destination-chip.active {
-      transform: translateY(-2px);
-      border-color: rgba(59,130,246,.48) !important;
-      background: rgba(37,99,235,.09) !important;
-      box-shadow: 0 8px 20px rgba(0,0,0,.14);
+    @keyframes heroCardCounterRotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(-360deg);
+      }
     }
 
-    .destination-chip-arrow {
-      margin-left: 1px;
-      color: var(--accent-blue);
-      font-size: .78rem;
-      opacity: .7;
-      transition: transform .18s ease, opacity .18s ease;
+    .hero-orbit-stage:has(.hero-orbit-card:hover) .hero-orbit-item,
+    .hero-orbit-stage:has(.hero-orbit-card:hover) .hero-orbit-card-inner {
+      animation-play-state: paused;
     }
 
-    .destination-chip:hover .destination-chip-arrow,
-    .destination-chip.active .destination-chip-arrow {
-      opacity: 1;
-      transform: translate(2px, -2px);
+    @media (prefers-reduced-motion: reduce) {
+      .hero-orbit-item,
+      .hero-orbit-card-inner {
+        animation: none !important;
+      }
     }
 
-    [data-theme="light"] .hero-workflow-card {
-      background: rgba(248,250,252,.9);
-    }
-
-    [data-theme="light"] .nav-dropdown-menu {
-      box-shadow: 0 18px 40px rgba(15,23,42,.12);
-    }
-
-    .hero-sec .hero-buttons .btn-secondary {
-      background: transparent !important;
+    [data-theme="light"] .hero-orbit-card-inner {
+      background: rgba(255,255,255,.78);
+      box-shadow:
+        0 12px 28px rgba(15,23,42,.10),
+        0 0 24px rgba(37,99,235,.06),
+        inset 0 1px 0 rgba(255,255,255,.72);
     }
 
     @media (max-width: 900px) {
-      .nav-dropdown {
-        width: 100%;
+      .hero-orbit-stage {
+        width: min(100%, 480px);
+        min-height: 450px;
       }
 
-      .nav-dropdown-toggle {
-        width: 100%;
-        justify-content: flex-start;
-        padding: 0;
+      .hero-orbit-ring-one,
+      .hero-orbit-item-one {
+        --ring-size: 390px;
+        --orbit-size: 390px;
       }
 
-      .nav-dropdown-menu {
-        position: static;
-        min-width: 0;
-        width: 100%;
-        margin-top: 8px;
-        padding: 4px;
-        transform: none !important;
-        box-shadow: none;
-        opacity: 1;
-        visibility: visible;
-        pointer-events: auto;
-        display: none;
+      .hero-orbit-ring-two,
+      .hero-orbit-item-two {
+        --ring-size: 310px;
+        --orbit-size: 310px;
       }
 
-      .nav-dropdown.open .nav-dropdown-menu {
-        display: block;
-      }
-
-      .nav-dropdown-menu button,
-      .nav-dropdown-menu a {
-        padding: 9px 10px;
-      }
-
-      .hero-workflow {
-        min-height: 390px;
+      .hero-orbit-ring-three,
+      .hero-orbit-item-three {
+        --ring-size: 235px;
+        --orbit-size: 235px;
       }
     }
 
     @media (max-width: 640px) {
-      .hero-workflow {
-        padding: 22px;
-        min-height: 360px;
+      .hero-visual {
+        width: 100%;
       }
 
-      .hero-workflow-card {
-        grid-template-columns: 31px minmax(0, 1fr) 27px;
-        gap: 9px;
-        padding: 11px;
-        min-height: 72px;
+      .hero-orbit-stage {
+        width: 100%;
+        min-height: 0;
+        aspect-ratio: auto;
+        display: grid;
+        gap: 12px;
+        padding: 4px 0;
       }
 
-      .hero-workflow-card-two {
-        margin-left: 10px;
+      .hero-orbit-ring,
+      .hero-orbit-center {
+        display: none;
       }
 
-      .hero-workflow-card-three {
-        margin-left: 20px;
+      .hero-orbit-item,
+      .hero-orbit-item-one,
+      .hero-orbit-item-two,
+      .hero-orbit-item-three {
+        position: static;
+        width: 100%;
+        height: auto;
+        transform: none;
+        animation: none;
       }
 
-      .hero-workflow-line {
-        left: 22px;
+      .hero-orbit-card {
+        position: static;
+        width: 100%;
+        transform: none;
       }
 
-      .hero-workflow-line-one {
-        top: 70px;
+      .hero-orbit-card-inner,
+      .hero-orbit-item-two .hero-orbit-card-inner {
+        animation: none;
+        min-height: 68px;
+        padding: 12px 13px;
       }
 
-      .hero-workflow-line-two {
-        top: 164px;
+      .hero-orbit-card-title {
+        font-size: .84rem;
       }
 
-      .hero-workflow-card strong {
-        font-size: .8rem;
-      }
-
-      .hero-workflow-card span {
+      .hero-orbit-card-subtitle {
         font-size: .67rem;
+      }
+
+      .hero-orbit-card-icon {
+        width: 35px;
+        height: 35px;
+        flex-basis: 35px;
       }
     }
 
@@ -3141,7 +3195,23 @@ export default function App() {
             <a href="#team" className="nav-link" onClick={closeNav}>Our Team</a>
           </div>
 
-          <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <a
+              href="#contact"
+              className="nav-consultation-btn"
+              onClick={closeNav}
+              aria-label="Book a consultation"
+            >
+              <CalendarIcon size={16} />
+              <span>Book a Consultation</span>
+            </a>
+            <a
+              href="#calculator"
+              className="nav-eligibility-btn"
+              onClick={closeNav}
+            >
+              Check Your Eligibility
+            </a>
             <ThemeToggle />
             <div className="hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               <span style={{ transform: mobileMenuOpen ? 'rotate(45deg) translate(5px, 6px)' : 'none' }}></span>
@@ -3158,7 +3228,7 @@ export default function App() {
         <div className="container hero-grid">
           <div className="hero-content">
             <div className="hero-badge animate-pulse-glow" style={{ background: 'var(--bg-card)', borderColor: 'var(--accent-blue)' }}>
-              <span style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>128+ Visa Approvals & Growing</span>
+              <span style={{ color: 'var(--text-secondary)', fontWeight: '600' }}>Trusted Visa Guidance Since 2020</span>
             </div>
 
             <h1 className="hero-title text-gradient" style={{ fontSize: '2.8rem', lineHeight: '1.2', margin: '16px 0' }}>
@@ -3206,55 +3276,52 @@ export default function App() {
           </div>
 
           <div className="hero-visual">
-            <div className="hero-workflow glass-panel">
-              <div className="hero-workflow-top">
-                <div>
-                  <span className="hero-workflow-kicker">YOUR IMMIGRATION JOURNEY</span>
-                  <h3>From profile to destination.</h3>
-                </div>
-                <div className="hero-workflow-globe">
-                  <GlobeIcon />
-                </div>
+            <div className="hero-orbit-stage" aria-label="CloysterVisa immigration services overview">
+              <span className="hero-orbit-ring hero-orbit-ring-one" aria-hidden="true"></span>
+              <span className="hero-orbit-ring hero-orbit-ring-two" aria-hidden="true"></span>
+              <span className="hero-orbit-ring hero-orbit-ring-three" aria-hidden="true"></span>
+              <span className="hero-orbit-center" aria-hidden="true"></span>
+
+              <div className="hero-orbit-item hero-orbit-item-one">
+                <article className="hero-orbit-card">
+                  <div className="hero-orbit-card-inner">
+                    <span className="hero-orbit-card-icon" aria-hidden="true">
+                      <GlobeIcon />
+                    </span>
+                    <span className="hero-orbit-card-copy">
+                      <strong className="hero-orbit-card-title">Passport &amp; Global Mobility</strong>
+                      <span className="hero-orbit-card-subtitle">Express Entry &amp; Skilled Worker Pathways</span>
+                    </span>
+                  </div>
+                </article>
               </div>
 
-              <div className="hero-workflow-track">
-                <div className="hero-workflow-line hero-workflow-line-one"></div>
-                <div className="hero-workflow-line hero-workflow-line-two"></div>
-
-                <div className="hero-workflow-card hero-workflow-card-one">
-                  <div className="hero-workflow-number">01</div>
-                  <div>
-                    <strong>Profile Assessment</strong>
-                    <span>Review your goals, credentials and eligibility.</span>
+              <div className="hero-orbit-item hero-orbit-item-two">
+                <article className="hero-orbit-card">
+                  <div className="hero-orbit-card-inner">
+                    <span className="hero-orbit-card-icon" aria-hidden="true">
+                      <GlobeIcon />
+                    </span>
+                    <span className="hero-orbit-card-copy">
+                      <strong className="hero-orbit-card-title">Seamless Relocation</strong>
+                      <span className="hero-orbit-card-subtitle">Dedicated Assistance Worldwide</span>
+                    </span>
                   </div>
-                  <div className="hero-workflow-check"><CheckIcon /></div>
-                </div>
-
-                <div className="hero-workflow-card hero-workflow-card-two">
-                  <div className="hero-workflow-number">02</div>
-                  <div>
-                    <strong>Pathway Strategy</strong>
-                    <span>Match your profile to the right visa route.</span>
-                  </div>
-                  <div className="hero-workflow-check"><CheckIcon /></div>
-                </div>
-
-                <div className="hero-workflow-card hero-workflow-card-three">
-                  <div className="hero-workflow-number">03</div>
-                  <div>
-                    <strong>Application Support</strong>
-                    <span>Documents, filing and post-submission guidance.</span>
-                  </div>
-                  <div className="hero-workflow-check"><CheckIcon /></div>
-                </div>
+                </article>
               </div>
 
-              <div className="hero-proof-row">
-                <div className="hero-proof-badge">✓</div>
-                <div>
-                  <strong>128+ Visa Approvals</strong>
-                  <span>Across 5 destination pathways</span>
-                </div>
+              <div className="hero-orbit-item hero-orbit-item-three">
+                <article className="hero-orbit-card">
+                  <div className="hero-orbit-card-inner">
+                    <span className="hero-orbit-card-icon success" aria-hidden="true">
+                      <CheckIcon />
+                    </span>
+                    <span className="hero-orbit-card-copy">
+                      <strong className="hero-orbit-card-title">Visa Approval Status</strong>
+                      <span className="hero-orbit-card-subtitle">128+ Total Visa Approvals</span>
+                    </span>
+                  </div>
+                </article>
               </div>
             </div>
           </div>
