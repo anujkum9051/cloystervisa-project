@@ -317,6 +317,429 @@ const INSTAGRAM_URL = 'https://www.instagram.com/cloystervisa/'
 const LINKEDIN_URL = 'https://www.linkedin.com/company/cloystervisa/?viewAsMember=true'
 const GOOGLE_BUSINESS_URL = 'https://local.google.com/place?placeid=ChIJxWcEuEQdDTkRz5rn0njVtBg&utm_medium=noren&utm_source=gbp&utm_campaign=2026'
 
+function ServiceModalContent({
+  service,
+  title,
+  description,
+  intro,
+  bullets,
+  extra,
+  note,
+  cta,
+  ctaHref,
+  closeModal
+}) {
+  return (
+    <div>
+      <p
+        style={{
+          color: 'var(--accent-blue)',
+          fontSize: '0.82rem',
+          fontWeight: '700',
+          margin: '14px 0 6px',
+          letterSpacing: '.2px'
+        }}
+      >
+        {service}
+      </p>
+
+      <h3
+        id="service-modal-title"
+        style={{
+          fontSize: '1.55rem',
+          lineHeight: '1.3',
+          margin: '0 0 14px',
+          color: 'var(--text-primary)'
+        }}
+      >
+        {title}
+      </h3>
+
+      <p
+        style={{
+          color: 'var(--text-secondary)',
+          lineHeight: '1.65',
+          fontSize: '0.94rem',
+          margin: '0 0 16px'
+        }}
+      >
+        {description}
+      </p>
+
+      <p
+        style={{
+          color: 'var(--text-primary)',
+          fontWeight: '700',
+          fontSize: '0.92rem',
+          margin: '0 0 8px'
+        }}
+      >
+        {intro}
+      </p>
+
+      <ul
+        style={{
+          color: 'var(--text-secondary)',
+          paddingLeft: '20px',
+          margin: '0',
+          lineHeight: '1.75',
+          fontSize: '0.9rem'
+        }}
+      >
+        {bullets.map((bullet) => (
+          <li key={bullet} style={{ marginBottom: '5px' }}>
+            {bullet}
+          </li>
+        ))}
+      </ul>
+
+      {extra && (
+        <p
+          style={{
+            color: 'var(--text-secondary)',
+            lineHeight: '1.6',
+            fontSize: '0.88rem',
+            margin: '14px 0 0'
+          }}
+        >
+          {extra}
+        </p>
+      )}
+
+      <div
+        style={{
+          marginTop: '18px',
+          padding: '13px 14px',
+          borderRadius: '10px',
+          background: 'rgba(148,163,184,.07)',
+          border: '1px solid var(--border-color)'
+        }}
+      >
+        <strong style={{ color: 'var(--text-primary)', fontSize: '0.84rem' }}>
+          Please Note:
+        </strong>
+        <span
+          style={{
+            color: 'var(--text-secondary)',
+            fontSize: '0.82rem',
+            lineHeight: '1.55'
+          }}
+        >
+          {' '}{note}
+        </span>
+      </div>
+
+      <div style={{ marginTop: '20px' }}>
+        <a
+          href={ctaHref}
+          onClick={closeModal}
+          className="btn btn-primary"
+          style={{
+            width: '100%',
+            justifyContent: 'center',
+            background: 'var(--accent-blue)',
+            color: '#fff',
+            padding: '11px 14px',
+            borderRadius: '8px',
+            textDecoration: 'none',
+            fontWeight: '600',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '7px'
+          }}
+        >
+          {cta} <ArrowRightIcon />
+        </a>
+      </div>
+    </div>
+  )
+}
+
+function LegalModal({ type, onClose }) {
+  const documents = {
+    privacy: {
+      label: 'PRIVACY POLICY',
+      title: 'PRIVACY POLICY',
+      updated: 'Last Updated: August 2026',
+      sections: [
+        {
+          heading: 'Information We May Collect',
+          body: 'Depending on the service you enquire about, CloysterVisa may collect information including:',
+          bullets: [
+            'Full Name',
+            'Email',
+            'Phone/WhatsApp',
+            'Country',
+            'Educational Qualifications',
+            'Work Experience',
+            'Visa History',
+            'Technical/Cookie data'
+          ]
+        },
+        {
+          heading: 'How We Use Your Information',
+          body: 'Your information may be used for:',
+          bullets: [
+            'Enquiries',
+            'Profile assessments',
+            'Application updates',
+            'Customer service'
+          ]
+        },
+        {
+          heading: 'Third-Party Sharing',
+          body: 'CloysterVisa does not sell or rent personal information. Where necessary for a service requested by you, information may be shared only with relevant authorities, institutions, or service providers involved in processing the requested service.'
+        },
+        {
+          heading: 'Contact',
+          body: 'For privacy-related enquiries, please contact:'
+        }
+      ],
+      contact: true
+    },
+    terms: {
+      label: 'TERMS & CONDITIONS',
+      title: 'TERMS & CONDITIONS',
+      updated: 'Last Updated: August 2026',
+      sections: [
+        {
+          heading: 'Nature of Services',
+          body: 'CloysterVisa provides consultancy, profile assessment, documentation support, and related immigration, visa and international education guidance depending on the client’s requirements and the services agreed upon.'
+        },
+        {
+          heading: 'No Guarantee of Visa, PR, Admission or Employment',
+          body: 'CloysterVisa DOES NOT guarantee:',
+          bullets: [
+            'Visa approvals',
+            'Permanent residence grants',
+            'Admissions',
+            'Scholarships',
+            'Employment or job offers'
+          ],
+          note: 'Final decisions rest entirely with official government, embassy, consulate, educational institution, employer, or other competent authorities.'
+        },
+        {
+          heading: 'Client Responsibilities',
+          body: 'Clients are responsible for:',
+          bullets: [
+            'Providing truthful and complete information',
+            'Providing genuine and valid documents',
+            'Reviewing information before submission',
+            'Meeting applicable deadlines and requirements',
+            'Attending required appointments, interviews, medical examinations, or biometrics'
+          ]
+        },
+        {
+          heading: 'Governing Law',
+          body: 'These Terms & Conditions are governed by the laws of India. Disputes shall be subject to the jurisdiction of competent courts in India.'
+        }
+      ]
+    },
+    disclaimer: {
+      label: 'DISCLAIMER',
+      title: 'DISCLAIMER',
+      updated: 'Last Updated: August 2026',
+      sections: [
+        {
+          heading: 'Purpose',
+          body: 'The information provided by CloysterVisa is for general informational purposes only. Immigration laws, visa requirements, government programs, admission criteria, processing times, fees, and policies may change frequently.'
+        },
+        {
+          heading: 'No Approval Guarantee',
+          body: 'CloysterVisa does not control decisions made by immigration departments, embassies, consulates, visa application centres, universities, colleges, employers, or other authorities. No visa, permanent residence, admission, employment, invitation, processing time, or other outcome can be guaranteed.'
+        },
+        {
+          heading: 'Affiliation Note',
+          body: 'References to governments, universities, or third parties do not imply official endorsement, authorization, affiliation, or partnership unless explicitly stated.'
+        },
+        {
+          heading: 'Professional Assessment',
+          body: 'Users should undergo an individual assessment before making significant financial, educational, employment, immigration, or relocation decisions based on general website information.'
+        }
+      ]
+    }
+  }
+
+  const document = documents[type]
+  if (!document) return null
+
+  return (
+    <div
+      className="modal-overlay legal-modal-overlay"
+      role="presentation"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose()
+      }}
+      style={{
+        position: 'fixed',
+        inset: 0,
+        background: 'rgba(15, 23, 42, 0.82)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        zIndex: 1300,
+        padding: '20px'
+      }}
+    >
+      <div
+        className="glass-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="legal-modal-title"
+        style={{
+          width: '100%',
+          maxWidth: '820px',
+          maxHeight: '80vh',
+          overflow: 'hidden',
+          position: 'relative',
+          border: '1px solid var(--accent-blue)',
+          background: 'var(--bg-card)',
+          boxShadow: '0 24px 70px rgba(0,0,0,.45)',
+          borderRadius: '16px',
+          color: 'var(--text-primary)'
+        }}
+      >
+        <div
+          style={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 3,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            padding: '18px 22px',
+            borderBottom: '1px solid var(--border-color)',
+            background: 'rgba(15,23,42,.92)',
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)'
+          }}
+        >
+          <div>
+            <div style={{
+              color: 'var(--accent-blue)',
+              fontSize: '.74rem',
+              fontWeight: '700',
+              letterSpacing: '.12em',
+              marginBottom: '4px'
+            }}>
+              LEGAL INFORMATION
+            </div>
+            <h2 id="legal-modal-title" style={{ margin: 0, fontSize: '1.18rem', lineHeight: 1.3 }}>
+              {document.title}
+            </h2>
+            <div style={{ color: 'var(--text-muted)', fontSize: '.78rem', marginTop: '4px' }}>
+              {document.updated}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={`Close ${document.label}`}
+            title="Close"
+            style={{
+              flex: '0 0 auto',
+              width: '38px',
+              height: '38px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              border: '1px solid var(--border-color)',
+              borderRadius: '10px',
+              background: 'var(--bg-main)',
+              color: 'var(--text-primary)',
+              fontSize: '1.15rem',
+              cursor: 'pointer'
+            }}
+          >
+            ✕
+          </button>
+        </div>
+
+        <div
+          style={{
+            maxHeight: 'calc(80vh - 88px)',
+            overflowY: 'auto',
+            padding: '24px 26px 28px'
+          }}
+        >
+          {document.sections.map((section) => (
+            <section key={section.heading} style={{ marginBottom: '22px' }}>
+              <h3 style={{
+                margin: '0 0 8px',
+                color: 'var(--text-primary)',
+                fontSize: '1rem',
+                lineHeight: 1.4
+              }}>
+                {section.heading}
+              </h3>
+              {section.body && (
+                <p style={{
+                  margin: 0,
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.7,
+                  fontSize: '.9rem'
+                }}>
+                  {section.body}
+                </p>
+              )}
+              {section.bullets && (
+                <ul style={{
+                  margin: '10px 0 0',
+                  paddingLeft: '21px',
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.7,
+                  fontSize: '.9rem'
+                }}>
+                  {section.bullets.map((bullet) => (
+                    <li key={bullet} style={{ marginBottom: '5px' }}>{bullet}</li>
+                  ))}
+                </ul>
+              )}
+              {section.note && (
+                <div style={{
+                  marginTop: '12px',
+                  padding: '12px 14px',
+                  borderRadius: '10px',
+                  background: 'rgba(148,163,184,.07)',
+                  border: '1px solid var(--border-color)',
+                  color: 'var(--text-secondary)',
+                  lineHeight: 1.6,
+                  fontSize: '.84rem'
+                }}>
+                  <strong style={{ color: 'var(--text-primary)' }}>Important:</strong>{' '}
+                  {section.note}
+                </div>
+              )}
+            </section>
+          ))}
+
+          {document.contact && (
+            <div style={{
+              marginTop: '4px',
+              padding: '16px',
+              borderRadius: '12px',
+              background: 'rgba(37,99,235,.07)',
+              border: '1px solid var(--border-color)',
+              color: 'var(--text-secondary)',
+              lineHeight: 1.75,
+              fontSize: '.9rem'
+            }}>
+              <strong style={{ color: 'var(--text-primary)' }}>CloysterVisa</strong><br />
+              Email: <a href="mailto:info@cloystervisa.com" style={{ color: 'var(--accent-blue)' }}>info@cloystervisa.com</a><br />
+              Phone: <a href="tel:+917027466559" style={{ color: 'var(--accent-blue)' }}>+91 70274 66559</a><br />
+              Website: <a href="https://www.cloystervisa.com" target="_blank" rel="noreferrer" style={{ color: 'var(--accent-blue)' }}>www.cloystervisa.com</a>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -330,6 +753,7 @@ export default function App() {
 
   // Service Details Modal State
   const [activeModal, setActiveModal] = useState(null)
+  const [activeLegalModal, setActiveLegalModal] = useState(null)
 
   // Eligibility Calculator State
   const [calcStep, setCalcStep] = useState(1)
@@ -364,6 +788,18 @@ export default function App() {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
+
+  // Close the active legal modal with Escape.
+  useEffect(() => {
+    if (!activeLegalModal) return undefined
+
+    const handleLegalEscape = (event) => {
+      if (event.key === 'Escape') setActiveLegalModal(null)
+    }
+
+    window.addEventListener('keydown', handleLegalEscape)
+    return () => window.removeEventListener('keydown', handleLegalEscape)
+  }, [activeLegalModal])
 
   // Keep the browser/SPA document metadata aligned with the CloysterVisa brand.
   // The same title should also be set in index.html for search engines on first load.
@@ -1939,6 +2375,29 @@ export default function App() {
       color: var(--text-muted);
       font-size: .78rem;
       line-height: 1.5;
+    }
+
+    .footer-legal-button {
+      appearance: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      cursor: pointer;
+      text-decoration: none;
+      transition: color .18s ease;
+    }
+
+    .footer-legal-button:hover,
+    .footer-legal-button:focus-visible {
+      color: var(--accent-blue);
+      outline: none;
+    }
+
+    .legal-modal-overlay {
+      overscroll-behavior: contain;
     }
 
     .footer-legal-links {
@@ -4807,9 +5266,14 @@ export default function App() {
               <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
                 Discuss your goals, destination, visa category, eligibility questions, and next steps in a focused consultation.
               </p>
-              <a href="#contact" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <button
+                type="button"
+                onClick={() => setActiveModal('consultation')}
+                className="service-link"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--accent-blue)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
                 Book a Consultation <ArrowRightIcon />
-              </a>
+              </button>
             </div>
 
             <div className="service-card glass-panel" style={{ padding: '28px' }}>
@@ -4817,9 +5281,14 @@ export default function App() {
               <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
                 Review your age, education, experience, language profile, destination, and visa category to understand your potential pathway.
               </p>
-              <a href="#calculator" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <button
+                type="button"
+                onClick={() => setActiveModal('assessment')}
+                className="service-link"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--accent-blue)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
                 Assess My Profile <ArrowRightIcon />
-              </a>
+              </button>
             </div>
 
             <div className="service-card glass-panel" style={{ padding: '28px' }}>
@@ -4842,9 +5311,14 @@ export default function App() {
               <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
                 Prepare complete applications for work, permanent residency, and study visa pathways, including forms, statements, financial documentation, and submission readiness.
               </p>
-              <a href="#calculator" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <button
+                type="button"
+                onClick={() => setActiveModal('application')}
+                className="service-link"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--accent-blue)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
                 Explore Application Preparation <ArrowRightIcon />
-              </a>
+              </button>
             </div>
 
             <div className="service-card glass-panel" style={{ padding: '28px' }}>
@@ -4852,9 +5326,14 @@ export default function App() {
               <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
                 Prepare for visa interviews where applicable and get practical pre-departure guidance for study, work, and relocation.
               </p>
-              <a href="#contact" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <button
+                type="button"
+                onClick={() => setActiveModal('predeparture')}
+                className="service-link"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--accent-blue)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
                 Explore Pre-Departure Guidance <ArrowRightIcon />
-              </a>
+              </button>
             </div>
 
             <div className="service-card glass-panel" style={{ padding: '28px' }}>
@@ -4862,9 +5341,14 @@ export default function App() {
               <p className="service-desc" style={{ color: 'var(--text-secondary)', fontSize: '0.92rem', lineHeight: '1.6', marginBottom: '16px' }}>
                 Stay supported after submission with status follow-up guidance, document response support, and next-step assistance through the decision stage.
               </p>
-              <a href="#contact" className="service-link" style={{ color: 'var(--accent-blue)', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <button
+                type="button"
+                onClick={() => setActiveModal('postsubmission')}
+                className="service-link"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: 'var(--accent-blue)', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+              >
                 Explore Post-Submission Support <ArrowRightIcon />
-              </a>
+              </button>
             </div>
           </div>
 
@@ -4989,70 +5473,238 @@ export default function App() {
         </div>
       </section>
 
-      {/* DEDICATED MODAL FOR SERVICE DETAILS */}
+      {/* SERVICE DETAILS MODALS — each CTA routes to its relevant section */}
       {activeModal && (
-        <div className="modal-overlay" style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(15, 23, 42, 0.85)',
-          backdropFilter: 'blur(8px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1200,
-          padding: '20px'
-        }}>
-          <div className="glass-panel" style={{
-            background: 'var(--bg-card)',
-            border: '1px solid var(--accent-blue)',
-            borderRadius: '16px',
-            maxWidth: '550px',
-            width: '100%',
-            padding: '30px',
-            position: 'relative',
-            color: 'var(--text-primary)'
-          }}>
+        <div
+          className="modal-overlay"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setActiveModal(null)
+          }}
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(15, 23, 42, 0.85)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1200,
+            padding: '20px',
+            overflowY: 'auto'
+          }}
+        >
+          <div
+            className="glass-panel"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="service-modal-title"
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--accent-blue)',
+              borderRadius: '16px',
+              maxWidth: '700px',
+              width: '100%',
+              maxHeight: 'calc(100vh - 40px)',
+              overflowY: 'auto',
+              padding: '30px',
+              position: 'relative',
+              color: 'var(--text-primary)'
+            }}
+          >
             <button
+              type="button"
               onClick={() => setActiveModal(null)}
+              aria-label="Close service details"
               style={{
                 position: 'absolute',
-                top: '15px',
-                right: '20px',
-                background: 'none',
-                border: 'none',
-                color: 'var(--text-muted)',
-                fontSize: '1.5rem',
-                cursor: 'pointer'
+                top: '14px',
+                right: '16px',
+                width: '38px',
+                height: '38px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'var(--bg-main)',
+                border: '1px solid var(--border-color)',
+                borderRadius: '10px',
+                color: 'var(--text-primary)',
+                fontSize: '1.25rem',
+                lineHeight: 1,
+                cursor: 'pointer',
+                zIndex: 2
               }}
             >
               ✕
             </button>
 
-            {activeModal === 'documentation' && (
-              <div>
-                <span style={{ background: 'rgba(37, 99, 235, 0.2)', color: 'var(--accent-blue)', padding: '4px 12px', borderRadius: '12px', fontSize: '0.85rem' }}>
-                  Detailed Overview
-                </span>
-                <h3 style={{ fontSize: '1.6rem', marginTop: '10px', marginBottom: '15px' }}>📄 Documentation Support</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Strong documentation can make an application easier to review. Our specialists assist you with:
-                </p>
-                <ul style={{ color: 'var(--text-secondary)', paddingLeft: '20px', margin: '15px 0', lineHeight: '1.8', fontSize: '0.95rem' }}>
-                  <li><strong>Educational Credential Assessment (ECA):</strong> Step-by-step guidance for WES, IQAS, or ICAS submissions.</li>
-                  <li><strong>Statement of Purpose & LOE:</strong> Customized Letters of Explanation for study permits or gap years.</li>
-                  <li><strong>Proof of Financial Documentation:</strong> Reviewing bank certificates, GIC setups, and liquid asset statements.</li>
-                  <li><strong>Work Experience Reference Letters:</strong> Aligning job duties with exact NOC/ANZSCO codes.</li>
-                </ul>
-                <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
-                  <a href="#contact" onClick={() => setActiveModal(null)} className="btn btn-primary" style={{ flex: 1, textAlign: 'center', justifyContent: 'center', background: 'var(--accent-blue)', color: '#fff', padding: '10px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
-                    Request Document Review
-                  </a>
-                </div>
-              </div>
-            )}
+            <div style={{ paddingRight: '48px' }}>
+              <span
+                style={{
+                  display: 'inline-flex',
+                  background: 'rgba(37, 99, 235, 0.12)',
+                  color: 'var(--accent-blue)',
+                  padding: '5px 12px',
+                  borderRadius: '999px',
+                  fontSize: '0.78rem',
+                  fontWeight: '700',
+                  letterSpacing: '.3px'
+                }}
+              >
+                Detailed Overview
+              </span>
+
+              {activeModal === 'consultation' && (
+                <ServiceModalContent
+                  title="Get Clarity Before You Begin"
+                  service="Immigration Consultation"
+                  description="Every immigration journey starts with understanding the right pathway. Our consultation is designed to help you discuss your goals, circumstances, preferred destination and available options before taking the next step."
+                  intro="During the consultation, we may discuss:"
+                  bullets={[
+                    'Your immigration, study or international mobility goals',
+                    'Preferred country and visa category',
+                    'Education and professional background',
+                    'Work experience and current profile',
+                    'Relevant eligibility requirements',
+                    'Possible immigration or visa pathways',
+                    'Key documentation requirements',
+                    'Potential challenges or gaps in your profile',
+                    'Practical next steps'
+                  ]}
+                  note="A consultation provides professional guidance based on the information available at the time and does not guarantee visa, admission, permanent residence or any other immigration outcome."
+                  cta="Book a Consultation"
+                  ctaHref="#contact"
+                  closeModal={() => setActiveModal(null)}
+                />
+              )}
+
+              {activeModal === 'assessment' && (
+                <ServiceModalContent
+                  title="Understand Where Your Profile Stands"
+                  service="Profile & Eligibility Assessment"
+                  description="Before starting an application, it is important to understand whether your profile potentially meets the requirements of the relevant immigration or visa pathway. Our profile assessment reviews key factors that may influence your eligibility and available options."
+                  intro="Your assessment may include:"
+                  bullets={[
+                    'Age',
+                    'Educational qualifications',
+                    'Work experience',
+                    'Occupation and professional background',
+                    'Language proficiency',
+                    'Preferred destination',
+                    'Visa or immigration category',
+                    'Previous immigration history, where relevant',
+                    'Points-based criteria, where applicable',
+                    'Potential areas for profile improvement'
+                  ]}
+                  extra="Where multiple pathways may be relevant, we can help identify options worth exploring based on the information you provide."
+                  note="An eligibility assessment is indicative and does not constitute a guarantee of selection, invitation, visa approval or permanent residence."
+                  cta="Check Your Eligibility"
+                  ctaHref="#calculator"
+                  closeModal={() => setActiveModal(null)}
+                />
+              )}
+
+              {activeModal === 'documentation' && (
+                <ServiceModalContent
+                  title="Prepare Your Documents with Greater Confidence"
+                  service="Documentation Support"
+                  description="Immigration, visa and study applications can involve extensive documentation. CloysterVisa provides structured support to help applicants understand, organize and prepare the documents required for their selected pathway."
+                  intro="Support may include guidance relating to:"
+                  bullets={[
+                    'Educational Credential Assessment (ECA)',
+                    'Educational documents',
+                    'Employment and reference letters',
+                    'Proof of funds and financial documentation',
+                    'Personal and identity documents',
+                    'Supporting statements and explanations',
+                    'Application-specific forms',
+                    'Document organization and review',
+                    'Additional supporting records where applicable'
+                  ]}
+                  extra="Document requirements vary according to country, visa category and individual circumstances."
+                  note="Clients remain responsible for providing genuine, complete and accurate documents and information."
+                  cta="Book a Documentation Consultation"
+                  ctaHref="#contact"
+                  closeModal={() => setActiveModal(null)}
+                />
+              )}
+
+              {activeModal === 'application' && (
+                <ServiceModalContent
+                  title="Structured Support from Documentation to Submission Readiness"
+                  service="Application Preparation"
+                  description="Once the appropriate pathway has been identified, we help clients prepare their application in an organized and systematic manner. Support is available for relevant work, permanent residency and study visa pathways, depending on the destination and individual case."
+                  intro="Application preparation may include:"
+                  bullets={[
+                    'Application requirement review',
+                    'Document checklist preparation',
+                    'Application form guidance',
+                    'Supporting document organization',
+                    'Statement and explanation guidance',
+                    'Financial documentation guidance',
+                    'Study visa documentation support',
+                    'Review for completeness and consistency',
+                    'Identification of missing information or documents',
+                    'Pre-submission readiness review'
+                  ]}
+                  extra="Our objective is to help you submit a well-organized application based on accurate information and the requirements applicable to your case."
+                  note="Final decisions remain entirely with the relevant immigration authority, embassy, consulate, educational institution or other competent authority."
+                  cta="Start Your Application Assessment"
+                  ctaHref="#calculator"
+                  closeModal={() => setActiveModal(null)}
+                />
+              )}
+
+              {activeModal === 'predeparture' && (
+                <ServiceModalContent
+                  title="Prepare for the Next Stage of Your Journey"
+                  service="Interview & Pre-Departure Guidance"
+                  description="Where an interview is applicable, preparation can help you understand what to expect and communicate your circumstances clearly and confidently. For clients preparing to relocate internationally, we can also provide practical pre-departure guidance."
+                  intro="Support may include:"
+                  bullets={[
+                    'Visa interview preparation, where applicable',
+                    'Understanding commonly discussed areas',
+                    'Reviewing important application information before an interview',
+                    'Guidance on presenting information clearly and truthfully',
+                    'Pre-departure documentation checklist',
+                    'Travel preparation guidance',
+                    'Important documents to carry',
+                    'Initial settlement and arrival considerations',
+                    'Practical preparation for study, work or relocation'
+                  ]}
+                  note="Interview requirements and procedures vary according to the destination and visa category."
+                  cta="Explore Pre-Departure Support"
+                  ctaHref="#contact"
+                  closeModal={() => setActiveModal(null)}
+                />
+              )}
+
+              {activeModal === 'postsubmission' && (
+                <ServiceModalContent
+                  title="Support Doesn't End When the Application Is Submitted"
+                  service="Post-Submission Support"
+                  description="After submission, applicants may receive updates, requests or further instructions from the relevant authority. CloysterVisa provides continued support during this stage for applications handled under the agreed service scope."
+                  intro="Post-submission support may include:"
+                  bullets={[
+                    'Application status follow-up guidance',
+                    'Understanding official correspondence',
+                    'Guidance regarding additional document requests',
+                    'Document response preparation support',
+                    'Updates regarding relevant next steps',
+                    'Interview or biometric instruction guidance',
+                    'Passport request or decision-stage guidance, where applicable',
+                    'General next-step assistance following a decision'
+                  ]}
+                  note="Processing times and final decisions are controlled by the relevant government, embassy, institution or other authority and cannot be guaranteed by CloysterVisa."
+                  cta="Contact CloysterVisa"
+                  ctaHref="#contact"
+                  closeModal={() => setActiveModal(null)}
+                />
+              )}
+
+            </div>
           </div>
         </div>
       )}
@@ -5481,6 +6133,13 @@ export default function App() {
         <WhatsAppIcon />
       </a>
 
+      {activeLegalModal && (
+        <LegalModal
+          type={activeLegalModal}
+          onClose={() => setActiveLegalModal(null)}
+        />
+      )}
+
       {/* FOOTER */}
       <footer className="site-footer">
         <div className="container footer-main-grid">
@@ -5652,11 +6311,29 @@ export default function App() {
           <div className="container footer-bottom-inner">
             <p>© 2026 CLOYSTER VISA. All rights reserved.</p>
             <nav className="footer-legal-links" aria-label="Legal links">
-              <a href="#privacy-policy">Privacy Policy</a>
+              <button
+                type="button"
+                onClick={() => setActiveLegalModal('privacy')}
+                className="footer-legal-button"
+              >
+                Privacy Policy
+              </button>
               <span aria-hidden="true">|</span>
-              <a href="#terms-conditions">Terms &amp; Conditions</a>
+              <button
+                type="button"
+                onClick={() => setActiveLegalModal('terms')}
+                className="footer-legal-button"
+              >
+                Terms &amp; Conditions
+              </button>
               <span aria-hidden="true">|</span>
-              <a href="#immigration-disclaimer">Immigration Disclaimer</a>
+              <button
+                type="button"
+                onClick={() => setActiveLegalModal('disclaimer')}
+                className="footer-legal-button"
+              >
+                Immigration Disclaimer
+              </button>
             </nav>
           </div>
         </div>

@@ -18,20 +18,20 @@ const TEAM_MEMBERS = [
   {
     id: 'prabhat-kumar',
     name: 'Prabhat Kumar',
-    role: 'Immigration Consultant',
+    role: 'Technology & Immigration Advisor',
     experience: '6+ Years Experience',
     specialization:
-      'Specializes in Germany immigration, Opportunity Card and skilled worker pathways.',
+      'Combines engineering expertise with immigration guidance for skilled professionals, technology careers and Germany pathways.',
     photo: prabhatPhoto,
     linkedin: 'https://www.linkedin.com/in/prabhat-kumar-1a3469128/'
   },
   {
     id: 'anuj-kumar',
     name: 'Anuj Kumar',
-    role: 'Immigration Consultant',
+    role: 'Technology & Client Solutions Advisor',
     experience: '2+ Years Experience',
     specialization:
-      'Specializes in client support, documentation and immigration coordination.',
+      'Combines engineering knowledge with client support, documentation and technology-focused immigration coordination.',
     photo: anujPhoto,
     linkedin: 'https://www.linkedin.com/in/anuj-kumar-83210a24a/'
   }
