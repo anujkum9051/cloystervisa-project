@@ -3492,6 +3492,492 @@ export default function App() {
       }
     }
 
+    /* ==========================================================
+       FINAL MOBILE RESPONSIVENESS OVERRIDES
+       Desktop styles remain unchanged. Mobile uses normal document flow.
+       ========================================================== */
+    .mobile-nav-actions { display: none; }
+
+    @media (max-width: 767px) {
+      html,
+      body,
+      #root {
+        width: 100% !important;
+        max-width: 100vw !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+      }
+
+      body { overflow-x: hidden !important; }
+
+      main,
+      section,
+      header,
+      nav,
+      footer,
+      .section-padding,
+      .hero-sec,
+      .roadmap-section,
+      .team-section,
+      .client-success-section {
+        width: 100% !important;
+        max-width: 100vw !important;
+        min-width: 0 !important;
+      }
+
+      .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        margin-inline: auto !important;
+        padding-inline: 16px !important;
+      }
+
+      /* Header: mobile shows only logo + hamburger. */
+      .navbar {
+        position: sticky !important;
+        top: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        z-index: 1300 !important;
+      }
+
+      .nav-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        padding: 9px 16px !important;
+        gap: 10px !important;
+      }
+
+      .nav-container .logo-link {
+        min-width: 0 !important;
+        max-width: calc(100% - 52px) !important;
+        margin-right: 0 !important;
+        flex: 1 1 auto !important;
+      }
+
+      .cloyster-logo-image {
+        width: clamp(124px, 38vw, 150px) !important;
+        max-width: 100% !important;
+        height: auto !important;
+      }
+
+      .nav-actions {
+        display: flex !important;
+        flex: 0 0 42px !important;
+        min-width: 42px !important;
+        margin-left: auto !important;
+        gap: 0 !important;
+        z-index: 1401 !important;
+      }
+
+      .nav-actions > .nav-consultation-btn,
+      .nav-actions > .nav-eligibility-btn,
+      .nav-actions > .theme-toggle {
+        display: none !important;
+      }
+
+      .hamburger {
+        display: flex !important;
+        width: 42px !important;
+        height: 42px !important;
+        min-width: 42px !important;
+        padding: 9px !important;
+        justify-content: center !important;
+        gap: 5px !important;
+        z-index: 1402 !important;
+      }
+
+      .nav-menu {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100% !important;
+        max-width: 100vw !important;
+        height: 100dvh !important;
+        max-height: none !important;
+        padding: 92px 16px 24px !important;
+        display: none !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 6px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        background: var(--bg-card) !important;
+        border: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        transform: none !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        z-index: 1250 !important;
+      }
+
+      .nav-menu.open { display: flex !important; }
+
+      .nav-menu .nav-link {
+        width: 100% !important;
+        padding: 13px 12px !important;
+        line-height: 1.3 !important;
+        white-space: normal !important;
+      }
+
+      .nav-menu .nav-dropdown-menu {
+        position: static !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        margin-top: 5px !important;
+        transform: none !important;
+        box-shadow: none !important;
+      }
+
+      .nav-menu .nav-dropdown:not(.open) .nav-dropdown-menu {
+        display: none !important;
+      }
+
+      .mobile-nav-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        gap: 10px !important;
+        margin-top: 10px !important;
+        padding-top: 14px !important;
+        border-top: 1px solid var(--border-color) !important;
+      }
+
+      .mobile-nav-actions .nav-consultation-btn,
+      .mobile-nav-actions .nav-eligibility-btn {
+        width: 100% !important;
+        min-width: 0 !important;
+        justify-content: center !important;
+        white-space: normal !important;
+        text-align: center !important;
+      }
+
+      .mobile-nav-actions .theme-toggle {
+        align-self: flex-start !important;
+      }
+
+      /* Announcement wraps instead of colliding with the header. */
+      .announcement-bar {
+        width: 100% !important;
+        max-width: 100vw !important;
+        min-height: 0 !important;
+        padding: 8px 12px !important;
+        display: flex !important;
+        flex-wrap: wrap !important;
+        justify-content: center !important;
+        gap: 3px 6px !important;
+        line-height: 1.35 !important;
+        overflow: visible !important;
+      }
+
+      .announcement-bar a { white-space: normal !important; }
+
+      /* Hero becomes one full-width column. */
+      .hero-sec {
+        overflow: visible !important;
+        padding: 26px 0 42px !important;
+      }
+
+      .hero-grid {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 28px !important;
+        align-items: stretch !important;
+      }
+
+      .hero-content,
+      .hero-visual {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .hero-title {
+        max-width: 100% !important;
+        font-size: clamp(1.9rem, 9vw, 2.65rem) !important;
+        line-height: 1.08 !important;
+        overflow-wrap: normal !important;
+        word-break: normal !important;
+      }
+
+      .hero-desc {
+        max-width: 100% !important;
+        font-size: clamp(.95rem, 4vw, 1.08rem) !important;
+        line-height: 1.65 !important;
+      }
+
+      .hero-buttons {
+        width: 100% !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+
+      .hero-buttons .btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        justify-content: center !important;
+      }
+
+      /* Orbiting hero cards become a compact normal-flow stack. */
+      .hero-orbit-stage {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        aspect-ratio: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+      }
+
+      .hero-orbit-ring,
+      .hero-orbit-center { display: none !important; }
+
+      .hero-orbit-item,
+      .hero-orbit-item-one,
+      .hero-orbit-item-two,
+      .hero-orbit-item-three,
+      .hero-orbit-card {
+        position: static !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: 0 !important;
+        transform: none !important;
+        animation: none !important;
+      }
+
+      .hero-orbit-card-inner {
+        width: 100% !important;
+        height: auto !important;
+        min-height: 68px !important;
+        transform: none !important;
+        animation: none !important;
+      }
+
+      /* Step-by-step roadmap: single-column cards + stacked CTA. */
+      .roadmap-section {
+        overflow: visible !important;
+        padding: 56px 0 !important;
+      }
+
+      .roadmap-timeline {
+        width: 100% !important;
+        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
+        padding: 0 !important;
+        overflow: visible !important;
+      }
+
+      .roadmap-line { display: none !important; }
+
+      .roadmap-step,
+      .roadmap-step-left,
+      .roadmap-step-right {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+
+      .roadmap-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: fit-content !important;
+        padding: 20px 18px !important;
+        overflow: visible !important;
+      }
+
+      .roadmap-step-number,
+      .roadmap-step-right .roadmap-step-number {
+        position: static !important;
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        margin: 0 0 12px !important;
+        transform: none !important;
+      }
+
+      .roadmap-cta {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: fit-content !important;
+        margin: 26px 0 0 !important;
+        padding: 22px 18px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 18px !important;
+        overflow: visible !important;
+      }
+
+      .roadmap-cta > div:first-child,
+      .roadmap-cta .country-next-step-actions {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .roadmap-cta .country-next-step-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+      }
+
+      .roadmap-cta .country-next-step-actions .btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        flex: 0 0 auto !important;
+        justify-content: center !important;
+        white-space: normal !important;
+      }
+
+      /* Destination explorer: predictable vertical order. */
+      .country-destination-shell,
+      .country-display-grid,
+      .country-image-wrapper,
+      .country-info-box,
+      .destination-why-panel,
+      .country-pathways-list,
+      .country-next-step {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: 0 !important;
+        overflow: visible !important;
+      }
+
+      .country-display-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 0 !important;
+      }
+
+      .country-image-wrapper,
+      .country-info-box { display: contents !important; }
+
+      .country-title { order: 1; }
+      .country-desc { order: 2; }
+      .country-pathway-visual { order: 3; }
+      .country-stats-row { order: 4; }
+      .destination-why-panel { order: 5; }
+      .country-pathways-list { order: 6; }
+      .country-next-step { order: 7; }
+
+      .country-stats-row {
+        width: 100% !important;
+        display: grid !important;
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+      }
+
+      .c-stat-card {
+        width: 100% !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: fit-content !important;
+      }
+
+      .country-next-step {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+      }
+
+      .country-next-step-actions {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+      }
+
+      .country-next-step-actions .btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        justify-content: center !important;
+      }
+
+      /* Services, calculator, team and success sections stack cleanly. */
+      .services-grid,
+      .team-grid,
+      .client-success-stats,
+      .calc-grid {
+        width: 100% !important;
+        max-width: 100% !important;
+        grid-template-columns: 1fr !important;
+      }
+
+      .service-card,
+      .team-card,
+      .calculator-box,
+      .client-success-panel,
+      .glass-panel {
+        width: 100%;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .service-card,
+      .team-card,
+      .calculator-box {
+        height: auto !important;
+        min-height: fit-content !important;
+      }
+
+      .client-success-panel { overflow: visible !important; }
+
+      /* Forms and footer cannot create a wider layout. */
+      input,
+      select,
+      textarea,
+      button,
+      .btn { max-width: 100% !important; }
+
+      .phone-input-row {
+        width: 100% !important;
+        grid-template-columns: 82px minmax(0, 1fr) !important;
+      }
+
+      textarea { height: auto !important; }
+
+      .footer-main-grid,
+      .footer-connect-block {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        grid-template-columns: 1fr !important;
+      }
+
+      .footer-qr-grid {
+        width: 100% !important;
+        flex-direction: column !important;
+      }
+
+      .footer-qr-compact {
+        width: 100% !important;
+        max-width: 100% !important;
+      }
+
+      h1, h2, h3, h4, h5, h6, p, a, span, li, label {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+      }
+    }
+
     @media (max-width: 479px) {
       .container {
         padding-left: 13px !important;
@@ -3525,6 +4011,249 @@ export default function App() {
       .footer-bottom-inner {
         padding-left: 13px !important;
         padding-right: 13px !important;
+      }
+    }
+
+    /* ==========================================================
+       FINAL MOBILE ROADMAP OVERRIDE
+       Keep the desktop alternating timeline on phones too.
+       Cards stay in normal flow, remain fully visible, and share
+       the center line without creating horizontal page overflow.
+       ========================================================== */
+    @media (max-width: 767px) {
+      .roadmap-section {
+        width: 100% !important;
+        max-width: 100vw !important;
+        overflow: visible !important;
+        padding: 44px 0 54px !important;
+      }
+
+      .roadmap-section .container {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .roadmap-header {
+        margin-bottom: 32px !important;
+        padding: 0 4px !important;
+      }
+
+      .roadmap-header .section-title {
+        font-size: clamp(1.65rem, 7.2vw, 2.15rem) !important;
+        line-height: 1.15 !important;
+        margin: 14px 0 10px !important;
+      }
+
+      .roadmap-header .section-desc {
+        width: 100% !important;
+        max-width: 680px !important;
+        font-size: clamp(.76rem, 3.1vw, .9rem) !important;
+        line-height: 1.55 !important;
+      }
+
+      .roadmap-timeline {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        padding: 6px 0 8px !important;
+        overflow: visible !important;
+      }
+
+      .roadmap-line {
+        display: block !important;
+        position: absolute !important;
+        top: 0 !important;
+        bottom: 0 !important;
+        left: 50% !important;
+        width: 2px !important;
+        transform: translateX(-50%) !important;
+        z-index: 0 !important;
+      }
+
+      .roadmap-step,
+      .roadmap-step-left,
+      .roadmap-step-right {
+        position: relative !important;
+        box-sizing: border-box !important;
+        display: block !important;
+        width: 50% !important;
+        max-width: 50% !important;
+        margin: 0 !important;
+        padding-top: 14px !important;
+        padding-bottom: 14px !important;
+      }
+
+      .roadmap-step-left {
+        margin-left: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 12px !important;
+      }
+
+      .roadmap-step-right {
+        margin-left: 50% !important;
+        padding-left: 12px !important;
+        padding-right: 0 !important;
+      }
+
+      .roadmap-card {
+        position: relative !important;
+        z-index: 1 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        height: auto !important;
+        min-height: fit-content !important;
+        padding: 16px 13px !important;
+        border-radius: 12px !important;
+        overflow: visible !important;
+      }
+
+      .roadmap-step-number,
+      .roadmap-step-right .roadmap-step-number {
+        position: absolute !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        z-index: 3 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 30px !important;
+        height: 30px !important;
+        min-width: 30px !important;
+        margin: 0 !important;
+        font-size: .72rem !important;
+        border-width: 2px !important;
+        box-shadow: 0 0 0 4px var(--bg-main), 0 0 14px rgba(37,99,235,.28) !important;
+      }
+
+      .roadmap-step-left .roadmap-step-number {
+        left: auto !important;
+        right: -15px !important;
+      }
+
+      .roadmap-step-right .roadmap-step-number {
+        left: -15px !important;
+        right: auto !important;
+        box-shadow: 0 0 0 4px var(--bg-main), 0 0 14px rgba(34,197,94,.22) !important;
+      }
+
+      .roadmap-kicker {
+        display: inline-block !important;
+        max-width: 100% !important;
+        font-size: .58rem !important;
+        line-height: 1.25 !important;
+        letter-spacing: .8px !important;
+        margin-bottom: 6px !important;
+      }
+
+      .roadmap-card h3 {
+        font-size: clamp(.82rem, 3.6vw, 1rem) !important;
+        line-height: 1.28 !important;
+        margin: 0 0 7px !important;
+        overflow-wrap: anywhere !important;
+      }
+
+      .roadmap-card p {
+        font-size: clamp(.64rem, 2.8vw, .76rem) !important;
+        line-height: 1.48 !important;
+        overflow-wrap: anywhere !important;
+      }
+
+      .roadmap-cta {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: auto !important;
+        min-height: fit-content !important;
+        margin: 28px 0 0 !important;
+        padding: 20px 16px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 16px !important;
+        overflow: visible !important;
+      }
+
+      .roadmap-cta > div:first-child,
+      .roadmap-cta .country-next-step-actions {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      .roadmap-cta h3 {
+        font-size: clamp(1rem, 4.5vw, 1.18rem) !important;
+        line-height: 1.3 !important;
+      }
+
+      .roadmap-cta p {
+        font-size: .82rem !important;
+        line-height: 1.5 !important;
+      }
+
+      .roadmap-cta .country-next-step-actions {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+      }
+
+      .roadmap-cta .country-next-step-actions .btn {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        justify-content: center !important;
+        white-space: normal !important;
+        text-align: center !important;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .roadmap-section {
+        padding-top: 38px !important;
+      }
+
+      .roadmap-section .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+      }
+
+      .roadmap-step-left {
+        padding-right: 10px !important;
+      }
+
+      .roadmap-step-right {
+        padding-left: 10px !important;
+      }
+
+      .roadmap-card {
+        padding: 14px 11px !important;
+      }
+
+      .roadmap-card h3 {
+        font-size: .78rem !important;
+      }
+
+      .roadmap-card p {
+        font-size: .62rem !important;
+        line-height: 1.45 !important;
+      }
+
+      .roadmap-step-number,
+      .roadmap-step-right .roadmap-step-number {
+        width: 28px !important;
+        height: 28px !important;
+        min-width: 28px !important;
+        font-size: .68rem !important;
+      }
+
+      .roadmap-step-left .roadmap-step-number {
+        right: -14px !important;
+      }
+
+      .roadmap-step-right .roadmap-step-number {
+        left: -14px !important;
       }
     }
   `
@@ -3602,6 +4331,25 @@ export default function App() {
             </div>
 
             <a href="#team" className="nav-link" onClick={closeNav}>Our Team</a>
+
+            <div className="mobile-nav-actions" aria-label="Mobile navigation actions">
+              <a
+                href="#contact"
+                className="nav-consultation-btn"
+                onClick={closeNav}
+              >
+                <CalendarIcon size={16} />
+                <span>Book a Consultation</span>
+              </a>
+              <a
+                href="#calculator"
+                className="nav-eligibility-btn"
+                onClick={closeNav}
+              >
+                Check Your Eligibility
+              </a>
+              <ThemeToggle />
+            </div>
           </div>
 
           <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
