@@ -4256,6 +4256,61 @@ export default function App() {
         left: -14px !important;
       }
     }
+    /* MOBILE WIDTH LOCK — only prevents horizontal page dragging.
+       No desktop layout or existing component styles are changed. */
+    @media (max-width: 767px) {
+      html,
+      body,
+      #root {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        overflow-x: hidden !important;
+        overflow-x: clip !important;
+        overscroll-behavior-x: none !important;
+      }
+
+      body {
+        touch-action: pan-y !important;
+      }
+
+      #root {
+        position: relative;
+        isolation: isolate;
+      }
+
+      main,
+      header,
+      nav,
+      section,
+      footer,
+      .container,
+      .section-padding,
+      .hero-sec,
+      .roadmap-section,
+      .team-section,
+      .client-success-section,
+      .consultation-section {
+        max-width: 100% !important;
+        min-width: 0 !important;
+      }
+
+      img,
+      svg,
+      video,
+      canvas {
+        max-width: 100% !important;
+      }
+
+      input,
+      select,
+      textarea,
+      button {
+        max-width: 100% !important;
+      }
+    }
   `
 
   return (
