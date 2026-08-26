@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
 
 import niyatiPhoto from './niyati.png'
+import rakeshPhoto from './rakesh-rao.png'
+import natashaPhoto from './natasha.png'
 import prabhatPhoto from './prabhat.jpeg'
 import anujPhoto from './anuj.jpeg'
+
 
 const TEAM_MEMBERS = [
   {
@@ -13,29 +16,57 @@ const TEAM_MEMBERS = [
     specialization:
       'Specializes in Canada Express Entry and skilled worker pathways.',
     photo: niyatiPhoto,
-    linkedin: 'https://www.linkedin.com/company/cloystervisa/?viewAsMember=true'
+    linkedin:
+      'https://www.linkedin.com/company/cloystervisa/?viewAsMember=true'
   },
+
+  {
+    id: 'rakesh-rao',
+    name: 'Rakesh Rao',
+    role: 'Senior Immigration Consultant',
+    experience: '5+ Years Experience',
+    specialization:
+      'Provides professional immigration guidance, visa strategy and client consultation.',
+    photo: rakeshPhoto,
+    linkedin: 'https://www.linkedin.com/'
+  },
+
+  {
+    id: 'natasha',
+    name: 'Natasha',
+    role: 'Immigration Support Specialist',
+    experience: '3+ Years Experience',
+    specialization:
+      'Supports clients with immigration enquiries, documentation and application coordination.',
+    photo: natashaPhoto,
+    linkedin: 'https://www.linkedin.com/'
+  },
+
   {
     id: 'prabhat-kumar',
     name: 'Prabhat Kumar',
-    role: 'Technology & Immigration Advisor',
+    role: 'Immigration Consultant',
     experience: '6+ Years Experience',
     specialization:
-      'Combines engineering expertise with immigration guidance for skilled professionals, technology careers and Germany pathways.',
+      'Specializes in Germany immigration, Opportunity Card and skilled worker pathways.',
     photo: prabhatPhoto,
-    linkedin: 'https://www.linkedin.com/in/prabhat-kumar-1a3469128/'
+    linkedin:
+      'https://www.linkedin.com/in/prabhat-kumar-1a3469128/'
   },
+
   {
     id: 'anuj-kumar',
     name: 'Anuj Kumar',
-    role: 'Technology & Client Solutions Advisor',
+    role: 'Immigration Consultant',
     experience: '2+ Years Experience',
     specialization:
-      'Combines engineering knowledge with client support, documentation and technology-focused immigration coordination.',
+      'Specializes in client support, documentation and immigration coordination.',
     photo: anujPhoto,
-    linkedin: 'https://www.linkedin.com/in/anuj-kumar-83210a24a/'
+    linkedin:
+      'https://www.linkedin.com/in/anuj-kumar-83210a24/'
   }
 ]
+
 
 const LinkedInIcon = ({ size = 18 }) => (
   <svg
@@ -49,8 +80,11 @@ const LinkedInIcon = ({ size = 18 }) => (
   </svg>
 )
 
+
 export default function Team() {
+
   const [activeSlide, setActiveSlide] = useState(0)
+
 
   const handleScroll = (event) => {
     const container = event.currentTarget
@@ -60,9 +94,13 @@ export default function Team() {
     const index = Math.round(scrollLeft / cardWidth)
 
     setActiveSlide(
-      Math.max(0, Math.min(index, TEAM_MEMBERS.length - 1))
+      Math.max(
+        0,
+        Math.min(index, TEAM_MEMBERS.length - 1)
+      )
     )
   }
+
 
   const goToSlide = (index) => {
     const container = document.querySelector('.team-mobile-slider')
@@ -77,11 +115,16 @@ export default function Team() {
     setActiveSlide(index)
   }
 
+
   return (
     <section id="team" className="team-section">
+
       <div className="container">
 
-        {/* Section Header */}
+        {/* =====================================================
+            SECTION HEADER
+        ====================================================== */}
+
         <div
           className="section-header"
           style={{
@@ -89,6 +132,7 @@ export default function Team() {
             marginBottom: '42px'
           }}
         >
+
           <span
             className="section-tag"
             style={{
@@ -105,6 +149,7 @@ export default function Team() {
             OUR TEAM
           </span>
 
+
           <h2
             className="section-title text-gradient"
             style={{
@@ -114,6 +159,7 @@ export default function Team() {
           >
             Meet Our Team
           </h2>
+
 
           <p
             className="section-desc"
@@ -127,12 +173,16 @@ export default function Team() {
             Meet the people behind CloysterVisa and connect with our
             immigration support team.
           </p>
+
         </div>
+
 
         {/* =====================================================
             DESKTOP TEAM
         ====================================================== */}
+
         <div className="team-desktop">
+
           <div
             className="team-grid"
             style={{
@@ -140,27 +190,34 @@ export default function Team() {
               justifyContent: 'center',
               gap: '22px',
               maxWidth: '1000px',
-              margin: '0 auto'
+              margin: '0 auto',
+              flexWrap: 'wrap'
             }}
           >
+
             {TEAM_MEMBERS.map((member) => (
               <TeamCard
                 key={member.id}
                 member={member}
               />
             ))}
+
           </div>
+
         </div>
+
 
         {/* =====================================================
             MOBILE TEAM SLIDER
         ====================================================== */}
+
         <div className="team-mobile">
 
           <div
             className="team-mobile-slider"
             onScroll={handleScroll}
           >
+
             {TEAM_MEMBERS.map((member) => (
               <div
                 className="team-mobile-slide"
@@ -169,13 +226,17 @@ export default function Team() {
                 <TeamCard member={member} />
               </div>
             ))}
+
           </div>
 
+
           {/* Slider Dots */}
+
           <div
             className="team-slider-dots"
             aria-label="Team member slides"
           >
+
             {TEAM_MEMBERS.map((member, index) => (
               <button
                 key={member.id}
@@ -190,19 +251,29 @@ export default function Team() {
                 }
               />
             ))}
+
           </div>
 
+
           {/* Swipe Hint */}
+
           <div className="team-swipe-hint">
+
             <span>Swipe</span>
-            <span className="team-swipe-arrow">→</span>
+
+            <span className="team-swipe-arrow">
+              →
+            </span>
+
           </div>
 
         </div>
 
+
         {/* =====================================================
             STYLES
         ====================================================== */}
+
         <style>{`
 
           /* -----------------------------------------------
@@ -219,6 +290,7 @@ export default function Team() {
             flex-direction: column;
             align-items: center;
           }
+
 
           .team-avatar {
             width: 126px;
@@ -237,12 +309,14 @@ export default function Team() {
               0 0 0 5px rgba(59,130,246,0.08);
           }
 
+
           .team-avatar img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
           }
+
 
           .team-social-link {
             margin-top: auto;
@@ -259,6 +333,7 @@ export default function Team() {
             transition: all 0.2s ease;
           }
 
+
           .team-social-link:hover {
             transform: translateY(-2px);
             background: rgba(37,99,235,0.16) !important;
@@ -273,6 +348,7 @@ export default function Team() {
           .team-desktop {
             display: block;
           }
+
 
           .team-mobile {
             display: none;
@@ -289,10 +365,12 @@ export default function Team() {
               display: none;
             }
 
+
             .team-mobile {
               display: block;
               width: 100%;
             }
+
 
             .team-mobile-slider {
               width: 100%;
@@ -306,9 +384,11 @@ export default function Team() {
               overscroll-behavior-x: contain;
             }
 
+
             .team-mobile-slider::-webkit-scrollbar {
               display: none;
             }
+
 
             .team-mobile-slide {
               flex: 0 0 100%;
@@ -323,6 +403,7 @@ export default function Team() {
 
               padding: 0 12px;
             }
+
 
             .team-mobile-slide .team-card {
               width: 100%;
@@ -344,6 +425,7 @@ export default function Team() {
               margin-top: 20px;
             }
 
+
             .team-slider-dot {
               width: 8px;
               height: 8px;
@@ -358,12 +440,14 @@ export default function Team() {
                 transform 0.25s ease;
             }
 
+
             .team-slider-dot.active {
               width: 22px;
               border-radius: 999px;
               background: #3b82f6;
               transform: scale(1.05);
             }
+
 
             .team-slider-dot:focus-visible {
               outline: 2px solid #60a5fa;
@@ -386,12 +470,15 @@ export default function Team() {
               opacity: 0.7;
             }
 
+
             .team-swipe-arrow {
               font-size: 1rem;
               animation: teamSwipeArrow 1.5s ease-in-out infinite;
             }
 
+
             @keyframes teamSwipeArrow {
+
               0%,
               100% {
                 transform: translateX(0);
@@ -400,7 +487,9 @@ export default function Team() {
               50% {
                 transform: translateX(5px);
               }
+
             }
+
           }
 
 
@@ -414,10 +503,12 @@ export default function Team() {
               padding: 0 8px;
             }
 
+
             .team-mobile-slide .team-card {
               max-width: 320px;
               padding: 26px 20px 24px;
             }
+
 
             .team-avatar {
               width: 116px;
@@ -425,11 +516,13 @@ export default function Team() {
               min-width: 116px;
               min-height: 116px;
             }
+
           }
 
         `}</style>
 
       </div>
+
     </section>
   )
 }
@@ -440,6 +533,7 @@ export default function Team() {
 ========================================================== */
 
 function TeamCard({ member }) {
+
   const initials = member.name
     .split(' ')
     .map((part) => part[0])
@@ -447,20 +541,27 @@ function TeamCard({ member }) {
     .slice(0, 2)
     .toUpperCase()
 
+
   return (
+
     <article className="team-card glass-panel">
 
       {/* Profile Photo */}
+
       <div
         className="team-avatar"
         aria-label={`${member.name} profile photo`}
       >
+
         {member.photo ? (
+
           <img
             src={member.photo}
             alt={`${member.name} - ${member.role}`}
           />
+
         ) : (
+
           <span
             style={{
               color: '#60a5fa',
@@ -470,11 +571,14 @@ function TeamCard({ member }) {
           >
             {initials}
           </span>
+
         )}
+
       </div>
 
 
       {/* Name */}
+
       <h3
         style={{
           margin: '0 0 6px',
@@ -488,6 +592,7 @@ function TeamCard({ member }) {
 
 
       {/* Role */}
+
       <p
         style={{
           margin: '0 0 12px',
@@ -500,7 +605,9 @@ function TeamCard({ member }) {
 
 
       {/* Experience */}
+
       {member.experience && (
+
         <span
           style={{
             display: 'inline-flex',
@@ -518,11 +625,14 @@ function TeamCard({ member }) {
         >
           {member.experience}
         </span>
+
       )}
 
 
       {/* Specialization */}
+
       {member.specialization && (
+
         <p
           style={{
             margin: '0 auto 20px',
@@ -534,10 +644,12 @@ function TeamCard({ member }) {
         >
           {member.specialization}
         </p>
+
       )}
 
 
       {/* LinkedIn */}
+
       <a
         className="team-social-link"
         href={member.linkedin}
@@ -549,5 +661,6 @@ function TeamCard({ member }) {
       </a>
 
     </article>
+
   )
 }
