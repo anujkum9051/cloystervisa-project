@@ -7,6 +7,7 @@ import googleBusinessQr from './google-business-qr-only.png'
 import Team from './Team'
 import AnnouncementBar from './AnnouncementBar'
 import ThemeToggle from './ThemeToggle'
+import ClientSuccessStories from './ClientSuccessStories'
 
 // EmailJS configuration
 // IMPORTANT: The EmailJS template below should be the template that sends
@@ -6052,57 +6053,11 @@ export default function App() {
       {/* MEET OUR TEAM — latest client update */}
       <Team />
 
-      {/* CLIENT SUCCESS — kept at the bottom, immediately before the footer */}
-      <section id="client-success" className="client-success-section">
-        <div className="container">
-          <div className="section-header" style={{ textAlign: 'center', marginBottom: '42px' }}>
-            <span className="section-tag" style={{ background: 'rgba(34,197,94,0.12)', color: '#22c55e', padding: '7px 14px', borderRadius: '999px', fontSize: '0.8rem', fontWeight: '700', letterSpacing: '1px' }}>
-              CLIENT SUCCESS
-            </span>
-            <h2 className="section-title text-gradient" style={{ fontSize: '2.45rem', margin: '16px 0 12px' }}>
-              Client Success Stories
-            </h2>
-            <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '720px', margin: '0 auto', lineHeight: '1.7' }}>
-              Structured, destination-focused support designed to make your immigration journey clearer from the first assessment through the next stage.
-            </p>
-          </div>
+      {/* CLIENT SUCCESS STORIES */}
+         <ClientSuccessStories />
 
-          <div className="client-success-shell">
-            <div className="client-success-panel glass-panel">
-              <div className="client-success-quote-mark" aria-hidden="true">“</div>
-              <h3>Personalized guidance, transparent communication, and practical support at every stage of the journey.</h3>
-              <p>
-                CloysterVisa supports clients across work, study and permanent residency pathways with profile assessment, documentation guidance, application preparation and post-submission support.
-              </p>
 
-              <div className="client-success-stats">
-                <div className="client-success-stat">
-                  <strong>128+</strong>
-                  <span>Total visa approvals</span>
-                </div>
-                <div className="client-success-stat">
-                  <strong>5 Destinations</strong>
-                  <span>Canada, Australia, Germany, UK and New Zealand</span>
-                </div>
-                <div className="client-success-stat">
-                  <strong>End-to-End</strong>
-                  <span>Profile, documents, application and post-submission guidance</span>
-                </div>
-              </div>
-
-              <div style={{ marginTop: '30px', display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                <a href="#contact" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '11px 18px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
-                  Book a Consultation <ArrowRightIcon />
-                </a>
-                <a href="#calculator" className="btn btn-secondary" style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '11px 18px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
-                  Assess My Profile <ArrowRightIcon />
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      
       {/* FLOATING WHATSAPP BUTTON */}
       <a
         className="whatsapp-float"
