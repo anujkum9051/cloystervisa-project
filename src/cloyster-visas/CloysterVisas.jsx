@@ -9,6 +9,9 @@ import AnnouncementBar from './AnnouncementBar'
 import ThemeToggle from './ThemeToggle'
 import ClientSuccessStories from './ClientSuccessStories'
 
+import PartnerWithUs from './partner-with-us/PartnerWithUs';
+import StudyVisa from './study-visa/StudyVisa';
+
 // EmailJS configuration
 // IMPORTANT: The EmailJS template below should be the template that sends
 // the consultation request to cloysterimmigration@gmail.com.
@@ -313,6 +316,71 @@ const TEAM_MEMBERS = [
   //   linkedin: 'https://www.linkedin.com/in/.../'
   // }
 ]
+
+
+
+// ============================================================
+// NEW: Study Visa & Partnership content
+// These additions are self-contained so existing sections/components
+// remain unchanged.
+// ============================================================
+const STUDY_VISA_DESTINATIONS = [
+  { id: 'study-italy', name: 'Italy', region: 'Europe', flag: 'https://flagcdn.com/w40/it.png', description: 'Study in Italy with guidance on course selection, application documentation, visa preparation and pre-departure planning.' },
+  { id: 'study-canada', name: 'Canada', region: 'North America', flag: 'https://flagcdn.com/w40/ca.png', description: 'Explore Canadian study pathways with structured support for admissions, documentation, financial requirements and study visa preparation.' },
+  { id: 'study-australia', name: 'Australia', region: 'Oceania', flag: 'https://flagcdn.com/w40/au.png', description: 'Plan your Australian education journey with support from course selection through application and visa-readiness preparation.' },
+  { id: 'study-germany', name: 'Germany', region: 'Europe', flag: 'https://flagcdn.com/w40/de.png', description: 'Get guidance for studying in Germany, including education planning, application documentation and student visa preparation.' },
+  { id: 'study-uk', name: 'United Kingdom', region: 'Europe', flag: 'https://flagcdn.com/w40/gb.png', description: 'Explore UK study options with assistance across institution applications, documentation and student visa preparation.' },
+  { id: 'study-new-zealand', name: 'New Zealand', region: 'Oceania', flag: 'https://flagcdn.com/w40/nz.png', description: 'Plan a New Zealand study pathway with practical guidance on applications, supporting documents and visa preparation.' }
+]
+
+// Image-ready slots for the 3 partnership agreements and 1 certificate.
+// Replace the empty image values with the real files when they are supplied.
+
+
+const StudyVisaSection = () => (
+  <section id="study-visa" className="section-padding study-visa-section" style={{ padding: '76px 0', background: 'var(--bg-alt)' }}>
+    <div className="container">
+      <div className="section-header study-visa-header" style={{ textAlign: 'center', marginBottom: '42px' }}>
+        <span className="section-tag" style={{ background: 'var(--bg-card)', color: 'var(--accent-blue)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>
+          International Education
+        </span>
+        <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Study Visa</h2>
+        <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '760px', margin: '0 auto', lineHeight: 1.7 }}>
+          A dedicated study pathway for students planning to pursue education abroad, with destination-focused guidance from course planning through visa preparation.
+        </p>
+      </div>
+
+      <div className="study-visa-intro glass-panel">
+        <div>
+          <span className="study-support-tag">STUDY ABROAD SUPPORT</span>
+          <h3>Choose your study destination</h3>
+          <p>Select a country below to explore the study visa support pathway. Requirements vary by institution, course, country and individual profile.</p>
+        </div>
+        <a href="#contact" className="btn btn-primary study-visa-cta">Discuss Your Study Plan <ArrowRightIcon /></a>
+      </div>
+
+      <div className="study-visa-grid">
+        {STUDY_VISA_DESTINATIONS.map((destination) => (
+          <article className="study-visa-card glass-panel" key={destination.id}>
+            <div className="study-visa-card-top">
+              <span className="study-country-flag-wrap">
+                <img src={destination.flag} alt={`${destination.name} flag`} className="study-country-flag" />
+              </span>
+              <div>
+                <span className="study-country-region">{destination.region}</span>
+                <h3>{destination.name}</h3>
+              </div>
+            </div>
+            <p>{destination.description}</p>
+            <a href="#contact" className="study-visa-card-link">Explore {destination.name} <ArrowRightIcon size={16} /></a>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+)
+
+
 
 const INSTAGRAM_URL = 'https://www.instagram.com/cloystervisa/'
 const LINKEDIN_URL = 'https://www.linkedin.com/company/cloystervisa/?viewAsMember=true'
@@ -4771,6 +4839,73 @@ export default function App() {
         max-width: 100% !important;
       }
     }
+
+    /* ==========================================================
+       NEW SECTIONS — STUDY VISA + PARTNER WITH US
+       Scoped styles only; existing sections remain unchanged.
+       ========================================================== */
+    .study-visa-intro,
+    .partnership-cta {
+      padding: 24px 26px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+
+    .study-visa-intro h3,
+    .partnership-cta h3 { margin: 0 0 8px; color: var(--text-primary); font-size: 1.18rem; }
+    .study-visa-intro p,
+    .partnership-cta p { margin: 0; color: var(--text-secondary); line-height: 1.65; font-size: .9rem; max-width: 780px; }
+    .study-visa-cta,
+    .partnership-cta .btn { flex: 0 0 auto; text-decoration: none; white-space: nowrap; }
+
+    .study-visa-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+    .study-visa-card { padding: 22px; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+    .study-visa-card:hover,
+    .partnership-card:hover { transform: translateY(-3px); border-color: rgba(59,130,246,.38) !important; box-shadow: 0 16px 36px rgba(0,0,0,.18); }
+    .study-visa-card-top { display: flex; align-items: center; gap: 13px; margin-bottom: 15px; }
+    .study-country-flag-wrap { width: 46px; height: 46px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; background: rgba(37,99,235,.08); border: 1px solid var(--border-color); flex: 0 0 auto; }
+    .study-country-flag { width: 27px; height: auto; max-height: 20px; object-fit: contain; border-radius: 2px; }
+    .study-country-region { display: block; color: var(--accent-blue); text-transform: uppercase; letter-spacing: .08em; font-size: .67rem; font-weight: 700; margin-bottom: 3px; }
+    .study-visa-card h3 { margin: 0; color: var(--text-primary); font-size: 1.08rem; }
+    .study-visa-card p { margin: 0 0 16px; color: var(--text-secondary); line-height: 1.65; font-size: .86rem; }
+    .study-visa-card-link { display: inline-flex; align-items: center; gap: 6px; color: var(--accent-blue); text-decoration: none; font-size: .84rem; font-weight: 700; }
+
+    .partnership-showcase-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+    .partnership-card { overflow: hidden; transition: transform .2s ease, border-color .2s ease, box-shadow .2s ease; }
+    .partnership-media { width: 100%; aspect-ratio: 4 / 3; background: var(--bg-alt); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .partnership-media > img { width: 100%; height: 100%; object-fit: contain; padding: 16px; display: block; }
+    .partnership-placeholder { width: calc(100% - 28px); height: calc(100% - 28px); border: 1px dashed rgba(59,130,246,.32); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; background: rgba(37,99,235,.045); text-align: center; }
+    .partnership-placeholder-mark { color: var(--accent-blue); font-size: .72rem; font-weight: 800; letter-spacing: .12em; }
+    .partnership-placeholder-note { color: var(--text-muted); font-size: .72rem; }
+    .partnership-card-content { padding: 18px 18px 20px; }
+    .partnership-type,
+    .partnership-cta-kicker { display: inline-flex; color: var(--accent-blue); font-size: .67rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+    .partnership-card h3 { margin: 7px 0 7px; color: var(--text-primary); font-size: 1rem; line-height: 1.35; }
+    .partnership-card p { margin: 0; color: var(--text-secondary); font-size: .82rem; line-height: 1.6; }
+    .partnership-cta { margin: 24px 0 0; }
+    .partnership-cta h3 { font-size: 1.1rem; margin-top: 6px; }
+
+    [data-theme="light"] .study-visa-section,
+    [data-theme="light"] .partnership-section { background: #f8fafc !important; }
+    [data-theme="light"] .partnership-placeholder { background: rgba(37,99,235,.035); border-color: rgba(37,99,235,.25); }
+
+    @media (max-width: 980px) {
+      .study-visa-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .partnership-showcase-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 700px) {
+      .study-visa-intro,
+      .partnership-cta { align-items: stretch; flex-direction: column; }
+      .study-visa-cta,
+      .partnership-cta .btn { width: 100%; justify-content: center; }
+      .study-visa-grid,
+      .partnership-showcase-grid { grid-template-columns: 1fr; }
+    }
+
   `
 
   return (
@@ -4838,12 +4973,15 @@ export default function App() {
                 <span className="nav-chevron" aria-hidden="true">⌄</span>
               </button>
               <div className="nav-dropdown-menu">
+                <a href="#study-visa" onClick={closeNav}>Study Visa</a>
                 <a href="#services" onClick={closeNav}>Visa Consultation</a>
                 <a href="#services" onClick={closeNav}>Document & Application Support</a>
                 <a href="#services" onClick={closeNav}>Interview Preparation</a>
                 <a href="#services" onClick={closeNav}>Post-Submission Guidance</a>
               </div>
             </div>
+
+            <a href="#partner-with-us" className="nav-link" onClick={closeNav}>Partner With Us</a>
 
             <a href="#team" className="nav-link" onClick={closeNav}>Our Team</a>
 
@@ -5392,6 +5530,10 @@ export default function App() {
           </div>
         </div>
       </section>
+
+      {/* NEW: DEDICATED STUDY VISA SECTION */}
+      <StudyVisa />
+
 
       {/* VISA ROADMAP — placed directly below Advisory Services */}
       <section id="visa-roadmap" className="section-padding roadmap-section" style={{ padding: '76px 0', background: 'var(--bg-main)' }}>
@@ -6058,7 +6200,9 @@ export default function App() {
 
 
       
-      {/* FLOATING WHATSAPP BUTTON */}
+      {/* NEW: PARTNERSHIPS & CERTIFICATION SHOWCASE */
+              <PartnerWithUs />
+      /* FLOATING WHATSAPP BUTTON */}
       <a
         className="whatsapp-float"
         href="https://wa.me/917027466559?text=Hello%20CloysterVisa,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
@@ -6117,6 +6261,8 @@ export default function App() {
               <li><a href="#destinations">Destinations</a></li>
               <li><a href="#services">Advisory Services</a></li>
               <li><a href="#team">Meet Our Team</a></li>
+              <li><a href="#study-visa">Study Visa</a></li>
+              <li><a href="#partner-with-us">Partner With Us</a></li>
               <li><a href="#calculator">Eligibility Points Check</a></li>
               <li><a href="#contact" className="footer-accent-link">Book a Consultation</a></li>
             </ul>
