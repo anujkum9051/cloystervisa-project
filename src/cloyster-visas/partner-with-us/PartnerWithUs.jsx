@@ -664,9 +664,15 @@ const PartnerWithUs = () => {
               </p>
             </div>
 
-            <a href="#contact" className="btn btn-primary">
-              Partner With Us
-            </a>
+            <a
+  href="https://wa.me/919266515362?text=Hello%20CloysterVisa%2C%20I%E2%80%99m%20interested%20in%20partnering%20with%20you."
+  target="_blank"
+  rel="noopener noreferrer"
+  className="btn btn-primary"
+>
+  Partner With Us
+</a>
+        
           </div>
         </div>
       </section>
