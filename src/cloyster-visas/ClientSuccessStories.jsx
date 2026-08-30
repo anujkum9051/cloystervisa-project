@@ -620,8 +620,8 @@ export default function ClientSuccessStories() {
             </p>
 
             <div className="client-success-rating-summary">
-              <span className="client-success-summary-stars">★★★★★</span>
-              <span className="client-success-summary-rating">5.0</span>
+              <span className="client-success-summary-stars">★★★★⯨</span>
+              <span className="client-success-summary-rating">4.5</span>
               <span className="client-success-summary-source">
                 Google Reviews
               </span>
