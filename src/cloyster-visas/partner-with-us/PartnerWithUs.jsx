@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import certificateImage from './cloyster-visa-certificate-1.png'
 
 const ArrowIcon = ({ direction = 'right', size = 16 }) => (
   <svg
@@ -51,17 +52,36 @@ const PARTNERSHIP_SHOWCASE = [
   {
     id: 'certification-01',
     type: 'Certification',
-    title: 'Professional Certification',
-    description: 'Certificate received by CloysterVisa.',
-    image: '',
+    title: 'Authorized Partner — Russian Education Agency',
+    description: 'Official partnership certificate issued to Cloyster Visa.',
+    image: certificateImage,
   },
 ]
 
 const PartnerWithUs = () => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const [viewingImage, setViewingImage] = useState(null)
   const touchStartX = useRef(null)
   const total = PARTNERSHIP_SHOWCASE.length
+
+  useEffect(() => {
+    if (!viewingImage) return undefined
+
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        setViewingImage(null)
+      }
+    }
+
+    document.body.style.overflow = 'hidden'
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      document.body.style.overflow = ''
+      window.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [viewingImage])
 
   const goToSlide = (index) => {
     setActiveIndex((index + total) % total)
@@ -198,7 +218,7 @@ const PartnerWithUs = () => {
 
         .partnership-media {
           width: 100%;
-          height: clamp(185px, 31vw, 250px);
+          height: clamp(220px, 34vw, 360px);
           border-radius: 13px;
           overflow: hidden;
           background: var(--bg-main);
@@ -391,6 +411,91 @@ const PartnerWithUs = () => {
           white-space: nowrap;
         }
 
+        .partnership-media-button {
+          width: 100%;
+          height: 100%;
+          padding: 0;
+          display: block;
+          border: 0;
+          background: transparent;
+          cursor: zoom-in;
+        }
+
+        .partnership-media-button:focus-visible {
+          outline: 2px solid var(--accent-blue);
+          outline-offset: -3px;
+        }
+
+        .partnership-lightbox {
+          position: fixed;
+          inset: 0;
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+          box-sizing: border-box;
+          background: rgba(3, 8, 20, 0.92);
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
+
+        .partnership-lightbox-close {
+          position: fixed;
+          top: 18px;
+          right: 18px;
+          z-index: 2;
+          width: 42px;
+          height: 42px;
+          padding: 0;
+          display: grid;
+          place-items: center;
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          border-radius: 50%;
+          background: rgba(15, 23, 42, 0.88);
+          color: #ffffff;
+          font-size: 25px;
+          line-height: 1;
+          cursor: pointer;
+        }
+
+        .partnership-lightbox-close:hover {
+          border-color: var(--accent-blue);
+          color: var(--accent-blue);
+        }
+
+        .partnership-lightbox-image {
+          display: block;
+          max-width: min(94vw, 1400px);
+          max-height: 92vh;
+          width: auto;
+          height: auto;
+          object-fit: contain;
+          border-radius: 8px;
+          box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+          user-select: none;
+          -webkit-user-drag: none;
+        }
+
+        @media (max-width: 700px) {
+          .partnership-lightbox {
+            padding: 14px;
+          }
+
+          .partnership-lightbox-close {
+            top: 12px;
+            right: 12px;
+            width: 38px;
+            height: 38px;
+            font-size: 22px;
+          }
+
+          .partnership-lightbox-image {
+            max-width: 96vw;
+            max-height: 88vh;
+            border-radius: 5px;
+          }
+
         @media (max-width: 700px) {
           .partnership-section {
             padding: 54px 0 60px;
@@ -425,7 +530,7 @@ const PartnerWithUs = () => {
           }
 
           .partnership-media {
-            height: 175px;
+            height: 250px;
             border-radius: 11px;
           }
 
@@ -503,7 +608,7 @@ const PartnerWithUs = () => {
           }
 
           .partnership-media {
-            height: 155px;
+            height: 240px;
           }
 
           .partnership-content h3 {
@@ -571,7 +676,19 @@ const PartnerWithUs = () => {
                     <article className="partnership-card">
                       <div className="partnership-media">
                         {item.image ? (
-                          <img src={item.image} alt={item.title} />
+                          <button
+                            type="button"
+                            className="partnership-media-button"
+                            onClick={() =>
+                              setViewingImage({
+                                src: item.image,
+                                title: item.title,
+                              })
+                            }
+                            aria-label={`View ${item.title} full size`}
+                          >
+                            <img src={item.image} alt={item.title} />
+                          </button>
                         ) : (
                           <div
                             className="partnership-placeholder"
@@ -676,6 +793,32 @@ const PartnerWithUs = () => {
           </div>
         </div>
       </section>
+
+      {viewingImage && (
+        <div
+          className="partnership-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${viewingImage.title} full-size view`}
+          onClick={() => setViewingImage(null)}
+        >
+          <button
+            type="button"
+            className="partnership-lightbox-close"
+            onClick={() => setViewingImage(null)}
+            aria-label="Close certificate viewer"
+          >
+            ×
+          </button>
+
+          <img
+            className="partnership-lightbox-image"
+            src={viewingImage.src}
+            alt={viewingImage.title}
+            onClick={(event) => event.stopPropagation()}
+          />
+        </div>
+      )}
     </>
   )
 }
