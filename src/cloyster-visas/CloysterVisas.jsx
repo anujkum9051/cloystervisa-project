@@ -6207,8 +6207,135 @@ export default function App() {
       {/* NEW: PARTNERSHIPS & CERTIFICATION SHOWCASE */}
       <PartnerWithUs />
 
-      {/* BLOG — added as a standalone themed section */}
-      <section id="blog">
+
+      {/* BLOG — compact single-page carousel section */}
+      <section id="blog" className="cv-blog-compact-home">
+        <style>{`
+          .cv-blog-compact-home {
+            width: 100%;
+            overflow: hidden;
+          }
+
+          .cv-blog-compact-home .cv-blog-page {
+            min-height: auto !important;
+            padding: 58px 24px 56px !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-hero {
+            margin-bottom: 28px !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-hero h1 {
+            font-size: clamp(30px, 4vw, 44px) !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-hero p {
+            max-width: 650px !important;
+            font-size: 14px !important;
+            line-height: 1.6 !important;
+            margin-top: 12px !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-toolbar {
+            margin-bottom: 24px !important;
+          }
+
+          /* Horizontal swipe row: cards do not stack vertically on mobile. */
+          .cv-blog-compact-home .cv-blog-grid {
+            display: flex !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+            gap: 16px !important;
+            padding: 3px 2px 12px !important;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+          }
+
+          .cv-blog-compact-home .cv-blog-card {
+            flex: 0 0 330px !important;
+            width: 330px !important;
+            scroll-snap-align: start;
+          }
+
+          .cv-blog-compact-home .cv-blog-card-visual {
+            height: 145px !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-card-body {
+            padding: 18px !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-card-body h3 {
+            font-size: 17px !important;
+            margin-top: 11px !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-card-body p {
+            font-size: 12.5px !important;
+            line-height: 1.6 !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-read-more {
+            margin-top: 14px !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-section-heading {
+            margin-bottom: 16px !important;
+          }
+
+          /* Hide the large featured block on the homepage; the card row is the
+             compact Blog preview. The full content remains inside Blog.jsx. */
+          .cv-blog-compact-home .cv-blog-featured {
+            display: none !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-cta {
+            margin-top: 30px !important;
+            padding: 24px !important;
+          }
+
+          .cv-blog-compact-home .cv-blog-cta h2 {
+            font-size: 22px !important;
+          }
+
+          @media (max-width: 680px) {
+            .cv-blog-compact-home .cv-blog-page {
+              padding: 48px 16px 48px !important;
+            }
+
+            .cv-blog-compact-home .cv-blog-toolbar {
+              padding: 10px !important;
+            }
+
+            .cv-blog-compact-home .cv-blog-categories {
+              display: flex !important;
+              flex-wrap: nowrap !important;
+              overflow-x: auto !important;
+              justify-content: flex-start !important;
+              padding-bottom: 2px;
+            }
+
+            .cv-blog-compact-home .cv-blog-category-btn {
+              width: auto !important;
+              flex: 0 0 auto;
+            }
+
+            .cv-blog-compact-home .cv-blog-card {
+              flex-basis: 285px !important;
+              width: 285px !important;
+            }
+
+            .cv-blog-compact-home .cv-blog-card-visual {
+              height: 125px !important;
+            }
+
+            .cv-blog-compact-home .cv-blog-cta {
+              padding: 22px 18px !important;
+            }
+          }
+        `}</style>
+
         <Blog />
       </section>
 
