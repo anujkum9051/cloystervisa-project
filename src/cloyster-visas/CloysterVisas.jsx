@@ -9,8 +9,10 @@ import AnnouncementBar from './AnnouncementBar'
 import ThemeToggle from './ThemeToggle'
 import ClientSuccessStories from './ClientSuccessStories'
 
+
 import PartnerWithUs from './partner-with-us/PartnerWithUs';
 import StudyVisa from './study-visa/StudyVisa';
+import Blog from './blog/Blog';
 
 // EmailJS configuration
 // IMPORTANT: The EmailJS template below should be the template that sends
@@ -4983,6 +4985,8 @@ export default function App() {
 
             <a href="#partner-with-us" className="nav-link" onClick={closeNav}>Partner With Us</a>
 
+            <a href="#blog" className="nav-link" onClick={closeNav}>Blog</a>
+
             <a href="#team" className="nav-link" onClick={closeNav}>Our Team</a>
 
             <div className="mobile-nav-actions" aria-label="Mobile navigation actions">
@@ -6200,9 +6204,15 @@ export default function App() {
 
 
       
-      {/* NEW: PARTNERSHIPS & CERTIFICATION SHOWCASE */
-              <PartnerWithUs />
-      /* FLOATING WHATSAPP BUTTON */}
+      {/* NEW: PARTNERSHIPS & CERTIFICATION SHOWCASE */}
+      <PartnerWithUs />
+
+      {/* BLOG — added as a standalone themed section */}
+      <section id="blog">
+        <Blog />
+      </section>
+
+      {/* FLOATING WHATSAPP BUTTON */}
       <a
         className="whatsapp-float"
         href="https://wa.me/917027466559?text=Hello%20CloysterVisa,%20I%20would%20like%20to%20inquire%20about%20visa%20consultation."
@@ -6263,6 +6273,7 @@ export default function App() {
               <li><a href="#team">Meet Our Team</a></li>
               <li><a href="#study-visa">Study Visa</a></li>
               <li><a href="#partner-with-us">Partner With Us</a></li>
+              <li><a href="#blog">Blog</a></li>
               <li><a href="#calculator">Eligibility Points Check</a></li>
               <li><a href="#contact" className="footer-accent-link">Book a Consultation</a></li>
             </ul>
