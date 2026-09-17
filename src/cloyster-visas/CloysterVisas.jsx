@@ -358,7 +358,7 @@ const StudyVisaSection = () => (
           <h3>Choose your study destination</h3>
           <p>Select a country below to explore the study visa support pathway. Requirements vary by institution, course, country and individual profile.</p>
         </div>
-        <a href="#contact" className="btn btn-primary study-visa-cta">Discuss Your Study Plan <ArrowRightIcon /></a>
+        <a href={sectionHref("#contact")} className="btn btn-primary study-visa-cta">Discuss Your Study Plan <ArrowRightIcon /></a>
       </div>
 
       <div className="study-visa-grid">
@@ -374,7 +374,7 @@ const StudyVisaSection = () => (
               </div>
             </div>
             <p>{destination.description}</p>
-            <a href="#contact" className="study-visa-card-link">Explore {destination.name} <ArrowRightIcon size={16} /></a>
+            <a href={sectionHref("#contact")} className="study-visa-card-link">Explore {destination.name} <ArrowRightIcon size={16} /></a>
           </article>
         ))}
       </div>
@@ -815,7 +815,13 @@ export default function App() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [openNavDropdown, setOpenNavDropdown] = useState(null)
-  
+
+  // Blog is a standalone route. On /blog and /blog/:slug the homepage body is
+  // replaced by Blog; the normal CloysterVisa header, WhatsApp button and footer remain.
+  const isBlogRoute =
+    window.location.pathname === '/blog' ||
+    window.location.pathname.startsWith('/blog/')
+  const sectionHref = (hash) => (isBlogRoute ? `/${hash}` : hash)
 
   const countries = staticCountriesData
 
@@ -826,17 +832,32 @@ export default function App() {
   const [activeModal, setActiveModal] = useState(null)
   const [activeLegalModal, setActiveLegalModal] = useState(null)
 
-  // Eligibility Calculator State
-  const [calcStep, setCalcStep] = useState(1)
-  const [calcData, setCalcData] = useState({
-    destination: 'canada',
-    visaType: 'pr',
-    age: '25-32',
-    education: 'masters',
-    experience: '3-5',
-    englishScore: 'clb9'
+  // Immigration Eligibility Calculator State
+  // Canada = Federal Skilled Worker (FSW) 100-point selection grid.
+  // Australia = skilled migration points test for subclasses 189/190/491.
+  const [calculatorCountry, setCalculatorCountry] = useState('canada')
+  const [canadaCalc, setCanadaCalc] = useState({
+    age: '18-35',
+    workExperience: '1',
+    education: 'bachelors',
+    firstLanguageSpeaking: '6',
+    firstLanguageListening: '6',
+    firstLanguageReading: '6',
+    firstLanguageWriting: '6',
+    secondLanguage: '0',
+    arrangedEmployment: '0',
+    adaptability: '0'
   })
-  const [calcScore, setCalcScore] = useState(75)
+  const [australiaCalc, setAustraliaCalc] = useState({
+    visa: '189',
+    age: '25-32',
+    english: 'competent',
+    overseasExperience: '0',
+    australianExperience: '0',
+    education: 'bachelor'
+  })
+  const [calcScore, setCalcScore] = useState(0)
+  const [calcResult, setCalcResult] = useState(null)
 
   // Booking Form State
   const [bookingSubmitted, setBookingSubmitted] = useState(false)
@@ -891,29 +912,136 @@ export default function App() {
     setMeta('meta[property=\"og:title\"]', 'property', 'CloysterVisa | Immigration & Visa Consultancy')
   }, [])
 
-  // Calculate Eligibility Score Client-Side
+  // Calculate official-style preliminary scores client-side.
+  // These are screening calculators only; they do not determine eligibility,
+  // invitation rounds, admissibility, or a final immigration decision.
+  const calculateCanadaFSW = () => {
+    const agePoints = {
+      '18-35': 12, '36': 11, '37': 10, '38': 9, '39': 8, '40': 7,
+      '41': 6, '42': 5, '43': 4, '44': 3, '45': 2, '46': 1, '47+': 0
+    }
+
+    const workPoints = { '1': 9, '2-3': 11, '4-5': 13, '6+': 15 }
+    const educationPoints = {
+      highschool: 5,
+      postsecondary1: 15,
+      postsecondary2: 19,
+      bachelors: 21,
+      twoCredentials: 22,
+      masters: 23,
+      phd: 25
+    }
+
+    const firstLanguagePoints =
+      Number(canadaCalc.firstLanguageSpeaking) +
+      Number(canadaCalc.firstLanguageListening) +
+      Number(canadaCalc.firstLanguageReading) +
+      Number(canadaCalc.firstLanguageWriting)
+
+    const secondLanguagePoints = Number(canadaCalc.secondLanguage)
+    const arrangedEmploymentPoints = Number(canadaCalc.arrangedEmployment)
+    const adaptabilityPoints = Number(canadaCalc.adaptability)
+
+    const total =
+      (agePoints[canadaCalc.age] ?? 0) +
+      (workPoints[canadaCalc.workExperience] ?? 0) +
+      (educationPoints[canadaCalc.education] ?? 0) +
+      firstLanguagePoints +
+      secondLanguagePoints +
+      arrangedEmploymentPoints +
+      adaptabilityPoints
+
+    const firstLanguageMinimumMet =
+      Number(canadaCalc.firstLanguageSpeaking) >= 4 &&
+      Number(canadaCalc.firstLanguageListening) >= 4 &&
+      Number(canadaCalc.firstLanguageReading) >= 4 &&
+      Number(canadaCalc.firstLanguageWriting) >= 4
+
+    const result = {
+      country: 'canada',
+      score: total,
+      maxScore: 100,
+      eligible: total >= 67 && firstLanguageMinimumMet,
+      languageMinimumMet: firstLanguageMinimumMet
+    }
+
+    setCalcScore(total)
+    setCalcResult(result)
+  }
+
+  const calculateAustraliaPoints = () => {
+    const agePoints = {
+      '18-24': 25,
+      '25-32': 30,
+      '33-39': 25,
+      '40-44': 15
+    }
+
+    const englishPoints = {
+      competent: 0,
+      proficient: 10,
+      superior: 20
+    }
+
+    const overseasPoints = {
+      '0': 0,
+      '3-4': 5,
+      '5-7': 10,
+      '8+': 15
+    }
+
+    const australianPoints = {
+      '0': 0,
+      '1-2': 5,
+      '3-4': 10,
+      '5-7': 15,
+      '8+': 20
+    }
+
+    const educationPoints = {
+      doctorate: 20,
+      bachelor: 15,
+      diploma: 10
+    }
+
+    const nominationPoints = {
+      '189': 0,
+      '190': 5,
+      '491': 15
+    }
+
+    const total =
+      (agePoints[australiaCalc.age] ?? 0) +
+      (englishPoints[australiaCalc.english] ?? 0) +
+      (overseasPoints[australiaCalc.overseasExperience] ?? 0) +
+      (australianPoints[australiaCalc.australianExperience] ?? 0) +
+      (educationPoints[australiaCalc.education] ?? 0) +
+      (nominationPoints[australiaCalc.visa] ?? 0)
+
+    const result = {
+      country: 'australia',
+      score: total,
+      maxScore: 115,
+      threshold: 65,
+      eligible: total >= 65,
+      visa: australiaCalc.visa
+    }
+
+    setCalcScore(total)
+    setCalcResult(result)
+  }
+
   const runCalculation = () => {
-    let score = 30
-    if (calcData.age === '18-24') score += 20
-    else if (calcData.age === '25-32') score += 25
-    else if (calcData.age === '33-39') score += 15
-    else score += 5
+    if (calculatorCountry === 'canada') {
+      calculateCanadaFSW()
+    } else {
+      calculateAustraliaPoints()
+    }
+  }
 
-    if (calcData.education === 'phd') score += 25
-    else if (calcData.education === 'masters') score += 20
-    else if (calcData.education === 'bachelors') score += 15
-    else score += 10
-
-    if (calcData.experience === '6+') score += 15
-    else if (calcData.experience === '3-5') score += 10
-    else score += 5
-
-    if (calcData.englishScore === 'clb9') score += 20
-    else if (calcData.englishScore === 'clb8') score += 15
-    else score += 10
-
-    setCalcScore(score)
-    setCalcStep(4)
+  const resetCalculator = () => {
+    setCalcResult(null)
+    setCalcScore(0)
   }
 
   // Handle Submission using EmailJS
@@ -4923,12 +5051,12 @@ export default function App() {
       {/* HEADER & NAVBAR */}
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="container nav-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 24px' }}>
-          <a href="#" className="logo-link" style={{ textDecoration: 'none' }} aria-label="CloysterVisa home">
+          <a href="/" className="logo-link" style={{ textDecoration: 'none' }} aria-label="CloysterVisa home">
             <LogoImage />
           </a>
 
           <div className={`nav-menu ${mobileMenuOpen ? 'open' : ''}`}>
-            <a href="#about" className="nav-link" onClick={closeNav}>About Us</a>
+            <a href={sectionHref("#about")} className="nav-link" onClick={closeNav}>About Us</a>
 
             <div className={`nav-dropdown ${openNavDropdown === 'destinations' ? 'open' : ''}`}>
               <button
@@ -4975,23 +5103,23 @@ export default function App() {
                 <span className="nav-chevron" aria-hidden="true">⌄</span>
               </button>
               <div className="nav-dropdown-menu">
-                <a href="#study-visa" onClick={closeNav}>Study Visa</a>
-                <a href="#services" onClick={closeNav}>Visa Consultation</a>
-                <a href="#services" onClick={closeNav}>Document & Application Support</a>
-                <a href="#services" onClick={closeNav}>Interview Preparation</a>
-                <a href="#services" onClick={closeNav}>Post-Submission Guidance</a>
+                <a href={sectionHref("#study-visa")} onClick={closeNav}>Study Visa</a>
+                <a href={sectionHref("#services")} onClick={closeNav}>Visa Consultation</a>
+                <a href={sectionHref("#services")} onClick={closeNav}>Document & Application Support</a>
+                <a href={sectionHref("#services")} onClick={closeNav}>Interview Preparation</a>
+                <a href={sectionHref("#services")} onClick={closeNav}>Post-Submission Guidance</a>
               </div>
             </div>
 
-            <a href="#partner-with-us" className="nav-link" onClick={closeNav}>Partner With Us</a>
+            <a href={sectionHref("#partner-with-us")} className="nav-link" onClick={closeNav}>Partner With Us</a>
 
-            <a href="#blog" className="nav-link" onClick={closeNav}>Blog</a>
+            <a href="/blog" className="nav-link" onClick={closeNav}>Blog</a>
 
-            <a href="#team" className="nav-link" onClick={closeNav}>Our Team</a>
+            <a href={sectionHref("#team")} className="nav-link" onClick={closeNav}>Our Team</a>
 
             <div className="mobile-nav-actions" aria-label="Mobile navigation actions">
               <a
-                href="#contact"
+                href={sectionHref("#contact")}
                 className="nav-consultation-btn"
                 onClick={closeNav}
               >
@@ -4999,7 +5127,7 @@ export default function App() {
                 <span>Book a Consultation</span>
               </a>
               <a
-                href="#calculator"
+                href={sectionHref("#calculator")}
                 className="nav-eligibility-btn"
                 onClick={closeNav}
               >
@@ -5011,7 +5139,7 @@ export default function App() {
 
           <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <a
-              href="#contact"
+              href={sectionHref("#contact")}
               className="nav-consultation-btn"
               onClick={closeNav}
               aria-label="Book a consultation"
@@ -5020,7 +5148,7 @@ export default function App() {
               <span>Book a Consultation</span>
             </a>
             <a
-              href="#calculator"
+              href={sectionHref("#calculator")}
               className="nav-eligibility-btn"
               onClick={closeNav}
             >
@@ -5036,6 +5164,8 @@ export default function App() {
         </div>
       </nav>
 
+      {!isBlogRoute && (
+        <>
       {/* HERO SECTION */}
       <header className="hero-sec">
         <div className="hero-mesh"></div>
@@ -5053,10 +5183,10 @@ export default function App() {
             </p>
 
             <div className="hero-buttons" style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-              <a href="#calculator" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <a href={sectionHref("#calculator")} className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
                 Check Your Eligibility <ArrowRightIcon />
               </a>
-              <a href="#contact" className="btn btn-secondary" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
+              <a href={sectionHref("#contact")} className="btn btn-secondary" style={{ background: 'var(--bg-card)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '12px 24px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>
                 Book a Consultation
               </a>
             </div>
@@ -5378,7 +5508,7 @@ export default function App() {
 
                     <div className="country-next-step-actions">
                       <a
-                        href="#calculator"
+                        href={sectionHref("#calculator")}
                         className="btn btn-primary"
                       >
                         Check {currentCountry.name} Eligibility <ArrowRightIcon />
@@ -5514,20 +5644,20 @@ export default function App() {
                 Estimated Score: <span style={{ color: 'var(--accent-blue)' }}>{calcScore} Points</span>
               </div>
               <div style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', marginTop: '4px' }}>
-                Age Group: <strong style={{ color: 'var(--text-primary)' }}>{calcData.age}</strong> | Target: <strong style={{ color: 'var(--text-primary)', textTransform: 'capitalize' }}>{calcData.destination}</strong>
+                Calculator: <strong style={{ color: 'var(--text-primary)' }}>{calculatorCountry === 'canada' ? 'Canada FSW' : 'Australia Skilled Migration'}</strong> | Score: <strong style={{ color: 'var(--text-primary)' }}>{calcScore}</strong>
               </div>
-              <div style={{ color: '#22c55e', fontWeight: '700', fontSize: '0.92rem', marginTop: '4px' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><CheckIcon /> Potentially Eligible</span>
+              <div style={{ color: 'var(--text-secondary)', fontWeight: '700', fontSize: '0.92rem', marginTop: '4px' }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><CheckIcon /> Preliminary assessment only</span>
               </div>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '4px', maxWidth: '560px', lineHeight: '1.45' }}>
                 Eligibility depends on your individual profile and current program requirements.
               </div>
             </div>
             <div style={{ display: 'flex', gap: '9px', flexWrap: 'wrap' }}>
-              <a href="#calculator" className="btn btn-secondary" style={{ padding: '10px 14px', background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', textDecoration: 'none', borderRadius: '8px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <a href={sectionHref("#calculator")} className="btn btn-secondary" style={{ padding: '10px 14px', background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', textDecoration: 'none', borderRadius: '8px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                 Get Detailed Assessment <ArrowRightIcon />
               </a>
-              <a href="#contact" className="btn btn-primary" style={{ padding: '10px 14px', background: 'var(--accent-blue)', color: '#fff', textDecoration: 'none', borderRadius: '8px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+              <a href={sectionHref("#contact")} className="btn btn-primary" style={{ padding: '10px 14px', background: 'var(--accent-blue)', color: '#fff', textDecoration: 'none', borderRadius: '8px', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
                 Book a Consultation <ArrowRightIcon />
               </a>
             </div>
@@ -5609,10 +5739,10 @@ export default function App() {
               <p>Start with a preliminary assessment or speak with an advisor about your goals.</p>
             </div>
             <div className="country-next-step-actions">
-              <a href="#calculator" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '11px 17px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
+              <a href={sectionHref("#calculator")} className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '11px 17px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
                 Assess My Profile <ArrowRightIcon />
               </a>
-              <a href="#contact" className="btn btn-secondary" style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '11px 17px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
+              <a href={sectionHref("#contact")} className="btn btn-secondary" style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '11px 17px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '7px' }}>
                 Book a Consultation <ArrowRightIcon />
               </a>
             </div>
@@ -5857,175 +5987,316 @@ export default function App() {
       )}
 
       {/* ELIGIBILITY CALCULATOR */}
-      <section id="calculator" className="section-padding" style={{ padding: '60px 0' }}>
+      <section id="calculator" className="section-padding" style={{ padding: '72px 0' }}>
         <div className="container">
-          <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <span className="section-tag" style={{ background: 'var(--bg-card)', color: 'var(--accent-blue)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>Interactive Evaluation</span>
-            <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Check Your Immigration Eligibility</h2>
-            <p className="section-desc" style={{ color: 'var(--text-secondary)' }}>
-              Instant preliminary points assessment for Express Entry, GSM, and European job cards.
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '34px' }}>
+            <span className="section-tag" style={{ background: 'var(--bg-card)', color: 'var(--accent-blue)', padding: '7px 14px', borderRadius: '999px', fontSize: '0.82rem', fontWeight: 700 }}>
+              Interactive Eligibility Assessment
+            </span>
+            <h2 className="section-title text-gradient" style={{ fontSize: 'clamp(2rem, 4vw, 2.7rem)', margin: '14px 0 10px' }}>
+              Check Your Immigration Points
+            </h2>
+            <p className="section-desc" style={{ color: 'var(--text-secondary)', maxWidth: '760px', margin: '0 auto', lineHeight: 1.7 }}>
+              Choose Canada FSW or Australia skilled migration and calculate a preliminary points score using the factors shown below.
             </p>
           </div>
 
-          <div className="glass-panel calculator-box" style={{ padding: '30px', maxWidth: '700px', margin: '0 auto' }}>
-            <div className="calc-progress" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px', position: 'relative' }}>
-              <div className={`progress-step ${calcStep >= 1 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 1 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>1</div>
-              <div className={`progress-step ${calcStep >= 2 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 2 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>2</div>
-              <div className={`progress-step ${calcStep >= 3 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 3 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>3</div>
-              <div className={`progress-step ${calcStep >= 4 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 4 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>📊</div>
+          <div className="glass-panel" style={{ maxWidth: '980px', margin: '0 auto', padding: 'clamp(18px, 4vw, 34px)' }}>
+            {/* Country switcher */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+              gap: '10px',
+              padding: '6px',
+              borderRadius: '14px',
+              background: 'var(--bg-main)',
+              border: '1px solid var(--border-color)',
+              marginBottom: '28px'
+            }}>
+              <button
+                type="button"
+                onClick={() => { setCalculatorCountry('canada'); resetCalculator() }}
+                style={{
+                  border: '0',
+                  borderRadius: '10px',
+                  padding: '13px 14px',
+                  cursor: 'pointer',
+                  fontWeight: 800,
+                  background: calculatorCountry === 'canada' ? 'var(--accent-blue)' : 'transparent',
+                  color: calculatorCountry === 'canada' ? '#fff' : 'var(--text-secondary)'
+                }}
+              >
+                🇨🇦 Canada — FSW 67-Point
+              </button>
+              <button
+                type="button"
+                onClick={() => { setCalculatorCountry('australia'); resetCalculator() }}
+                style={{
+                  border: '0',
+                  borderRadius: '10px',
+                  padding: '13px 14px',
+                  cursor: 'pointer',
+                  fontWeight: 800,
+                  background: calculatorCountry === 'australia' ? 'var(--accent-blue)' : 'transparent',
+                  color: calculatorCountry === 'australia' ? '#fff' : 'var(--text-secondary)'
+                }}
+              >
+                🇦🇺 Australia — 189 / 190 / 491
+              </button>
             </div>
 
-            {/* STEP 1 */}
-            {calcStep === 1 && (
-              <div className="calc-step-content">
-                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)', marginBottom: '18px' }}>Select Relocation Preferences</h3>
-                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
+            {calculatorCountry === 'canada' ? (
+              <div>
+                <div style={{ marginBottom: '24px' }}>
+                  <h3 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '1.45rem' }}>
+                    🇨🇦 Canada — Federal Skilled Worker (FSW)
+                  </h3>
+                  <p style={{ margin: '7px 0 0', color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '.9rem' }}>
+                    This is the <strong>100-point FSW selection grid</strong>. A score of <strong>67 or higher</strong> may meet the FSW selection-factor threshold. This is separate from Express Entry CRS.
+                  </p>
+                </div>
+
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
                   <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Preferred Destination</label>
-                    <select
-                      className="select-control"
-                      value={calcData.destination}
-                      onChange={(e) => setCalcData({ ...calcData, destination: e.target.value })}
-                    >
-                      <option value="canada">🇨🇦 Canada (Express Entry)</option>
-                      <option value="australia">🇦🇺 Australia (General Skilled Migration)</option>
-                      <option value="germany">🇩🇪 Germany (Opportunity Card)</option>
-                      <option value="uk">🇬🇧 United Kingdom (Skilled Worker)</option>
-                      <option value="nz">🇳🇿 New Zealand (SMC)</option>
+                    <label className="form-label">Age</label>
+                    <select className="select-control" value={canadaCalc.age} onChange={(e) => setCanadaCalc({ ...canadaCalc, age: e.target.value })}>
+                      <option value="18-35">18–35 — 12 points</option>
+                      <option value="36">36 — 11 points</option>
+                      <option value="37">37 — 10 points</option>
+                      <option value="38">38 — 9 points</option>
+                      <option value="39">39 — 8 points</option>
+                      <option value="40">40 — 7 points</option>
+                      <option value="41">41 — 6 points</option>
+                      <option value="42">42 — 5 points</option>
+                      <option value="43">43 — 4 points</option>
+                      <option value="44">44 — 3 points</option>
+                      <option value="45">45 — 2 points</option>
+                      <option value="46">46 — 1 point</option>
+                      <option value="47+">47+ / under 18 — 0 points</option>
                     </select>
                   </div>
+
                   <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Visa Category</label>
-                    <select
-                      className="select-control"
-                      value={calcData.visaType}
-                      onChange={(e) => setCalcData({ ...calcData, visaType: e.target.value })}
-                    >
-                      <option value="pr">Permanent Residency (PR)</option>
-                      <option value="work">Skilled Work Permit</option>
-                      <option value="student">Study Visa / Higher Education Pathway</option>
+                    <label className="form-label">Skilled Work Experience</label>
+                    <select className="select-control" value={canadaCalc.workExperience} onChange={(e) => setCanadaCalc({ ...canadaCalc, workExperience: e.target.value })}>
+                      <option value="1">1 year — 9 points</option>
+                      <option value="2-3">2–3 years — 11 points</option>
+                      <option value="4-5">4–5 years — 13 points</option>
+                      <option value="6+">6+ years — 15 points</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Education</label>
+                    <select className="select-control" value={canadaCalc.education} onChange={(e) => setCanadaCalc({ ...canadaCalc, education: e.target.value })}>
+                      <option value="highschool">High school — 5 points</option>
+                      <option value="postsecondary1">1-year post-secondary — 15 points</option>
+                      <option value="postsecondary2">2-year post-secondary — 19 points</option>
+                      <option value="bachelors">Bachelor's / 3+ year credential — 21 points</option>
+                      <option value="twoCredentials">Two or more credentials — 22 points</option>
+                      <option value="masters">Master's / eligible professional degree — 23 points</option>
+                      <option value="phd">PhD — 25 points</option>
                     </select>
                   </div>
                 </div>
-                {calcData.visaType === 'student' && (
-                  <div style={{
-                    marginTop: '14px',
-                    padding: '12px 14px',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(59,130,246,.2)',
-                    background: 'rgba(37,99,235,.08)',
-                    color: 'var(--text-secondary)',
-                    fontSize: '0.84rem',
-                    lineHeight: '1.55'
-                  }}>
-                    Study Visa assessment includes your academic profile, destination, language readiness, financial documentation, and post-study pathway considerations.
+
+                <div style={{ marginTop: '24px', padding: '20px', border: '1px solid var(--border-color)', borderRadius: '14px', background: 'var(--bg-main)' }}>
+                  <h4 style={{ margin: '0 0 5px', color: 'var(--text-primary)', fontSize: '1rem' }}>
+                    First Official Language — Speaking, Listening, Reading & Writing
+                  </h4>
+                  <p style={{ margin: '0 0 15px', color: 'var(--text-muted)', fontSize: '.82rem', lineHeight: 1.55 }}>
+                    CLB 9+ = 6 points per ability · CLB 8 = 5 · CLB 7 = 4. Below CLB 7 does not meet the FSW minimum language requirement.
+                  </p>
+
+                  <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+                    {[
+                      ['firstLanguageSpeaking', 'Speaking'],
+                      ['firstLanguageListening', 'Listening'],
+                      ['firstLanguageReading', 'Reading'],
+                      ['firstLanguageWriting', 'Writing']
+                    ].map(([key, label]) => (
+                      <div className="form-group" key={key}>
+                        <label className="form-label">{label}</label>
+                        <select className="select-control" value={canadaCalc[key]} onChange={(e) => setCanadaCalc({ ...canadaCalc, [key]: e.target.value })}>
+                          <option value="6">CLB 9+ — 6 points</option>
+                          <option value="5">CLB 8 — 5 points</option>
+                          <option value="4">CLB 7 — 4 points</option>
+                          <option value="0">Below CLB 7 — 0 points</option>
+                        </select>
+                      </div>
+                    ))}
                   </div>
+                </div>
+
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginTop: '16px' }}>
+                  <div className="form-group">
+                    <label className="form-label">Second Official Language</label>
+                    <select className="select-control" value={canadaCalc.secondLanguage} onChange={(e) => setCanadaCalc({ ...canadaCalc, secondLanguage: e.target.value })}>
+                      <option value="4">CLB 5+ in all 4 abilities — 4 points</option>
+                      <option value="0">Does not meet CLB 5 in all 4 — 0 points</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Arranged Employment in Canada</label>
+                    <select className="select-control" value={canadaCalc.arrangedEmployment} onChange={(e) => setCanadaCalc({ ...canadaCalc, arrangedEmployment: e.target.value })}>
+                      <option value="0">No valid arranged employment — 0 points</option>
+                      <option value="10">Valid arranged employment — 10 points</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Adaptability</label>
+                    <select className="select-control" value={canadaCalc.adaptability} onChange={(e) => setCanadaCalc({ ...canadaCalc, adaptability: e.target.value })}>
+                      <option value="0">No adaptability points — 0</option>
+                      <option value="5">One 5-point adaptability factor — 5</option>
+                      <option value="10">Maximum adaptability combination — 10</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '.8rem', lineHeight: 1.5 }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>FSW grid:</strong> maximum 100 points · threshold 67.
+                  </div>
+                  <button type="button" className="btn btn-primary" onClick={runCalculation} style={{ background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '12px 20px', borderRadius: '9px', fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                    Calculate Canada FSW Score <ArrowRightIcon />
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div style={{ marginBottom: '24px' }}>
+                  <h3 style={{ margin: 0, color: 'var(--text-primary)', fontSize: '1.45rem' }}>
+                    🇦🇺 Australia — Skilled Migration Points Test
+                  </h3>
+                  <p style={{ margin: '7px 0 0', color: 'var(--text-secondary)', lineHeight: 1.6, fontSize: '.9rem' }}>
+                    Preliminary points calculation for <strong>subclass 189, 190 and 491</strong>. The minimum points threshold is <strong>65</strong>, but reaching 65 does not guarantee an invitation.
+                  </p>
+                </div>
+
+                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px' }}>
+                  <div className="form-group">
+                    <label className="form-label">Visa / Pathway</label>
+                    <select className="select-control" value={australiaCalc.visa} onChange={(e) => setAustraliaCalc({ ...australiaCalc, visa: e.target.value })}>
+                      <option value="189">Subclass 189 — Skilled Independent</option>
+                      <option value="190">Subclass 190 — Skilled Nominated (+5)</option>
+                      <option value="491">Subclass 491 — Skilled Work Regional (+15)</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Age</label>
+                    <select className="select-control" value={australiaCalc.age} onChange={(e) => setAustraliaCalc({ ...australiaCalc, age: e.target.value })}>
+                      <option value="18-24">18–24 — 25 points</option>
+                      <option value="25-32">25–32 — 30 points</option>
+                      <option value="33-39">33–39 — 25 points</option>
+                      <option value="40-44">40–44 — 15 points</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">English</label>
+                    <select className="select-control" value={australiaCalc.english} onChange={(e) => setAustraliaCalc({ ...australiaCalc, english: e.target.value })}>
+                      <option value="competent">Competent — 0 points</option>
+                      <option value="proficient">Proficient — 10 points</option>
+                      <option value="superior">Superior — 20 points</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Overseas Skilled Employment</label>
+                    <select className="select-control" value={australiaCalc.overseasExperience} onChange={(e) => setAustraliaCalc({ ...australiaCalc, overseasExperience: e.target.value })}>
+                      <option value="0">Less than 3 years — 0 points</option>
+                      <option value="3-4">3–4 years — 5 points</option>
+                      <option value="5-7">5–7 years — 10 points</option>
+                      <option value="8+">8+ years — 15 points</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Australian Skilled Employment</label>
+                    <select className="select-control" value={australiaCalc.australianExperience} onChange={(e) => setAustraliaCalc({ ...australiaCalc, australianExperience: e.target.value })}>
+                      <option value="0">Less than 1 year — 0 points</option>
+                      <option value="1-2">1–2 years — 5 points</option>
+                      <option value="3-4">3–4 years — 10 points</option>
+                      <option value="5-7">5–7 years — 15 points</option>
+                      <option value="8+">8+ years — 20 points</option>
+                    </select>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Education</label>
+                    <select className="select-control" value={australiaCalc.education} onChange={(e) => setAustraliaCalc({ ...australiaCalc, education: e.target.value })}>
+                      <option value="doctorate">Doctorate — 20 points</option>
+                      <option value="bachelor">Bachelor / qualifying Master — 15 points</option>
+                      <option value="diploma">Eligible diploma / trade qualification — 10 points</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ marginTop: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '14px', flexWrap: 'wrap' }}>
+                  <div style={{ color: 'var(--text-muted)', fontSize: '.8rem', lineHeight: 1.5 }}>
+                    <strong style={{ color: 'var(--text-primary)' }}>Important:</strong> invitation depends on the relevant occupation, EOI, nomination/invitation settings and current selection arrangements.
+                  </div>
+                  <button type="button" className="btn btn-primary" onClick={runCalculation} style={{ background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '12px 20px', borderRadius: '9px', fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                    Calculate Australia Score <ArrowRightIcon />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {calcResult && (
+              <div style={{
+                marginTop: '28px',
+                padding: '24px',
+                borderRadius: '16px',
+                border: `1px solid ${calcResult.eligible ? 'rgba(34,197,94,.35)' : 'var(--border-color)'}`,
+                background: calcResult.eligible ? 'rgba(34,197,94,.07)' : 'var(--bg-main)',
+                textAlign: 'center'
+              }}>
+                <div style={{ color: 'var(--text-muted)', fontSize: '.78rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '.08em' }}>
+                  {calcResult.country === 'canada' ? 'Canada FSW Selection Score' : `Australia Subclass ${calcResult.visa} Points`}
+                </div>
+
+                <div style={{ fontSize: 'clamp(2.6rem, 7vw, 4rem)', fontWeight: 900, color: calcResult.eligible ? '#22c55e' : 'var(--accent-blue)', margin: '8px 0' }}>
+                  {calcResult.score}
+                  <span style={{ fontSize: '1rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                    /{calcResult.maxScore}
+                  </span>
+                </div>
+
+                {calcResult.country === 'canada' ? (
+                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.65, maxWidth: '700px', margin: '0 auto 16px' }}>
+                    {calcResult.languageMinimumMet
+                      ? (calcResult.eligible
+                        ? 'Your preliminary FSW selection score is at or above the 67-point threshold.'
+                        : 'Your preliminary score is below the 67-point FSW selection threshold.')
+                      : 'Your first official language selections include an ability below CLB 7, so the FSW minimum language requirement is not met.'}
+                  </p>
+                ) : (
+                  <p style={{ color: 'var(--text-secondary)', lineHeight: 1.65, maxWidth: '700px', margin: '0 auto 16px' }}>
+                    {calcResult.eligible
+                      ? 'Your preliminary score reaches the 65-point minimum threshold.'
+                      : 'Your preliminary score is below the 65-point minimum threshold.'}
+                    {' '}Meeting 65 points does not guarantee an invitation.
+                  </p>
                 )}
-                <button className="btn btn-primary" onClick={() => setCalcStep(2)} style={{ marginTop: '20px', background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                  Next Step <ArrowRightIcon />
-                </button>
-              </div>
-            )}
 
-            {/* STEP 2 */}
-            {calcStep === 2 && (
-              <div className="calc-step-content">
-                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)', marginBottom: '18px' }}>Basic Profile Details</h3>
-                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Age Group</label>
-                    <select
-                      className="select-control"
-                      value={calcData.age}
-                      onChange={(e) => setCalcData({ ...calcData, age: e.target.value })}
-                    >
-                      <option value="18-24">18 - 24 years</option>
-                      <option value="25-32">25 - 32 years</option>
-                      <option value="33-39">33 - 39 years</option>
-                      <option value="40+">40+ years</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Highest Qualification</label>
-                    <select
-                      className="select-control"
-                      value={calcData.education}
-                      onChange={(e) => setCalcData({ ...calcData, education: e.target.value })}
-                    >
-                      <option value="phd">Doctorate / PhD</option>
-                      <option value="masters">Master's Degree</option>
-                      <option value="bachelors">Bachelor's Degree</option>
-                      <option value="diploma">2-Year Diploma / Cert</option>
-                    </select>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Back</button>
-                  <button className="btn btn-primary" onClick={() => setCalcStep(3)} style={{ background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                    Next Step <ArrowRightIcon />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 3 */}
-            {calcStep === 3 && (
-              <div className="calc-step-content">
-                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)', marginBottom: '18px' }}>{calcData.visaType === 'student' ? 'Study Profile & Language Ability' : 'Experience & Language Ability'}</h3>
-                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>{calcData.visaType === 'student' ? 'Work / Relevant Experience' : 'Work Experience'}</label>
-                    <select
-                      className="select-control"
-                      value={calcData.experience}
-                      onChange={(e) => setCalcData({ ...calcData, experience: e.target.value })}
-                    >
-                      <option value="6+">6+ Years</option>
-                      <option value="3-5">3 - 5 Years</option>
-                      <option value="1-2">1 - 2 Years</option>
-                      <option value="0">Less than 1 Year</option>
-                    </select>
-                  </div>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Language Proficiency Score</label>
-                    <select
-                      className="select-control"
-                      value={calcData.englishScore}
-                      onChange={(e) => setCalcData({ ...calcData, englishScore: e.target.value })}
-                    >
-                      <option value="clb9">CLB 9+ / High Proficiency</option>
-                      <option value="clb8">CLB 8 / Moderate Proficiency</option>
-                      <option value="clb7">CLB 7 / Basic Qualification</option>
-                    </select>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(2)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Back</button>
-                  <button className="btn btn-primary" onClick={runCalculation} style={{ background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                    Calculate Points <ArrowRightIcon />
-                  </button>
-                </div>
-              </div>
-            )}
-
-            {/* STEP 4: RESULTS */}
-            {calcStep === 4 && (
-              <div className="calc-step-content" style={{ textAlign: 'center' }}>
-                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)' }}>Estimated Eligibility Score</h3>
-                <div style={{ fontSize: '3.5rem', fontWeight: '800', color: 'var(--accent-blue)', margin: '15px 0' }}>
-                  {calcScore} Points
-                </div>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '20px' }}>
-                  {calcScore >= 70
-                    ? "🎉 Strong Score! You meet the standard points benchmark for PR considerations."
-                    : "👍 Good Score! Regional nominations or specific PNP options can boost your profile."}
-                </p>
                 <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Recalculate</button>
-                  <a href="#contact" className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '10px 18px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>Book a Consultation</a>
+                  <button type="button" className="btn btn-secondary" onClick={resetCalculator} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>
+                    Recalculate
+                  </button>
+                  <a href={sectionHref("#contact")} className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '10px 18px', borderRadius: '8px', textDecoration: 'none', fontWeight: 700 }}>
+                    Book a Consultation
+                  </a>
                 </div>
               </div>
             )}
+
+            <div style={{ marginTop: '22px', padding: '13px 15px', borderRadius: '11px', border: '1px solid var(--border-color)', background: 'rgba(148,163,184,.06)', color: 'var(--text-muted)', fontSize: '.76rem', lineHeight: 1.6 }}>
+              <strong style={{ color: 'var(--text-secondary)' }}>Disclaimer:</strong> This calculator is for preliminary informational screening only. It does not replace an official assessment and does not guarantee eligibility, nomination, invitation, visa approval, permanent residence or any other immigration outcome.
+            </div>
           </div>
         </div>
       </section>
@@ -6339,6 +6610,13 @@ export default function App() {
         <Blog />
       </section>
 
+        </>
+      )}
+
+      {/* STANDALONE BLOG ROUTE: header/footer stay from this App, while Blog
+          replaces the entire homepage body on /blog and /blog/:slug. */}
+      {isBlogRoute && <Blog />}
+
       {/* FLOATING WHATSAPP BUTTON */}
       <a
         className="whatsapp-float"
@@ -6382,7 +6660,7 @@ export default function App() {
 
           {/* 1. Brand */}
           <div className="footer-brand-column">
-            <a href="#" className="footer-logo-link" aria-label="CloysterVisa home">
+            <a href="/" className="footer-logo-link" aria-label="CloysterVisa home">
               <LogoImage footer />
             </a>
             <p className="footer-description">
@@ -6394,15 +6672,15 @@ export default function App() {
           <div className="footer-column">
             <h4 className="footer-heading">Quick Links</h4>
             <ul className="footer-link-list">
-              <li><a href="#about">About Us</a></li>
-              <li><a href="#destinations">Destinations</a></li>
-              <li><a href="#services">Advisory Services</a></li>
-              <li><a href="#team">Meet Our Team</a></li>
-              <li><a href="#study-visa">Study Visa</a></li>
-              <li><a href="#partner-with-us">Partner With Us</a></li>
-              <li><a href="#blog">Blog</a></li>
-              <li><a href="#calculator">Eligibility Points Check</a></li>
-              <li><a href="#contact" className="footer-accent-link">Book a Consultation</a></li>
+              <li><a href={sectionHref("#about")}>About Us</a></li>
+              <li><a href={sectionHref("#destinations")}>Destinations</a></li>
+              <li><a href={sectionHref("#services")}>Advisory Services</a></li>
+              <li><a href={sectionHref("#team")}>Meet Our Team</a></li>
+              <li><a href={sectionHref("#study-visa")}>Study Visa</a></li>
+              <li><a href={sectionHref("#partner-with-us")}>Partner With Us</a></li>
+              <li><a href={sectionHref("#blog")}>Blog</a></li>
+              <li><a href={sectionHref("#calculator")}>Eligibility Points Check</a></li>
+              <li><a href={sectionHref("#contact")} className="footer-accent-link">Book a Consultation</a></li>
             </ul>
           </div>
 
@@ -6413,7 +6691,7 @@ export default function App() {
               {countries.map((c) => (
                 <li key={c.id}>
                   <a
-                    href="#destinations"
+                    href={sectionHref("#destinations")}
                     onClick={() => setActiveTab(c.id)}
                     className="footer-destination-link"
                   >
