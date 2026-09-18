@@ -811,6 +811,52 @@ function LegalModal({ type, onClose }) {
   )
 }
 
+
+const CALCULATOR_COUNTRIES = [
+  { id: 'canada', label: '🇨🇦 Canada', subtitle: 'Choose a federal pathway' },
+  { id: 'australia', label: '🇦🇺 Australia', subtitle: 'Skilled migration visas' },
+  { id: 'germany', label: '🇩🇪 Germany', subtitle: 'Opportunity Card routes' },
+  { id: 'uk', label: '🇬🇧 United Kingdom', subtitle: 'Skilled Worker route' },
+  { id: 'nz', label: '🇳🇿 New Zealand', subtitle: 'Skilled Migrant pathways' }
+]
+
+const calculatorFieldStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '7px'
+}
+
+const calculatorLabelStyle = {
+  color: 'var(--text-primary)',
+  fontSize: '.84rem',
+  fontWeight: '700'
+}
+
+const calculatorHintStyle = {
+  color: 'var(--text-muted)',
+  fontSize: '.74rem',
+  lineHeight: 1.45
+}
+
+const calculatorSelectStyle = {
+  width: '100%',
+  minHeight: '44px',
+  padding: '10px 12px',
+  borderRadius: '10px',
+  border: '1px solid var(--border-color)',
+  background: 'var(--bg-main)',
+  color: 'var(--text-primary)',
+  outline: 'none'
+}
+
+const CalculatorField = ({ label, hint, children }) => (
+  <div style={calculatorFieldStyle}>
+    <label style={calculatorLabelStyle}>{label}</label>
+    {children}
+    {hint && <div style={calculatorHintStyle}>{hint}</div>}
+  </div>
+)
+
 export default function App() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -832,17 +878,130 @@ export default function App() {
   const [activeModal, setActiveModal] = useState(null)
   const [activeLegalModal, setActiveLegalModal] = useState(null)
 
-  // Eligibility Calculator State
-  const [calcStep, setCalcStep] = useState(1)
-  const [calcData, setCalcData] = useState({
-    destination: 'canada',
-    visaType: 'pr',
-    age: '25-32',
-    education: 'masters',
-    experience: '3-5',
-    englishScore: 'clb9'
+  // Professional pathway-specific eligibility calculator state.
+  // Input fields contain applicant facts only. Scoring is revealed after calculation.
+  const [calculatorCountry, setCalculatorCountry] = useState('canada')
+
+  const [canadaCalc, setCanadaCalc] = useState({
+    program: 'FSWP',
+    age: '18-35',
+    workExperience: '1',
+    education: 'bachelor',
+    firstLanguageSpeaking: '6',
+    firstLanguageListening: '6',
+    firstLanguageReading: '6',
+    firstLanguageWriting: '6',
+    secondLanguage: '0',
+    arrangedEmployment: '0',
+    adaptability: '0',
+    skilledWorkYears: '1',
+    skilledWorkHours: '1560',
+    workWithin10Years: 'yes',
+    skilledWorkPaid: 'yes',
+    continuousPrimaryOccupationWork: 'yes',
+    workTEER: '0',
+    languageCLB: '7',
+    foreignEducationECA: 'yes',
+    settlementFunds: 'yes',
+    admissible: 'yes',
+    intendOutsideQuebec: 'yes',
+    canadianWorkYears: '1',
+    canadianWorkHours: '1560',
+    canadianWorkLast3Years: 'yes',
+    canadianWorkTEER: '0',
+    canadianWorkAuthorized: 'yes',
+    canadianWorkPaid: 'yes',
+    canadianLanguageCLB: '7',
+    tradeWorkYears: '2',
+    tradeWorkHours: '3120',
+    tradeWorkLast5Years: 'yes',
+    tradeWorkPaid: 'yes',
+    fstLanguageSpeaking: '5',
+    fstLanguageListening: '5',
+    fstLanguageReading: '4',
+    fstLanguageWriting: '4',
+    validTradeJobOffer: 'no',
+    canadianTradeCertificate: 'no'
   })
-  const [calcScore, setCalcScore] = useState(75)
+
+  const [australiaCalc, setAustraliaCalc] = useState({
+    visa: '189',
+    age: '25-32',
+    occupationOnRelevantList: 'yes',
+    skillsAssessmentPositive: 'yes',
+    english: 'competent',
+    overseasExperience: '0',
+    australianExperience: '0',
+    education: 'bachelor',
+    EOI: 'yes',
+    invited: 'yes',
+    stateNomination: 'yes',
+    eligibleFamilySponsor: 'no',
+    regionalRequirement: 'yes',
+    health: 'yes',
+    character: 'yes'
+  })
+
+  const [germanyCalc, setGermanyCalc] = useState({
+    route: 'points',
+    qualificationFullyRecognisedGermany: 'yes',
+    ageRequirement: 'yes',
+    financialResources: 'yes',
+    healthInsurance: 'yes',
+    qualificationCompleted: 'yes',
+    qualificationRecognisedInOriginCountry: 'yes',
+    germanLevel: 'A2',
+    englishLevel: 'B2',
+    partialRecognition: 'no',
+    shortageOccupation: 'no',
+    experience: '0',
+    germanPoints: '0',
+    englishPoints: '0',
+    agePoints: '0',
+    germanyStay: '0',
+    partner: '0'
+  })
+
+  const [ukCalc, setUkCalc] = useState({
+    approvedSponsor: 'yes',
+    certificateOfSponsorship: 'yes',
+    eligibleOccupation: 'yes',
+    appropriateSkillLevel: 'yes',
+    englishLevel: 'B2',
+    salary: '',
+    goingRate: '',
+    relevantPhD: 'no',
+    relevantSTEMPhD: 'no',
+    onImmigrationSalaryList: 'no',
+    newEntrant: 'no',
+    genuineJob: 'yes',
+    financialRequirement: 'yes',
+    suitable: 'yes'
+  })
+
+  const [nzCalc, setNzCalc] = useState({
+    pathway: 'points',
+    age: '',
+    accreditedEmployer: 'yes',
+    skilledJobOrOffer: 'yes',
+    hoursPerWeek: '30',
+    english: 'yes',
+    health: 'yes',
+    character: 'yes',
+    skillCategory: 'qualification',
+    qualification: 'level7Bachelor',
+    income: '1.5x',
+    occupationalRegistration: '2years',
+    nzSkilledWorkExperience: '0',
+    relevantWorkExperienceYears: '',
+    nzSkilledWorkExperienceYears: '',
+    occupationSkillLevel: '1',
+    relevantTradeQualification: 'yes',
+    postQualificationExperienceYears: '',
+    nzSkilledWorkExperienceMonths: ''
+  })
+
+  const [calcResult, setCalcResult] = useState(null)
 
   // Booking Form State
   const [bookingSubmitted, setBookingSubmitted] = useState(false)
@@ -897,29 +1056,427 @@ export default function App() {
     setMeta('meta[property=\"og:title\"]', 'property', 'CloysterVisa | Immigration & Visa Consultancy')
   }, [])
 
-  // Calculate Eligibility Score Client-Side
+  // Calculate only against the rule set belonging to the selected pathway.
   const runCalculation = () => {
-    let score = 30
-    if (calcData.age === '18-24') score += 20
-    else if (calcData.age === '25-32') score += 25
-    else if (calcData.age === '33-39') score += 15
-    else score += 5
+    const yes = (value) => value === 'yes'
 
-    if (calcData.education === 'phd') score += 25
-    else if (calcData.education === 'masters') score += 20
-    else if (calcData.education === 'bachelors') score += 15
-    else score += 10
+    if (calculatorCountry === 'canada') {
+      if (canadaCalc.program === 'FSWP') {
+        const firstLanguage = [
+          canadaCalc.firstLanguageSpeaking,
+          canadaCalc.firstLanguageListening,
+          canadaCalc.firstLanguageReading,
+          canadaCalc.firstLanguageWriting
+        ].reduce((sum, value) => sum + Number(value), 0)
 
-    if (calcData.experience === '6+') score += 15
-    else if (calcData.experience === '3-5') score += 10
-    else score += 5
+        const languageMinimumMet = [
+          canadaCalc.firstLanguageSpeaking,
+          canadaCalc.firstLanguageListening,
+          canadaCalc.firstLanguageReading,
+          canadaCalc.firstLanguageWriting
+        ].every((value) => Number(value) >= 4)
 
-    if (calcData.englishScore === 'clb9') score += 20
-    else if (calcData.englishScore === 'clb8') score += 15
-    else score += 10
+        const agePoints = {
+          '18-35': 12, '36': 11, '37': 10, '38': 9, '39': 8, '40': 7,
+          '41': 6, '42': 5, '43': 4, '44': 3, '45': 2, '46': 1, '47+': 0
+        }[canadaCalc.age] ?? 0
 
-    setCalcScore(score)
-    setCalcStep(4)
+        const workPoints = {
+          '1': 9, '2-3': 11, '4-5': 13, '6+': 15
+        }[canadaCalc.workExperience] ?? 0
+
+        const educationPoints = {
+          highschool: 5,
+          postsecondary1: 15,
+          postsecondary2: 19,
+          bachelor: 21,
+          twoCredentials: 22,
+          masters: 23,
+          phd: 25
+        }[canadaCalc.education] ?? 0
+
+        const score = agePoints + educationPoints + workPoints + firstLanguage +
+          Number(canadaCalc.secondLanguage) +
+          Number(canadaCalc.arrangedEmployment) +
+          Number(canadaCalc.adaptability)
+
+        const minimumRequirementsMet =
+          Number(canadaCalc.skilledWorkYears) >= 1 &&
+          Number(canadaCalc.skilledWorkHours) >= 1560 &&
+          yes(canadaCalc.workWithin10Years) &&
+          yes(canadaCalc.skilledWorkPaid) &&
+          yes(canadaCalc.continuousPrimaryOccupationWork) &&
+          Number(canadaCalc.workTEER) >= 0 &&
+          Number(canadaCalc.workTEER) <= 3 &&
+          languageMinimumMet &&
+          canadaCalc.education !== 'none' &&
+          yes(canadaCalc.foreignEducationECA) &&
+          yes(canadaCalc.settlementFunds) &&
+          yes(canadaCalc.admissible) &&
+          yes(canadaCalc.intendOutsideQuebec)
+
+        setCalcResult({
+          country: 'canada',
+          program: 'FSWP',
+          score,
+          max: 100,
+          threshold: 67,
+          eligible: score >= 67 && minimumRequirementsMet,
+          requirementsMet: minimumRequirementsMet,
+          breakdown: [
+            ['Age', agePoints],
+            ['Education', educationPoints],
+            ['Skilled work experience', workPoints],
+            ['First official language', firstLanguage],
+            ['Second official language', Number(canadaCalc.secondLanguage)],
+            ['Arranged employment', Number(canadaCalc.arrangedEmployment)],
+            ['Adaptability', Number(canadaCalc.adaptability)]
+          ],
+          note: languageMinimumMet
+            ? '67 or more selection-factor points may qualify an applicant for FSWP, subject to the separate minimum requirements and complete assessment.'
+            : 'The first official language minimum is not met because at least one ability is below CLB 7.'
+        })
+        return
+      }
+
+      if (canadaCalc.program === 'CEC') {
+        const eligible =
+          Number(canadaCalc.canadianWorkYears) >= 1 &&
+          Number(canadaCalc.canadianWorkHours) >= 1560 &&
+          yes(canadaCalc.canadianWorkLast3Years) &&
+          Number(canadaCalc.canadianWorkTEER) >= 0 &&
+          Number(canadaCalc.canadianWorkTEER) <= 3 &&
+          yes(canadaCalc.canadianWorkAuthorized) &&
+          yes(canadaCalc.canadianWorkPaid) &&
+          yes(canadaCalc.admissible) &&
+          yes(canadaCalc.intendOutsideQuebec) &&
+          (
+            (Number(canadaCalc.canadianWorkTEER) <= 1 && Number(canadaCalc.canadianLanguageCLB) >= 7) ||
+            (Number(canadaCalc.canadianWorkTEER) >= 2 && Number(canadaCalc.canadianLanguageCLB) >= 5)
+          )
+
+        setCalcResult({
+          country: 'canada',
+          program: 'CEC',
+          score: null,
+          max: null,
+          threshold: null,
+          eligible,
+          requirementsMet: eligible,
+          breakdown: [],
+          note: eligible
+            ? 'The entered information meets the screening conditions configured for the Canadian Experience Class.'
+            : 'One or more CEC screening requirements are not met based on the information entered.'
+        })
+        return
+      }
+
+      const fstLanguageMet =
+        Number(canadaCalc.fstLanguageSpeaking) >= 5 &&
+        Number(canadaCalc.fstLanguageListening) >= 5 &&
+        Number(canadaCalc.fstLanguageReading) >= 4 &&
+        Number(canadaCalc.fstLanguageWriting) >= 4
+
+      const tradePathwayEligible =
+        Number(canadaCalc.tradeWorkYears) >= 2 &&
+        Number(canadaCalc.tradeWorkHours) >= 3120 &&
+        yes(canadaCalc.tradeWorkLast5Years) &&
+        yes(canadaCalc.tradeWorkPaid) &&
+        fstLanguageMet &&
+        (yes(canadaCalc.validTradeJobOffer) || yes(canadaCalc.canadianTradeCertificate)) &&
+        yes(canadaCalc.admissible) &&
+        yes(canadaCalc.settlementFunds) &&
+        yes(canadaCalc.intendOutsideQuebec)
+
+      setCalcResult({
+        country: 'canada',
+        program: 'FSTP',
+        score: null,
+        max: null,
+        threshold: null,
+        eligible: tradePathwayEligible,
+        requirementsMet: tradePathwayEligible,
+        breakdown: [],
+        note: tradePathwayEligible
+          ? 'The entered information meets the screening conditions configured for the Federal Skilled Trades Program.'
+          : 'One or more FSTP screening requirements are not met based on the information entered.'
+      })
+      return
+    }
+
+    if (calculatorCountry === 'australia') {
+      const agePoints = { '18-24': 25, '25-32': 30, '33-39': 25, '40-44': 15 }[australiaCalc.age] ?? 0
+      const englishPoints = { competent: 0, proficient: 10, superior: 20 }[australiaCalc.english] ?? 0
+      const overseasPoints = { '0': 0, '3-4': 5, '5-7': 10, '8+': 15 }[australiaCalc.overseasExperience] ?? 0
+      const australianPoints = { '0': 0, '1-2': 5, '3-4': 10, '5-7': 15, '8+': 20 }[australiaCalc.australianExperience] ?? 0
+      const educationPoints = { doctorate: 20, bachelor: 15, diploma: 10 }[australiaCalc.education] ?? 0
+      const nominationPoints = australiaCalc.visa === '189' ? 0 : australiaCalc.visa === '190' ? 5 : 15
+      const total = agePoints + englishPoints + overseasPoints + australianPoints + educationPoints + nominationPoints
+
+      const englishValid = ['competent', 'proficient', 'superior'].includes(australiaCalc.english)
+      const ageEligible = ['18-24', '25-32', '33-39', '40-44'].includes(australiaCalc.age)
+      const common =
+        ageEligible &&
+        yes(australiaCalc.occupationOnRelevantList) &&
+        yes(australiaCalc.skillsAssessmentPositive) &&
+        englishValid &&
+        yes(australiaCalc.EOI) &&
+        yes(australiaCalc.invited) &&
+        yes(australiaCalc.health) &&
+        yes(australiaCalc.character)
+
+      const pathwaySpecific =
+        australiaCalc.visa === '189'
+          ? true
+          : australiaCalc.visa === '190'
+            ? yes(australiaCalc.stateNomination)
+            : (yes(australiaCalc.stateNomination) || yes(australiaCalc.eligibleFamilySponsor)) && yes(australiaCalc.regionalRequirement)
+
+      setCalcResult({
+        country: 'australia',
+        program: `Subclass ${australiaCalc.visa}`,
+        score: total,
+        max: null,
+        threshold: 65,
+        eligible: common && pathwaySpecific && total >= 65,
+        requirementsMet: common && pathwaySpecific,
+        breakdown: [
+          ['Age', agePoints],
+          ['English', englishPoints],
+          ['Overseas skilled employment', overseasPoints],
+          ['Australian skilled employment', australianPoints],
+          ['Education', educationPoints],
+          ['Nomination', nominationPoints]
+        ],
+        note: '65 points is the minimum points threshold in the supplied rule set. Reaching the threshold does not itself guarantee an invitation.'
+      })
+      return
+    }
+
+    if (calculatorCountry === 'germany') {
+      if (germanyCalc.route === 'recognised') {
+        const eligible =
+          yes(germanyCalc.qualificationFullyRecognisedGermany) &&
+          yes(germanyCalc.ageRequirement) &&
+          yes(germanyCalc.financialResources) &&
+          yes(germanyCalc.healthInsurance)
+
+        setCalcResult({
+          country: 'germany',
+          program: 'Opportunity Card — recognised qualification route',
+          score: null,
+          max: null,
+          threshold: null,
+          eligible,
+          requirementsMet: eligible,
+          breakdown: [],
+          directRoute: true,
+          note: eligible
+            ? 'The entered information meets the supplied screening conditions for the recognised-qualification route.'
+            : 'One or more recognised-qualification route screening requirements are not met.'
+        })
+        return
+      }
+
+      const points = {
+        partialRecognition: Number(germanyCalc.partialRecognition),
+        shortageOccupation: Number(germanyCalc.shortageOccupation),
+        experience: Number(germanyCalc.experience),
+        german: Number(germanyCalc.germanPoints),
+        english: Number(germanyCalc.englishPoints),
+        age: Number(germanyCalc.agePoints),
+        germanyStay: Number(germanyCalc.germanyStay),
+        partner: Number(germanyCalc.partner)
+      }
+      const total = Object.values(points).reduce((sum, value) => sum + value, 0)
+
+      const languageMinimumMet =
+        ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'].includes(germanyCalc.germanLevel) ||
+        ['B2', 'C1', 'C2'].includes(germanyCalc.englishLevel)
+
+      const eligible =
+        yes(germanyCalc.qualificationCompleted) &&
+        yes(germanyCalc.qualificationRecognisedInOriginCountry) &&
+        languageMinimumMet &&
+        total >= 6 &&
+        yes(germanyCalc.financialResources) &&
+        yes(germanyCalc.healthInsurance)
+
+      setCalcResult({
+        country: 'germany',
+        program: 'Opportunity Card — points route',
+        score: total,
+        max: 16,
+        threshold: 6,
+        eligible,
+        requirementsMet: eligible,
+        breakdown: [
+          ['Qualification / recognition', points.partialRecognition],
+          ['Shortage occupation', points.shortageOccupation],
+          ['Professional experience', points.experience],
+          ['German language', points.german],
+          ['English C1+', points.english],
+          ['Age', points.age],
+          ['Previous Germany stay', points.germanyStay],
+          ['Partner eligibility', points.partner]
+        ],
+        note: 'The points route requires at least 6 points plus the separate qualification, language, financial and insurance requirements.'
+      })
+      return
+    }
+
+    if (calculatorCountry === 'uk') {
+      const mandatory =
+        yes(ukCalc.approvedSponsor) &&
+        yes(ukCalc.certificateOfSponsorship) &&
+        yes(ukCalc.eligibleOccupation) &&
+        yes(ukCalc.appropriateSkillLevel) &&
+        ['B2', 'C1', 'C2'].includes(ukCalc.englishLevel)
+
+      const salary = Number(ukCalc.salary)
+      const goingRate = Number(ukCalc.goingRate)
+      const hasSalaryData = Number.isFinite(salary) && salary > 0 && Number.isFinite(goingRate) && goingRate > 0
+
+      const tradeable =
+        hasSalaryData && (
+          (salary >= 41700 && salary >= goingRate) ||
+          (yes(ukCalc.relevantPhD) && salary >= 37500 && salary >= goingRate * 0.90) ||
+          (yes(ukCalc.relevantSTEMPhD) && salary >= 33400 && salary >= goingRate * 0.80) ||
+          (yes(ukCalc.onImmigrationSalaryList) && salary >= 33400 && salary >= goingRate) ||
+          (yes(ukCalc.newEntrant) && salary >= 33400 && salary >= goingRate * 0.70)
+        )
+
+      const eligible =
+        mandatory &&
+        tradeable &&
+        yes(ukCalc.genuineJob) &&
+        yes(ukCalc.financialRequirement) &&
+        yes(ukCalc.suitable)
+
+      setCalcResult({
+        country: 'uk',
+        program: 'Skilled Worker',
+        score: mandatory ? 50 + (tradeable ? 20 : 0) : 0,
+        max: 70,
+        threshold: 70,
+        eligible,
+        requirementsMet: mandatory,
+        breakdown: [
+          ['Mandatory requirements', mandatory ? 50 : 0],
+          ['Tradeable salary option', tradeable ? 20 : 0]
+        ],
+        note: 'The supplied UK rule set uses 70 total points: 50 mandatory points plus 20 tradeable points. Salary and going-rate data are required for the tradeable check.'
+      })
+      return
+    }
+
+    // 🇳🇿 New Zealand
+    const commonNZ =
+      Number(nzCalc.age) <= 55 &&
+      nzCalc.age !== '' &&
+      yes(nzCalc.accreditedEmployer) &&
+      yes(nzCalc.skilledJobOrOffer) &&
+      Number(nzCalc.hoursPerWeek) >= 30 &&
+      yes(nzCalc.english) &&
+      yes(nzCalc.health) &&
+      yes(nzCalc.character)
+
+    if (nzCalc.pathway === 'points') {
+      const categoryPoints = {
+        qualification: {
+          level10Doctorate: 6,
+          level9Masters: 5,
+          level8HonoursOrPGDip: 4,
+          level7Bachelor: 3
+        },
+        income: {
+          '3x': 6,
+          '2x': 4,
+          '1.5x': 3
+        },
+        occupationalRegistration: {
+          sixYears: 6,
+          fiveYears: 5,
+          fourYears: 4,
+          twoYears: 3
+        }
+      }
+
+      const primaryPoints =
+        nzCalc.skillCategory === 'qualification'
+          ? categoryPoints.qualification[nzCalc.qualification] ?? 0
+          : nzCalc.skillCategory === 'income'
+            ? categoryPoints.income[nzCalc.income] ?? 0
+            : categoryPoints.occupationalRegistration[nzCalc.occupationalRegistration] ?? 0
+
+      const workPoints = {
+        '0': 0,
+        '1': 1,
+        '1.5': 2,
+        '2': 3
+      }[nzCalc.nzSkilledWorkExperience] ?? 0
+
+      const total = Math.min(6, primaryPoints + workPoints)
+
+      setCalcResult({
+        country: 'nz',
+        program: 'Skilled Migrant Category — points pathway',
+        score: total,
+        max: 6,
+        threshold: 6,
+        eligible: commonNZ && total >= 6,
+        requirementsMet: commonNZ,
+        breakdown: [
+          ['Primary skill category', primaryPoints],
+          ['New Zealand skilled work experience', workPoints]
+        ],
+        note: 'The supplied points pathway uses one primary skill category—qualification, income or occupational registration—with New Zealand skilled work experience adding points where applicable.'
+      })
+      return
+    }
+
+    if (nzCalc.pathway === 'experience') {
+      const eligible =
+        commonNZ &&
+        Number(nzCalc.relevantWorkExperienceYears) >= 5 &&
+        Number(nzCalc.nzSkilledWorkExperienceYears) >= 2 &&
+        [1, 2, 3].includes(Number(nzCalc.occupationSkillLevel))
+
+      setCalcResult({
+        country: 'nz',
+        program: 'Skilled Migrant Category — skilled work experience pathway',
+        score: null,
+        max: null,
+        threshold: null,
+        eligible,
+        requirementsMet: commonNZ,
+        breakdown: [],
+        note: eligible
+          ? 'The entered information meets the supplied screening conditions for the skilled work experience pathway.'
+          : 'The supplied screening conditions for this pathway are not all met.'
+      })
+      return
+    }
+
+    const eligible =
+      commonNZ &&
+      yes(nzCalc.relevantTradeQualification) &&
+      Number(nzCalc.postQualificationExperienceYears) >= 4 &&
+      Number(nzCalc.nzSkilledWorkExperienceMonths) >= 18
+
+    setCalcResult({
+      country: 'nz',
+      program: 'Skilled Migrant Category — trades & technicians pathway',
+      score: null,
+      max: null,
+      threshold: null,
+      eligible,
+      requirementsMet: commonNZ,
+      breakdown: [],
+      note: eligible
+        ? 'The entered information meets the supplied screening conditions for the trades and technicians pathway.'
+        : 'The supplied screening conditions for this pathway are not all met.'
+    })
   }
 
   // Handle Submission using EmailJS
@@ -4914,6 +5471,649 @@ export default function App() {
       .partnership-showcase-grid { grid-template-columns: 1fr; }
     }
 
+    /* ==========================================================
+       ELIGIBILITY CALCULATOR — PROFESSIONAL RESPONSIVE UI
+       ========================================================== */
+    .calculator-intro {
+      max-width: 820px;
+      margin: 0 auto 34px;
+      text-align: center;
+    }
+
+    .calculator-eyebrow,
+    .calculator-kicker {
+      display: inline-flex;
+      align-items: center;
+      color: var(--accent-blue);
+      font-size: .69rem;
+      font-weight: 850;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .calculator-intro .section-title {
+      margin: 11px 0 10px;
+      font-size: clamp(2rem, 4vw, 2.75rem);
+    }
+
+    .calculator-intro p {
+      margin: 0 auto;
+      max-width: 760px;
+      color: var(--text-secondary);
+      line-height: 1.75;
+      font-size: .92rem;
+    }
+
+    .calculator-professional-shell {
+      max-width: 1160px;
+      margin: 0 auto;
+    }
+
+    .calculator-country-strip {
+      display: flex;
+      gap: 10px;
+      padding: 6px;
+      margin-bottom: 14px;
+      overflow-x: auto;
+      overscroll-behavior-x: contain;
+      scrollbar-width: thin;
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      background: var(--bg-card);
+      box-shadow: 0 12px 34px rgba(0,0,0,.12);
+    }
+
+    .calculator-country-tab {
+      flex: 1 0 188px;
+      min-width: 188px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 13px 14px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      text-align: left;
+      transition: .2s ease;
+    }
+
+    .calculator-country-tab:hover {
+      background: rgba(37,99,235,.055);
+      color: var(--text-primary);
+    }
+
+    .calculator-country-tab.active {
+      border-color: rgba(37,99,235,.45);
+      background: rgba(37,99,235,.11);
+      color: var(--text-primary);
+      box-shadow: inset 0 0 0 1px rgba(37,99,235,.08);
+    }
+
+    .calculator-country-flag {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 10px;
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      font-size: 1.05rem;
+    }
+
+    .calculator-country-copy {
+      min-width: 0;
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .calculator-country-copy strong {
+      color: inherit;
+      font-size: .86rem;
+      line-height: 1.2;
+    }
+
+    .calculator-country-copy small {
+      color: var(--text-muted);
+      font-size: .68rem;
+      line-height: 1.3;
+      white-space: normal;
+    }
+
+    .calculator-country-tab > svg {
+      flex: 0 0 auto;
+      opacity: .45;
+    }
+
+    .calculator-country-tab.active > svg {
+      color: var(--accent-blue);
+      opacity: 1;
+    }
+
+    .calculator-main-card {
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      background: var(--bg-card);
+      box-shadow: 0 22px 60px rgba(0,0,0,.14);
+    }
+
+    .calculator-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 28px 30px 24px;
+      border-bottom: 1px solid var(--border-color);
+      background: linear-gradient(135deg, rgba(37,99,235,.075), transparent 55%);
+    }
+
+    .calculator-card-head h3 {
+      margin: 7px 0 7px;
+      color: var(--text-primary);
+      font-size: clamp(1.28rem, 2vw, 1.65rem);
+      line-height: 1.25;
+    }
+
+    .calculator-card-head p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: .84rem;
+      line-height: 1.65;
+    }
+
+    .calculator-step-badge {
+      flex: 0 0 auto;
+      padding: 8px 11px;
+      border: 1px solid rgba(37,99,235,.22);
+      border-radius: 999px;
+      background: rgba(37,99,235,.08);
+      color: var(--accent-blue);
+      font-size: .67rem;
+      font-weight: 850;
+      letter-spacing: .08em;
+      white-space: nowrap;
+    }
+
+    .calculator-step-badge span {
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .calculator-content {
+      padding: 28px 30px 4px;
+    }
+
+    .calculator-pathway-switch {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+      margin-bottom: 28px;
+    }
+
+    .calculator-pathway-switch.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .calculator-pathway-switch.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .calculator-pathway-switch button {
+      min-width: 0;
+      padding: 13px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 13px;
+      background: var(--bg-main);
+      color: var(--text-secondary);
+      text-align: left;
+      cursor: pointer;
+      transition: .2s ease;
+    }
+
+    .calculator-pathway-switch button:hover {
+      border-color: rgba(37,99,235,.32);
+      color: var(--text-primary);
+    }
+
+    .calculator-pathway-switch button.active {
+      border-color: rgba(37,99,235,.62);
+      background: rgba(37,99,235,.1);
+      color: var(--text-primary);
+      box-shadow: inset 3px 0 0 var(--accent-blue);
+    }
+
+    .calculator-pathway-switch button span,
+    .calculator-pathway-switch button small {
+      display: block;
+    }
+
+    .calculator-pathway-switch button span {
+      color: inherit;
+      font-size: .84rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .calculator-pathway-switch button small {
+      margin-top: 4px;
+      color: var(--text-muted);
+      font-size: .69rem;
+      line-height: 1.35;
+    }
+
+    .calculator-section-heading {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      margin: 26px 0 15px;
+    }
+
+    .calculator-section-heading > span {
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 9px;
+      background: rgba(37,99,235,.1);
+      color: var(--accent-blue);
+      font-size: .68rem;
+      font-weight: 850;
+    }
+
+    .calculator-section-heading strong,
+    .calculator-section-heading small {
+      display: block;
+    }
+
+    .calculator-section-heading strong {
+      color: var(--text-primary);
+      font-size: .91rem;
+    }
+
+    .calculator-section-heading small {
+      margin-top: 3px;
+      color: var(--text-muted);
+      font-size: .72rem;
+      line-height: 1.45;
+    }
+
+    .calculator-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .calculator-form-grid > * {
+      min-width: 0;
+    }
+
+    .calculator-select,
+    .calculator-input {
+      width: 100%;
+      min-height: 48px;
+      padding: 11px 13px;
+      border: 1px solid var(--border-color);
+      border-radius: 11px;
+      outline: none;
+      background: var(--bg-main);
+      color: var(--text-primary);
+      font: inherit;
+      font-size: .86rem;
+      transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .calculator-select:focus,
+    .calculator-input:focus {
+      border-color: rgba(37,99,235,.75);
+      box-shadow: 0 0 0 3px rgba(37,99,235,.11);
+    }
+
+    .calculator-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .calculator-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      padding: 24px 30px 30px;
+      margin-top: 22px;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .calculator-primary-btn,
+    .calculator-secondary-btn {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 17px;
+      border-radius: 11px;
+      font: inherit;
+      font-size: .83rem;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .calculator-primary-btn {
+      border: 1px solid var(--accent-blue);
+      background: var(--accent-blue);
+      color: #fff;
+      box-shadow: 0 10px 22px rgba(37,99,235,.2);
+    }
+
+    .calculator-primary-btn:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .calculator-secondary-btn {
+      border: 1px solid var(--border-color);
+      background: var(--bg-main);
+      color: var(--text-primary);
+    }
+
+    .calculator-secondary-btn:hover {
+      border-color: rgba(37,99,235,.38);
+    }
+
+    .calculator-result {
+      margin: 0 30px 30px;
+      padding: 22px;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-main);
+    }
+
+    .calculator-result.is-positive {
+      border-color: rgba(34,197,94,.35);
+      background: linear-gradient(135deg, rgba(34,197,94,.07), var(--bg-main) 55%);
+    }
+
+    .calculator-result.is-negative {
+      border-color: rgba(239,68,68,.3);
+      background: linear-gradient(135deg, rgba(239,68,68,.055), var(--bg-main) 55%);
+    }
+
+    .calculator-result-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .calculator-result-top h3 {
+      margin: 6px 0 5px;
+      color: var(--text-primary);
+      font-size: 1.12rem;
+      line-height: 1.35;
+    }
+
+    .calculator-result-top p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: .81rem;
+      line-height: 1.6;
+    }
+
+    .calculator-score-display {
+      flex: 0 0 auto;
+      min-width: 132px;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 13px;
+      background: var(--bg-card);
+      text-align: right;
+    }
+
+    .calculator-score-display strong,
+    .calculator-score-display span {
+      display: block;
+    }
+
+    .calculator-score-display strong {
+      color: var(--accent-blue);
+      font-size: 1.65rem;
+      line-height: 1.05;
+      font-weight: 900;
+    }
+
+    .calculator-score-display span {
+      margin-top: 4px;
+      color: var(--text-muted);
+      font-size: .67rem;
+    }
+
+    .calculator-result-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding: 11px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      font-size: .78rem;
+    }
+
+    .result-status-dot {
+      width: 8px;
+      height: 8px;
+      flex: 0 0 auto;
+      border-radius: 50%;
+    }
+
+    .result-status-dot.positive { background: #16a34a; }
+    .result-status-dot.negative { background: #dc2626; }
+
+    .calculator-result-threshold {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 9px;
+      padding: 10px 12px;
+      color: var(--text-secondary);
+      font-size: .76rem;
+    }
+
+    .calculator-result-threshold strong {
+      color: var(--text-primary);
+    }
+
+    .calculator-breakdown {
+      margin-top: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--bg-card);
+    }
+
+    .calculator-breakdown-title {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-size: .75rem;
+      font-weight: 850;
+      letter-spacing: .03em;
+    }
+
+    .calculator-breakdown-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: .75rem;
+    }
+
+    .calculator-breakdown-row:last-child {
+      border-bottom: 0;
+    }
+
+    .calculator-breakdown-row strong {
+      color: var(--text-primary);
+      font-size: .8rem;
+    }
+
+    .calculator-result-note {
+      margin: 13px 0 0;
+      color: var(--text-secondary);
+      font-size: .78rem;
+      line-height: 1.65;
+    }
+
+    .calculator-result-actions {
+      display: flex;
+      gap: 9px;
+      flex-wrap: wrap;
+      margin-top: 17px;
+    }
+
+    .calculator-disclaimer {
+      max-width: 1040px;
+      margin: 16px auto 0;
+      padding: 12px 15px;
+      border: 1px solid var(--border-color);
+      border-radius: 11px;
+      background: rgba(148,163,184,.045);
+      color: var(--text-muted);
+      text-align: center;
+      font-size: .72rem;
+      line-height: 1.65;
+    }
+
+    .calculator-disclaimer strong {
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 900px) {
+      .calculator-country-tab {
+        flex: 0 0 210px;
+      }
+
+      .calculator-card-head {
+        padding: 24px 22px 20px;
+      }
+
+      .calculator-content {
+        padding: 23px 22px 2px;
+      }
+
+      .calculator-actions {
+        padding: 21px 22px 24px;
+      }
+
+      .calculator-result {
+        margin-left: 22px;
+        margin-right: 22px;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .calculator-country-strip {
+        margin-left: -4px;
+        margin-right: -4px;
+        padding: 5px;
+        border-radius: 15px;
+      }
+
+      .calculator-country-tab {
+        flex: 0 0 205px;
+        min-width: 205px;
+        padding: 12px;
+      }
+
+      .calculator-card-head {
+        flex-direction: column;
+        gap: 13px;
+      }
+
+      .calculator-step-badge {
+        align-self: flex-start;
+      }
+
+      .calculator-pathway-switch,
+      .calculator-pathway-switch.two,
+      .calculator-pathway-switch.three {
+        display: flex;
+        overflow-x: auto;
+        gap: 8px;
+        margin-left: -2px;
+        margin-right: -2px;
+        padding-bottom: 3px;
+      }
+
+      .calculator-pathway-switch button {
+        flex: 0 0 210px;
+      }
+
+      .calculator-form-grid {
+        grid-template-columns: 1fr;
+        gap: 13px;
+      }
+
+      .calculator-result-top {
+        flex-direction: column;
+      }
+
+      .calculator-score-display {
+        width: 100%;
+        text-align: left;
+      }
+
+      .calculator-primary-btn,
+      .calculator-secondary-btn {
+        width: 100%;
+      }
+
+      .calculator-result-actions {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .calculator-card-head {
+        padding: 21px 16px 18px;
+      }
+
+      .calculator-content {
+        padding: 20px 16px 0;
+      }
+
+      .calculator-actions {
+        padding: 18px 16px 20px;
+      }
+
+      .calculator-result {
+        margin: 0 16px 20px;
+        padding: 17px;
+      }
+
+      .calculator-intro p {
+        font-size: .84rem;
+      }
+
+      .calculator-country-tab {
+        flex-basis: 188px;
+        min-width: 188px;
+      }
+    }
+
   `
 
   return (
@@ -5519,13 +6719,19 @@ export default function App() {
                 Preliminary Profile Snapshot
               </div>
               <div style={{ color: 'var(--text-primary)', fontSize: '1.25rem', fontWeight: '800' }}>
-                Estimated Score: <span style={{ color: 'var(--accent-blue)' }}>{calcScore} Points</span>
+                Pathway: <span style={{ color: 'var(--accent-blue)' }}>{calculatorCountry === 'canada' ? 'Canada FSW' : calculatorCountry === 'australia' ? `Australia ${australiaCalc.visa}` : calculatorCountry === 'germany' ? 'Germany Opportunity Card' : calculatorCountry === 'uk' ? 'UK Skilled Worker' : 'New Zealand SMC'}</span>
               </div>
               <div style={{ color: 'var(--text-secondary)', fontSize: '0.88rem', marginTop: '4px' }}>
-                Age Group: <strong style={{ color: 'var(--text-primary)' }}>{calcData.age}</strong> | Target: <strong style={{ color: 'var(--text-primary)', textTransform: 'capitalize' }}>{calcData.destination}</strong>
+                {calcResult?.score !== null && calcResult?.score !== undefined
+                  ? <>Latest result: <strong style={{ color: 'var(--text-primary)' }}>{calcResult.score}{calcResult.max ? ` / ${calcResult.max}` : ' points'}</strong></>
+                  : 'No calculation run yet'}
               </div>
-              <div style={{ color: '#22c55e', fontWeight: '700', fontSize: '0.92rem', marginTop: '4px' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><CheckIcon /> Potentially Eligible</span>
+              <div style={{ color: calcResult?.eligible === false ? '#dc2626' : '#16a34a', fontWeight: '700', fontSize: '0.92rem', marginTop: '4px' }}>
+                {calcResult?.eligible === true
+                  ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}><CheckIcon /> Preliminary threshold met</span>
+                  : calcResult?.eligible === false
+                    ? 'Preliminary threshold not met'
+                    : 'Preliminary assessment only'}
               </div>
               <div style={{ color: 'var(--text-muted)', fontSize: '0.82rem', marginTop: '4px', maxWidth: '560px', lineHeight: '1.45' }}>
                 Eligibility depends on your individual profile and current program requirements.
@@ -5864,176 +7070,481 @@ export default function App() {
         </div>
       )}
 
-      {/* ELIGIBILITY CALCULATOR */}
-      <section id="calculator" className="section-padding" style={{ padding: '60px 0' }}>
+      {/* PROFESSIONAL ELIGIBILITY CALCULATOR */}
+      <section id="calculator" className="section-padding" style={{ padding: '82px 0', background: 'var(--bg-alt)' }}>
         <div className="container">
-          <div className="section-header" style={{ textAlign: 'center', marginBottom: '40px' }}>
-            <span className="section-tag" style={{ background: 'var(--bg-card)', color: 'var(--accent-blue)', padding: '6px 14px', borderRadius: '20px', fontSize: '0.85rem' }}>Interactive Evaluation</span>
-            <h2 className="section-title text-gradient" style={{ fontSize: '2.2rem', margin: '12px 0' }}>Check Your Immigration Eligibility</h2>
-            <p className="section-desc" style={{ color: 'var(--text-secondary)' }}>
-              Instant preliminary points assessment for Express Entry, GSM, and European job cards.
+          <div className="calculator-intro">
+            <div className="calculator-eyebrow">PERSONALISED PATHWAY SCREENING</div>
+            <h2 className="section-title text-gradient">Check Your Immigration Eligibility</h2>
+            <p>
+              Choose your destination and pathway, enter your profile details, and receive a preliminary result.
+              Point values are intentionally kept out of the questions and are revealed only after calculation.
             </p>
           </div>
 
-          <div className="glass-panel calculator-box" style={{ padding: '30px', maxWidth: '700px', margin: '0 auto' }}>
-            <div className="calc-progress" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px', position: 'relative' }}>
-              <div className={`progress-step ${calcStep >= 1 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 1 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>1</div>
-              <div className={`progress-step ${calcStep >= 2 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 2 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>2</div>
-              <div className={`progress-step ${calcStep >= 3 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 3 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>3</div>
-              <div className={`progress-step ${calcStep >= 4 ? 'active' : ''}`} style={{ width: '32px', height: '32px', borderRadius: '50%', background: calcStep >= 4 ? 'var(--accent-blue)' : 'var(--bg-main)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: '700' }}>📊</div>
+          <div className="calculator-professional-shell">
+            <div className="calculator-country-strip" role="tablist" aria-label="Choose destination">
+              {CALCULATOR_COUNTRIES.map((country) => {
+                const active = calculatorCountry === country.id
+                return (
+                  <button
+                    key={country.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={active}
+                    className={`calculator-country-tab ${active ? 'active' : ''}`}
+                    onClick={() => {
+                      setCalculatorCountry(country.id)
+                      setCalcResult(null)
+                    }}
+                  >
+                    <span className="calculator-country-flag">{country.label.split(' ')[0]}</span>
+                    <span className="calculator-country-copy">
+                      <strong>{country.label.replace(country.label.split(' ')[0], '').trim()}</strong>
+                      <small>{country.subtitle}</small>
+                    </span>
+                    <ArrowRightIcon size={16} />
+                  </button>
+                )
+              })}
             </div>
 
-            {/* STEP 1 */}
-            {calcStep === 1 && (
-              <div className="calc-step-content">
-                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)', marginBottom: '18px' }}>Select Relocation Preferences</h3>
-                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Preferred Destination</label>
-                    <select
-                      className="select-control"
-                      value={calcData.destination}
-                      onChange={(e) => setCalcData({ ...calcData, destination: e.target.value })}
-                    >
-                      <option value="canada">🇨🇦 Canada (Express Entry)</option>
-                      <option value="australia">🇦🇺 Australia (General Skilled Migration)</option>
-                      <option value="germany">🇩🇪 Germany (Opportunity Card)</option>
-                      <option value="uk">🇬🇧 United Kingdom (Skilled Worker)</option>
-                      <option value="nz">🇳🇿 New Zealand (SMC)</option>
-                    </select>
+            <div className="calculator-main-card">
+              <div className="calculator-card-head">
+                <div>
+                  <span className="calculator-kicker">
+                    {calculatorCountry === 'canada' && 'CANADA'}
+                    {calculatorCountry === 'australia' && 'AUSTRALIA'}
+                    {calculatorCountry === 'germany' && 'GERMANY'}
+                    {calculatorCountry === 'uk' && 'UNITED KINGDOM'}
+                    {calculatorCountry === 'nz' && 'NEW ZEALAND'}
+                  </span>
+                  <h3>
+                    {calculatorCountry === 'canada' && 'Choose your Canadian pathway'}
+                    {calculatorCountry === 'australia' && 'Choose your Australian skilled visa'}
+                    {calculatorCountry === 'germany' && 'Choose your Germany Opportunity Card route'}
+                    {calculatorCountry === 'uk' && 'Skilled Worker preliminary assessment'}
+                    {calculatorCountry === 'nz' && 'Choose your New Zealand pathway'}
+                  </h3>
+                  <p>
+                    {calculatorCountry === 'canada' && 'Answer the pathway-specific questions below. Your score and eligibility status will appear after you calculate.'}
+                    {calculatorCountry === 'australia' && 'Select the visa subclass first, then complete the skilled migration profile questions.'}
+                    {calculatorCountry === 'germany' && 'Select the access route first. The questions will adapt to that route.'}
+                    {calculatorCountry === 'uk' && 'The UK route uses sponsorship, skill, English and salary requirements rather than an age-based grid.'}
+                    {calculatorCountry === 'nz' && 'Select one pathway. Common requirements are collected once and the relevant pathway questions appear below.'}
+                  </p>
+                </div>
+                <div className="calculator-step-badge">STEP 1 <span>OF 2</span></div>
+              </div>
+
+              {/* CANADA */}
+              {calculatorCountry === 'canada' && (
+                <div className="calculator-content">
+                  <div className="calculator-pathway-switch">
+                    {[
+                      ['FSWP', 'Federal Skilled Worker'],
+                      ['CEC', 'Canadian Experience Class'],
+                      ['FSTP', 'Federal Skilled Trades']
+                    ].map(([value, label]) => (
+                      <button
+                        key={value}
+                        type="button"
+                        className={canadaCalc.program === value ? 'active' : ''}
+                        onClick={() => {
+                          setCanadaCalc({ ...canadaCalc, program: value })
+                          setCalcResult(null)
+                        }}
+                      >
+                        <span>{value}</span>
+                        <small>{label}</small>
+                      </button>
+                    ))}
                   </div>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Visa Category</label>
-                    <select
-                      className="select-control"
-                      value={calcData.visaType}
-                      onChange={(e) => setCalcData({ ...calcData, visaType: e.target.value })}
-                    >
-                      <option value="pr">Permanent Residency (PR)</option>
-                      <option value="work">Skilled Work Permit</option>
-                      <option value="student">Study Visa / Higher Education Pathway</option>
-                    </select>
+
+                  {canadaCalc.program === 'FSWP' && (
+                    <>
+                      <div className="calculator-section-heading">
+                        <span>01</span>
+                        <div><strong>Profile & selection factors</strong><small>Enter your information without worrying about the score.</small></div>
+                      </div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Age">
+                          <select className="calculator-select" value={canadaCalc.age} onChange={(e) => setCanadaCalc({ ...canadaCalc, age: e.target.value })}>
+                            <option value="18-35">18–35</option><option value="36">36</option><option value="37">37</option><option value="38">38</option><option value="39">39</option><option value="40">40</option><option value="41">41</option><option value="42">42</option><option value="43">43</option><option value="44">44</option><option value="45">45</option><option value="46">46</option><option value="47+">47 or older</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Skilled Work Experience">
+                          <select className="calculator-select" value={canadaCalc.workExperience} onChange={(e) => setCanadaCalc({ ...canadaCalc, workExperience: e.target.value })}>
+                            <option value="1">1 year</option><option value="2-3">2–3 years</option><option value="4-5">4–5 years</option><option value="6+">6+ years</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Education">
+                          <select className="calculator-select" value={canadaCalc.education} onChange={(e) => setCanadaCalc({ ...canadaCalc, education: e.target.value })}>
+                            <option value="highschool">Secondary / high school</option><option value="postsecondary1">1-year post-secondary credential</option><option value="postsecondary2">2-year post-secondary credential</option><option value="bachelor">Bachelor's / 3+ year credential</option><option value="twoCredentials">Two or more credentials</option><option value="masters">Master's / eligible professional degree</option><option value="phd">Doctorate</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="First Official Language — Speaking">
+                          <select className="calculator-select" value={canadaCalc.firstLanguageSpeaking} onChange={(e) => setCanadaCalc({ ...canadaCalc, firstLanguageSpeaking: e.target.value })}>
+                            <option value="6">CLB 9 or higher</option><option value="5">CLB 8</option><option value="4">CLB 7</option><option value="0">Below CLB 7</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="First Official Language — Listening">
+                          <select className="calculator-select" value={canadaCalc.firstLanguageListening} onChange={(e) => setCanadaCalc({ ...canadaCalc, firstLanguageListening: e.target.value })}>
+                            <option value="6">CLB 9 or higher</option><option value="5">CLB 8</option><option value="4">CLB 7</option><option value="0">Below CLB 7</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="First Official Language — Reading">
+                          <select className="calculator-select" value={canadaCalc.firstLanguageReading} onChange={(e) => setCanadaCalc({ ...canadaCalc, firstLanguageReading: e.target.value })}>
+                            <option value="6">CLB 9 or higher</option><option value="5">CLB 8</option><option value="4">CLB 7</option><option value="0">Below CLB 7</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="First Official Language — Writing">
+                          <select className="calculator-select" value={canadaCalc.firstLanguageWriting} onChange={(e) => setCanadaCalc({ ...canadaCalc, firstLanguageWriting: e.target.value })}>
+                            <option value="6">CLB 9 or higher</option><option value="5">CLB 8</option><option value="4">CLB 7</option><option value="0">Below CLB 7</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Second Official Language">
+                          <select className="calculator-select" value={canadaCalc.secondLanguage} onChange={(e) => setCanadaCalc({ ...canadaCalc, secondLanguage: e.target.value })}>
+                            <option value="0">CLB 5 not met in all four abilities</option><option value="4">CLB 5 or higher in all four abilities</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Arranged Employment">
+                          <select className="calculator-select" value={canadaCalc.arrangedEmployment} onChange={(e) => setCanadaCalc({ ...canadaCalc, arrangedEmployment: e.target.value })}>
+                            <option value="0">No qualifying arranged employment</option><option value="10">Qualifying arranged employment</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Adaptability">
+                          <select className="calculator-select" value={canadaCalc.adaptability} onChange={(e) => setCanadaCalc({ ...canadaCalc, adaptability: e.target.value })}>
+                            {Array.from({ length: 11 }, (_, i) => <option key={i} value={i}>{i === 1 ? '1 point' : `${i} points`}</option>)}
+                          </select>
+                        </CalculatorField>
+                      </div>
+
+                      <div className="calculator-section-heading">
+                        <span>02</span>
+                        <div><strong>Minimum requirements</strong><small>These checks do not add points; they determine whether the pathway requirements are met.</small></div>
+                      </div>
+                      <div className="calculator-form-grid">
+                                        <CalculatorField label="Qualifying Skilled Work — Years">
+                          <select className="calculator-select" value={canadaCalc.skilledWorkYears} onChange={(e) => setCanadaCalc({ ...canadaCalc, skilledWorkYears: e.target.value })}>
+                            <option value="0">Less than 1 year</option><option value="1">1 year or more</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Qualifying Work Hours">
+                          <select className="calculator-select" value={canadaCalc.skilledWorkHours} onChange={(e) => setCanadaCalc({ ...canadaCalc, skilledWorkHours: e.target.value })}>
+                            <option value="0">Below 1,560 hours</option><option value="1560">1,560 hours or more</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Work Within Last 10 Years">
+                          <select className="calculator-select" value={canadaCalc.workWithin10Years} onChange={(e) => setCanadaCalc({ ...canadaCalc, workWithin10Years: e.target.value })}>
+                            <option value="yes">Yes</option><option value="no">No</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Work Paid">
+                          <select className="calculator-select" value={canadaCalc.skilledWorkPaid} onChange={(e) => setCanadaCalc({ ...canadaCalc, skilledWorkPaid: e.target.value })}>
+                            <option value="yes">Yes</option><option value="no">No</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Continuous Primary Occupation Work">
+                          <select className="calculator-select" value={canadaCalc.continuousPrimaryOccupationWork} onChange={(e) => setCanadaCalc({ ...canadaCalc, continuousPrimaryOccupationWork: e.target.value })}>
+                            <option value="yes">Yes</option><option value="no">No</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Work TEER">
+                          <select className="calculator-select" value={canadaCalc.workTEER} onChange={(e) => setCanadaCalc({ ...canadaCalc, workTEER: e.target.value })}>
+                            <option value="0">TEER 0</option><option value="1">TEER 1</option><option value="2">TEER 2</option><option value="3">TEER 3</option><option value="4">TEER 4 or 5</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Foreign Education Assessment">
+                          <select className="calculator-select" value={canadaCalc.foreignEducationECA} onChange={(e) => setCanadaCalc({ ...canadaCalc, foreignEducationECA: e.target.value })}>
+                            <option value="yes">ECA available / not required for Canadian credential</option><option value="no">Not available</option>
+                          </select>
+                        </CalculatorField>
+                        <CalculatorField label="Settlement Funds">
+                          <select className="calculator-select" value={canadaCalc.settlementFunds} onChange={(e) => setCanadaCalc({ ...canadaCalc, settlementFunds: e.target.value })}><option value="yes">Available / requirement met</option><option value="no">Not met</option></select>
+                        </CalculatorField>
+                        <CalculatorField label="Admissibility">
+                          <select className="calculator-select" value={canadaCalc.admissible} onChange={(e) => setCanadaCalc({ ...canadaCalc, admissible: e.target.value })}><option value="yes">No known issue</option><option value="no">Potential issue</option></select>
+                        </CalculatorField>
+                        <CalculatorField label="Intention to Live Outside Quebec">
+                          <select className="calculator-select" value={canadaCalc.intendOutsideQuebec} onChange={(e) => setCanadaCalc({ ...canadaCalc, intendOutsideQuebec: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select>
+                        </CalculatorField>
+                      </div>
+                    </>
+                  )}
+
+                  {canadaCalc.program === 'CEC' && (
+                    <>
+                      <div className="calculator-section-heading">
+                        <span>01</span><div><strong>Canadian skilled work</strong><small>Enter the details of your qualifying Canadian employment.</small></div>
+                      </div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Canadian Work Experience"><select className="calculator-select" value={canadaCalc.canadianWorkYears} onChange={(e) => setCanadaCalc({ ...canadaCalc, canadianWorkYears: e.target.value })}><option value="0">Less than 1 year</option><option value="1">1 year or more</option></select></CalculatorField>
+                        <CalculatorField label="Canadian Work Hours"><select className="calculator-select" value={canadaCalc.canadianWorkHours} onChange={(e) => setCanadaCalc({ ...canadaCalc, canadianWorkHours: e.target.value })}><option value="0">Below 1,560 hours</option><option value="1560">1,560 hours or more</option></select></CalculatorField>
+                        <CalculatorField label="Work Within Last 3 Years"><select className="calculator-select" value={canadaCalc.canadianWorkLast3Years} onChange={(e) => setCanadaCalc({ ...canadaCalc, canadianWorkLast3Years: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                        <CalculatorField label="Canadian Work TEER"><select className="calculator-select" value={canadaCalc.canadianWorkTEER} onChange={(e) => setCanadaCalc({ ...canadaCalc, canadianWorkTEER: e.target.value })}><option value="0">TEER 0</option><option value="1">TEER 1</option><option value="2">TEER 2</option><option value="3">TEER 3</option><option value="4">TEER 4 or 5</option></select></CalculatorField>
+                        <CalculatorField label="Work Authorised"><select className="calculator-select" value={canadaCalc.canadianWorkAuthorized} onChange={(e) => setCanadaCalc({ ...canadaCalc, canadianWorkAuthorized: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                        <CalculatorField label="Work Paid"><select className="calculator-select" value={canadaCalc.canadianWorkPaid} onChange={(e) => setCanadaCalc({ ...canadaCalc, canadianWorkPaid: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                        <CalculatorField label="Language Level"><select className="calculator-select" value={canadaCalc.canadianLanguageCLB} onChange={(e) => setCanadaCalc({ ...canadaCalc, canadianLanguageCLB: e.target.value })}><option value="4">Below CLB 5</option><option value="5">CLB 5–6</option><option value="7">CLB 7+</option></select></CalculatorField>
+                      </div>
+                      <div className="calculator-section-heading"><span>02</span><div><strong>General requirements</strong><small>These are screening checks rather than point factors.</small></div></div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Admissibility"><select className="calculator-select" value={canadaCalc.admissible} onChange={(e) => setCanadaCalc({ ...canadaCalc, admissible: e.target.value })}><option value="yes">No known issue</option><option value="no">Potential issue</option></select></CalculatorField>
+                        <CalculatorField label="Intention to Live Outside Quebec"><select className="calculator-select" value={canadaCalc.intendOutsideQuebec} onChange={(e) => setCanadaCalc({ ...canadaCalc, intendOutsideQuebec: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                      </div>
+                    </>
+                  )}
+
+                  {canadaCalc.program === 'FSTP' && (
+                    <>
+                      <div className="calculator-section-heading">
+                        <span>01</span><div><strong>Skilled trade experience</strong><small>Enter your qualifying trade experience and language results.</small></div></div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Skilled Trade Experience"><select className="calculator-select" value={canadaCalc.tradeWorkYears} onChange={(e) => setCanadaCalc({ ...canadaCalc, tradeWorkYears: e.target.value })}><option value="0">Less than 2 years</option><option value="2">2 years or more</option></select></CalculatorField>
+                        <CalculatorField label="Trade Work Hours"><select className="calculator-select" value={canadaCalc.tradeWorkHours} onChange={(e) => setCanadaCalc({ ...canadaCalc, tradeWorkHours: e.target.value })}><option value="0">Below 3,120 hours</option><option value="3120">3,120 hours or more</option></select></CalculatorField>
+                        <CalculatorField label="Work Within Last 5 Years"><select className="calculator-select" value={canadaCalc.tradeWorkLast5Years} onChange={(e) => setCanadaCalc({ ...canadaCalc, tradeWorkLast5Years: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                        <CalculatorField label="Work Paid"><select className="calculator-select" value={canadaCalc.tradeWorkPaid} onChange={(e) => setCanadaCalc({ ...canadaCalc, tradeWorkPaid: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                        <CalculatorField label="Language — Speaking"><select className="calculator-select" value={canadaCalc.fstLanguageSpeaking} onChange={(e) => setCanadaCalc({ ...canadaCalc, fstLanguageSpeaking: e.target.value })}><option value="5">CLB 5+</option><option value="0">Below CLB 5</option></select></CalculatorField>
+                        <CalculatorField label="Language — Listening"><select className="calculator-select" value={canadaCalc.fstLanguageListening} onChange={(e) => setCanadaCalc({ ...canadaCalc, fstLanguageListening: e.target.value })}><option value="5">CLB 5+</option><option value="0">Below CLB 5</option></select></CalculatorField>
+                        <CalculatorField label="Language — Reading"><select className="calculator-select" value={canadaCalc.fstLanguageReading} onChange={(e) => setCanadaCalc({ ...canadaCalc, fstLanguageReading: e.target.value })}><option value="4">CLB 4+</option><option value="0">Below CLB 4</option></select></CalculatorField>
+                        <CalculatorField label="Language — Writing"><select className="calculator-select" value={canadaCalc.fstLanguageWriting} onChange={(e) => setCanadaCalc({ ...canadaCalc, fstLanguageWriting: e.target.value })}><option value="4">CLB 4+</option><option value="0">Below CLB 4</option></select></CalculatorField>
+                      </div>
+                      <div className="calculator-section-heading"><span>02</span><div><strong>Offer, certificate & general requirements</strong><small>At least one of the trade offer/certificate options must apply.</small></div></div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Valid Trade Job Offer"><select className="calculator-select" value={canadaCalc.validTradeJobOffer} onChange={(e) => setCanadaCalc({ ...canadaCalc, validTradeJobOffer: e.target.value })}><option value="no">No</option><option value="yes">Yes</option></select></CalculatorField>
+                        <CalculatorField label="Canadian Trade Certificate"><select className="calculator-select" value={canadaCalc.canadianTradeCertificate} onChange={(e) => setCanadaCalc({ ...canadaCalc, canadianTradeCertificate: e.target.value })}><option value="no">No</option><option value="yes">Yes</option></select></CalculatorField>
+                        <CalculatorField label="Settlement Funds"><select className="calculator-select" value={canadaCalc.settlementFunds} onChange={(e) => setCanadaCalc({ ...canadaCalc, settlementFunds: e.target.value })}><option value="yes">Available / requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                        <CalculatorField label="Admissibility"><select className="calculator-select" value={canadaCalc.admissible} onChange={(e) => setCanadaCalc({ ...canadaCalc, admissible: e.target.value })}><option value="yes">No known issue</option><option value="no">Potential issue</option></select></CalculatorField>
+                        <CalculatorField label="Intention to Live Outside Quebec"><select className="calculator-select" value={canadaCalc.intendOutsideQuebec} onChange={(e) => setCanadaCalc({ ...canadaCalc, intendOutsideQuebec: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* AUSTRALIA */}
+              {calculatorCountry === 'australia' && (
+                <div className="calculator-content">
+                  <div className="calculator-form-grid">
+                    <CalculatorField label="Visa / Pathway">
+                      <select className="calculator-select" value={australiaCalc.visa} onChange={(e) => setAustraliaCalc({ ...australiaCalc, visa: e.target.value })}>
+                        <option value="189">Subclass 189 — Skilled Independent</option><option value="190">Subclass 190 — Skilled Nominated</option><option value="491">Subclass 491 — Skilled Work Regional</option>
+                      </select>
+                    </CalculatorField>
+                    <CalculatorField label="Age"><select className="calculator-select" value={australiaCalc.age} onChange={(e) => setAustraliaCalc({ ...australiaCalc, age: e.target.value })}><option value="18-24">18–24</option><option value="25-32">25–32</option><option value="33-39">33–39</option><option value="40-44">40–44</option><option value="45+">45 or older</option></select></CalculatorField>
+                    <CalculatorField label="English Level"><select className="calculator-select" value={australiaCalc.english} onChange={(e) => setAustraliaCalc({ ...australiaCalc, english: e.target.value })}><option value="competent">Competent</option><option value="proficient">Proficient</option><option value="superior">Superior</option></select></CalculatorField>
+                    <CalculatorField label="Overseas Skilled Employment"><select className="calculator-select" value={australiaCalc.overseasExperience} onChange={(e) => setAustraliaCalc({ ...australiaCalc, overseasExperience: e.target.value })}><option value="0">Less than 3 years</option><option value="3-4">3–4 years</option><option value="5-7">5–7 years</option><option value="8+">8+ years</option></select></CalculatorField>
+                    <CalculatorField label="Australian Skilled Employment"><select className="calculator-select" value={australiaCalc.australianExperience} onChange={(e) => setAustraliaCalc({ ...australiaCalc, australianExperience: e.target.value })}><option value="0">Less than 1 year</option><option value="1-2">1–2 years</option><option value="3-4">3–4 years</option><option value="5-7">5–7 years</option><option value="8+">8+ years</option></select></CalculatorField>
+                    <CalculatorField label="Highest Qualifying Education"><select className="calculator-select" value={australiaCalc.education} onChange={(e) => setAustraliaCalc({ ...australiaCalc, education: e.target.value })}><option value="doctorate">Doctorate</option><option value="bachelor">Bachelor / qualifying Master</option><option value="diploma">Eligible diploma / trade qualification</option></select></CalculatorField>
+                    <CalculatorField label="Occupation on Relevant Skilled List"><select className="calculator-select" value={australiaCalc.occupationOnRelevantList} onChange={(e) => setAustraliaCalc({ ...australiaCalc, occupationOnRelevantList: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                    <CalculatorField label="Positive Skills Assessment"><select className="calculator-select" value={australiaCalc.skillsAssessmentPositive} onChange={(e) => setAustraliaCalc({ ...australiaCalc, skillsAssessmentPositive: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                    <CalculatorField label="Expression of Interest (EOI)"><select className="calculator-select" value={australiaCalc.EOI} onChange={(e) => setAustraliaCalc({ ...australiaCalc, EOI: e.target.value })}><option value="yes">Submitted</option><option value="no">Not submitted</option></select></CalculatorField>
+                    <CalculatorField label="Invitation"><select className="calculator-select" value={australiaCalc.invited} onChange={(e) => setAustraliaCalc({ ...australiaCalc, invited: e.target.value })}><option value="yes">Received</option><option value="no">Not received</option></select></CalculatorField>
+                    <CalculatorField label="Health Requirement"><select className="calculator-select" value={australiaCalc.health} onChange={(e) => setAustraliaCalc({ ...australiaCalc, health: e.target.value })}><option value="yes">No known issue / requirement met</option><option value="no">Not met / issue</option></select></CalculatorField>
+                    <CalculatorField label="Character Requirement"><select className="calculator-select" value={australiaCalc.character} onChange={(e) => setAustraliaCalc({ ...australiaCalc, character: e.target.value })}><option value="yes">No known issue / requirement met</option><option value="no">Not met / issue</option></select></CalculatorField>
+                    {australiaCalc.visa !== '189' && <CalculatorField label={australiaCalc.visa === '190' ? 'State / Territory Nomination' : 'State Nomination or Eligible Family Sponsor'}><select className="calculator-select" value={australiaCalc.visa === '190' ? australiaCalc.stateNomination : (australiaCalc.stateNomination === 'yes' ? 'state' : 'family')} onChange={(e) => {
+                      if (australiaCalc.visa === '190') setAustraliaCalc({ ...australiaCalc, stateNomination: e.target.value })
+                      else setAustraliaCalc({ ...australiaCalc, stateNomination: e.target.value === 'state' ? 'yes' : 'no', eligibleFamilySponsor: e.target.value === 'family' ? 'yes' : 'no' })
+                    }}>
+                      {australiaCalc.visa === '190' ? <><option value="yes">Yes</option><option value="no">No</option></> : <><option value="state">State / territory nomination</option><option value="family">Eligible family sponsor</option><option value="none">Neither</option></>}
+                    </select></CalculatorField>}
+                    {australiaCalc.visa === '491' && <CalculatorField label="Regional Requirement"><select className="calculator-select" value={australiaCalc.regionalRequirement} onChange={(e) => setAustraliaCalc({ ...australiaCalc, regionalRequirement: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>}
                   </div>
                 </div>
-                {calcData.visaType === 'student' && (
-                  <div style={{
-                    marginTop: '14px',
-                    padding: '12px 14px',
-                    borderRadius: '10px',
-                    border: '1px solid rgba(59,130,246,.2)',
-                    background: 'rgba(37,99,235,.08)',
-                    color: 'var(--text-secondary)',
-                    fontSize: '0.84rem',
-                    lineHeight: '1.55'
-                  }}>
-                    Study Visa assessment includes your academic profile, destination, language readiness, financial documentation, and post-study pathway considerations.
+              )}
+
+              {/* GERMANY */}
+              {calculatorCountry === 'germany' && (
+                <div className="calculator-content">
+                  <div className="calculator-pathway-switch two">
+                    <button type="button" className={germanyCalc.route === 'recognised' ? 'active' : ''} onClick={() => { setGermanyCalc({ ...germanyCalc, route: 'recognised' }); setCalcResult(null) }}><span>Recognised qualification</span><small>Direct route</small></button>
+                    <button type="button" className={germanyCalc.route === 'points' ? 'active' : ''} onClick={() => { setGermanyCalc({ ...germanyCalc, route: 'points' }); setCalcResult(null) }}><span>Points route</span><small>Qualification + points</small></button>
                   </div>
-                )}
-                <button className="btn btn-primary" onClick={() => setCalcStep(2)} style={{ marginTop: '20px', background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                  Next Step <ArrowRightIcon />
+
+                  {germanyCalc.route === 'recognised' ? (
+                    <>
+                      <div className="calculator-section-heading"><span>01</span><div><strong>Core requirements</strong><small>Screen the recognised-qualification route first.</small></div></div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Qualification Fully Recognised in Germany"><select className="calculator-select" value={germanyCalc.qualificationFullyRecognisedGermany} onChange={(e) => setGermanyCalc({ ...germanyCalc, qualificationFullyRecognisedGermany: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                        <CalculatorField label="Applicable Age Requirement"><select className="calculator-select" value={germanyCalc.ageRequirement} onChange={(e) => setGermanyCalc({ ...germanyCalc, ageRequirement: e.target.value })}><option value="yes">Requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                        <CalculatorField label="Financial Resources"><select className="calculator-select" value={germanyCalc.financialResources} onChange={(e) => setGermanyCalc({ ...germanyCalc, financialResources: e.target.value })}><option value="yes">Requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                        <CalculatorField label="Health Insurance"><select className="calculator-select" value={germanyCalc.healthInsurance} onChange={(e) => setGermanyCalc({ ...germanyCalc, healthInsurance: e.target.value })}><option value="yes">Requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="calculator-section-heading"><span>01</span><div><strong>Qualification & language</strong><small>Confirm the base requirements before your points are calculated.</small></div></div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Completed Vocational or Academic Training"><select className="calculator-select" value={germanyCalc.qualificationCompleted} onChange={(e) => setGermanyCalc({ ...germanyCalc, qualificationCompleted: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                        <CalculatorField label="Qualification Recognised in Country of Origin"><select className="calculator-select" value={germanyCalc.qualificationRecognisedInOriginCountry} onChange={(e) => setGermanyCalc({ ...germanyCalc, qualificationRecognisedInOriginCountry: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                        <CalculatorField label="German Language Level"><select className="calculator-select" value={germanyCalc.germanLevel} onChange={(e) => setGermanyCalc({ ...germanyCalc, germanLevel: e.target.value })}><option value="A1">A1</option><option value="A2">A2</option><option value="B1">B1</option><option value="B2">B2</option><option value="C1">C1</option><option value="C2">C2</option><option value="none">No German</option></select></CalculatorField>
+                        <CalculatorField label="English Language Level"><select className="calculator-select" value={germanyCalc.englishLevel} onChange={(e) => setGermanyCalc({ ...germanyCalc, englishLevel: e.target.value })}><option value="B2">B2</option><option value="C1">C1</option><option value="C2">C2</option><option value="below">Below B2</option></select></CalculatorField>
+                        <CalculatorField label="Financial Resources"><select className="calculator-select" value={germanyCalc.financialResources} onChange={(e) => setGermanyCalc({ ...germanyCalc, financialResources: e.target.value })}><option value="yes">Requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                        <CalculatorField label="Health Insurance"><select className="calculator-select" value={germanyCalc.healthInsurance} onChange={(e) => setGermanyCalc({ ...germanyCalc, healthInsurance: e.target.value })}><option value="yes">Requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                      </div>
+
+                      <div className="calculator-section-heading"><span>02</span><div><strong>Points profile</strong><small>Point values stay hidden here and are shown only in your result.</small></div></div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Partial Recognition / Qualifying Notice"><select className="calculator-select" value={germanyCalc.partialRecognition === '4' ? 'yes' : 'no'} onChange={(e) => setGermanyCalc({ ...germanyCalc, partialRecognition: e.target.value === 'yes' ? '4' : '0' })}><option value="no">No</option><option value="yes">Yes</option></select></CalculatorField>
+                        <CalculatorField label="Shortage Occupation"><select className="calculator-select" value={germanyCalc.shortageOccupation === '1' ? 'yes' : 'no'} onChange={(e) => setGermanyCalc({ ...germanyCalc, shortageOccupation: e.target.value === 'yes' ? '1' : '0' })}><option value="no">No</option><option value="yes">Yes</option></select></CalculatorField>
+                        <CalculatorField label="Professional Experience"><select className="calculator-select" value={germanyCalc.experience} onChange={(e) => setGermanyCalc({ ...germanyCalc, experience: e.target.value })}><option value="0">Less than 2 years in the relevant period</option><option value="2">2+ years within the last 5 years</option><option value="3">5+ years within the last 7 years</option></select></CalculatorField>
+                        <CalculatorField label="German Language for Points"><select className="calculator-select" value={germanyCalc.germanPoints} onChange={(e) => setGermanyCalc({ ...germanyCalc, germanPoints: e.target.value })}><option value="0">Below A2</option><option value="1">A2</option><option value="2">B1</option><option value="3">B2 or higher</option></select></CalculatorField>
+                        <CalculatorField label="English C1 or Higher"><select className="calculator-select" value={germanyCalc.englishPoints} onChange={(e) => setGermanyCalc({ ...germanyCalc, englishPoints: e.target.value })}><option value="0">No</option><option value="1">Yes</option></select></CalculatorField>
+                        <CalculatorField label="Age Group"><select className="calculator-select" value={germanyCalc.agePoints} onChange={(e) => setGermanyCalc({ ...germanyCalc, agePoints: e.target.value })}><option value="2">Under 35</option><option value="1">35–39</option><option value="0">40 or older</option></select></CalculatorField>
+                        <CalculatorField label="Previous Germany Stay"><select className="calculator-select" value={germanyCalc.germanyStay} onChange={(e) => setGermanyCalc({ ...germanyCalc, germanyStay: e.target.value })}><option value="0">No qualifying stay</option><option value="1">6+ months within the last 5 years</option></select></CalculatorField>
+                        <CalculatorField label="Partner Also Meets Requirements"><select className="calculator-select" value={germanyCalc.partner} onChange={(e) => setGermanyCalc({ ...germanyCalc, partner: e.target.value })}><option value="0">No</option><option value="1">Yes</option></select></CalculatorField>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              {/* UNITED KINGDOM */}
+              {calculatorCountry === 'uk' && (
+                <div className="calculator-content">
+                  <div className="calculator-section-heading"><span>01</span><div><strong>Mandatory Skilled Worker requirements</strong><small>These questions establish the mandatory part of the supplied 70-point framework.</small></div></div>
+                  <div className="calculator-form-grid">
+                    <CalculatorField label="Approved Sponsor"><select className="calculator-select" value={ukCalc.approvedSponsor} onChange={(e) => setUkCalc({ ...ukCalc, approvedSponsor: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                    <CalculatorField label="Certificate of Sponsorship"><select className="calculator-select" value={ukCalc.certificateOfSponsorship} onChange={(e) => setUkCalc({ ...ukCalc, certificateOfSponsorship: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                    <CalculatorField label="Eligible Occupation"><select className="calculator-select" value={ukCalc.eligibleOccupation} onChange={(e) => setUkCalc({ ...ukCalc, eligibleOccupation: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                    <CalculatorField label="Appropriate Skill Level"><select className="calculator-select" value={ukCalc.appropriateSkillLevel} onChange={(e) => setUkCalc({ ...ukCalc, appropriateSkillLevel: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                    <CalculatorField label="English Level"><select className="calculator-select" value={ukCalc.englishLevel} onChange={(e) => setUkCalc({ ...ukCalc, englishLevel: e.target.value })}><option value="B2">B2</option><option value="C1">C1</option><option value="C2">C2</option><option value="below">Below B2</option></select></CalculatorField>
+                    <CalculatorField label="Genuine Job"><select className="calculator-select" value={ukCalc.genuineJob} onChange={(e) => setUkCalc({ ...ukCalc, genuineJob: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                    <CalculatorField label="Financial Requirement"><select className="calculator-select" value={ukCalc.financialRequirement} onChange={(e) => setUkCalc({ ...ukCalc, financialRequirement: e.target.value })}><option value="yes">Requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                    <CalculatorField label="Suitability"><select className="calculator-select" value={ukCalc.suitable} onChange={(e) => setUkCalc({ ...ukCalc, suitable: e.target.value })}><option value="yes">No known issue</option><option value="no">Potential issue</option></select></CalculatorField>
+                  </div>
+
+                  <div className="calculator-section-heading"><span>02</span><div><strong>Salary & tradeable option</strong><small>Enter salary figures directly. The calculator determines the applicable tradeable route.</small></div></div>
+                  <div className="calculator-form-grid">
+                    <CalculatorField label="Annual Salary (GBP)"><input className="calculator-input" type="number" min="0" inputMode="decimal" value={ukCalc.salary} onChange={(e) => setUkCalc({ ...ukCalc, salary: e.target.value })} placeholder="e.g. 45000" /></CalculatorField>
+                    <CalculatorField label="Applicable Going Rate (GBP)"><input className="calculator-input" type="number" min="0" inputMode="decimal" value={ukCalc.goingRate} onChange={(e) => setUkCalc({ ...ukCalc, goingRate: e.target.value })} placeholder="Enter the going rate for the occupation" /></CalculatorField>
+                    <CalculatorField label="Relevant PhD"><select className="calculator-select" value={ukCalc.relevantPhD} onChange={(e) => setUkCalc({ ...ukCalc, relevantPhD: e.target.value })}><option value="no">No</option><option value="yes">Yes</option></select></CalculatorField>
+                    <CalculatorField label="Relevant STEM PhD"><select className="calculator-select" value={ukCalc.relevantSTEMPhD} onChange={(e) => setUkCalc({ ...ukCalc, relevantSTEMPhD: e.target.value })}><option value="no">No</option><option value="yes">Yes</option></select></CalculatorField>
+                    <CalculatorField label="Immigration Salary List"><select className="calculator-select" value={ukCalc.onImmigrationSalaryList} onChange={(e) => setUkCalc({ ...ukCalc, onImmigrationSalaryList: e.target.value })}><option value="no">No</option><option value="yes">Yes</option></select></CalculatorField>
+                    <CalculatorField label="New Entrant"><select className="calculator-select" value={ukCalc.newEntrant} onChange={(e) => setUkCalc({ ...ukCalc, newEntrant: e.target.value })}><option value="no">No</option><option value="yes">Yes</option></select></CalculatorField>
+                  </div>
+                </div>
+              )}
+
+              {/* NEW ZEALAND */}
+              {calculatorCountry === 'nz' && (
+                <div className="calculator-content">
+                  <div className="calculator-pathway-switch three">
+                    <button type="button" className={nzCalc.pathway === 'points' ? 'active' : ''} onClick={() => { setNzCalc({ ...nzCalc, pathway: 'points' }); setCalcResult(null) }}><span>Points based</span><small>Primary skill category + NZ work</small></button>
+                    <button type="button" className={nzCalc.pathway === 'experience' ? 'active' : ''} onClick={() => { setNzCalc({ ...nzCalc, pathway: 'experience' }); setCalcResult(null) }}><span>Skilled work experience</span><small>Relevant experience route</small></button>
+                    <button type="button" className={nzCalc.pathway === 'trades' ? 'active' : ''} onClick={() => { setNzCalc({ ...nzCalc, pathway: 'trades' }); setCalcResult(null) }}><span>Trades & technicians</span><small>Qualification + experience</small></button>
+                  </div>
+
+                  <div className="calculator-section-heading"><span>01</span><div><strong>Common requirements</strong><small>These requirements apply across the supplied New Zealand pathways.</small></div></div>
+                  <div className="calculator-form-grid">
+                    <CalculatorField label="Age"><input className="calculator-input" type="number" min="0" max="100" inputMode="numeric" value={nzCalc.age} onChange={(e) => setNzCalc({ ...nzCalc, age: e.target.value })} placeholder="Enter age" /></CalculatorField>
+                    <CalculatorField label="Accredited Employer"><select className="calculator-select" value={nzCalc.accreditedEmployer} onChange={(e) => setNzCalc({ ...nzCalc, accreditedEmployer: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                    <CalculatorField label="Skilled Job or Job Offer"><select className="calculator-select" value={nzCalc.skilledJobOrOffer} onChange={(e) => setNzCalc({ ...nzCalc, skilledJobOrOffer: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                    <CalculatorField label="Hours per Week"><input className="calculator-input" type="number" min="0" inputMode="numeric" value={nzCalc.hoursPerWeek} onChange={(e) => setNzCalc({ ...nzCalc, hoursPerWeek: e.target.value })} placeholder="30 or more" /></CalculatorField>
+                    <CalculatorField label="English Requirement"><select className="calculator-select" value={nzCalc.english} onChange={(e) => setNzCalc({ ...nzCalc, english: e.target.value })}><option value="yes">Requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                    <CalculatorField label="Health Requirement"><select className="calculator-select" value={nzCalc.health} onChange={(e) => setNzCalc({ ...nzCalc, health: e.target.value })}><option value="yes">Requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                    <CalculatorField label="Character Requirement"><select className="calculator-select" value={nzCalc.character} onChange={(e) => setNzCalc({ ...nzCalc, character: e.target.value })}><option value="yes">Requirement met</option><option value="no">Not met</option></select></CalculatorField>
+                  </div>
+
+                  {nzCalc.pathway === 'points' && (
+                    <>
+                      <div className="calculator-section-heading"><span>02</span><div><strong>Primary skill category</strong><small>Choose one primary category. Points remain hidden until you calculate.</small></div></div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Primary Skill Category"><select className="calculator-select" value={nzCalc.skillCategory} onChange={(e) => setNzCalc({ ...nzCalc, skillCategory: e.target.value })}><option value="qualification">Qualification</option><option value="income">Income</option><option value="occupationalRegistration">Occupational registration</option></select></CalculatorField>
+                        {nzCalc.skillCategory === 'qualification' && <CalculatorField label="Highest Qualifying Qualification"><select className="calculator-select" value={nzCalc.qualification} onChange={(e) => setNzCalc({ ...nzCalc, qualification: e.target.value })}><option value="level10Doctorate">Level 10 doctorate</option><option value="level9Masters">Level 9 master's</option><option value="level8HonoursOrPGDip">Level 8 honours / PGDip</option><option value="level7Bachelor">Level 7 bachelor's</option></select></CalculatorField>}
+                        {nzCalc.skillCategory === 'income' && <CalculatorField label="Income Band"><select className="calculator-select" value={nzCalc.income} onChange={(e) => setNzCalc({ ...nzCalc, income: e.target.value })}><option value="3x">At least 3× threshold</option><option value="2x">At least 2× threshold</option><option value="1.5x">At least 1.5× threshold</option></select></CalculatorField>}
+                        {nzCalc.skillCategory === 'occupationalRegistration' && <CalculatorField label="Registration Training Length"><select className="calculator-select" value={nzCalc.occupationalRegistration} onChange={(e) => setNzCalc({ ...nzCalc, occupationalRegistration: e.target.value })}><option value="sixYears">6 years</option><option value="fiveYears">5 years</option><option value="fourYears">4 years</option><option value="twoYears">2 years</option></select></CalculatorField>}
+                        <CalculatorField label="NZ Skilled Work Experience"><select className="calculator-select" value={nzCalc.nzSkilledWorkExperience} onChange={(e) => setNzCalc({ ...nzCalc, nzSkilledWorkExperience: e.target.value })}><option value="0">None</option><option value="1">1 year</option><option value="1.5">1.5 years</option><option value="2">2 years or more</option></select></CalculatorField>
+                      </div>
+                    </>
+                  )}
+
+                  {nzCalc.pathway === 'experience' && (
+                    <>
+                      <div className="calculator-section-heading"><span>02</span><div><strong>Experience pathway</strong><small>Complete the relevant work and occupation requirements.</small></div></div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Relevant Work Experience"><input className="calculator-input" type="number" min="0" step="0.5" inputMode="decimal" value={nzCalc.relevantWorkExperienceYears} onChange={(e) => setNzCalc({ ...nzCalc, relevantWorkExperienceYears: e.target.value })} placeholder="Years" /></CalculatorField>
+                        <CalculatorField label="NZ Skilled Work Experience"><input className="calculator-input" type="number" min="0" step="0.5" inputMode="decimal" value={nzCalc.nzSkilledWorkExperienceYears} onChange={(e) => setNzCalc({ ...nzCalc, nzSkilledWorkExperienceYears: e.target.value })} placeholder="Years" /></CalculatorField>
+                        <CalculatorField label="Occupation Skill Level"><select className="calculator-select" value={nzCalc.occupationSkillLevel} onChange={(e) => setNzCalc({ ...nzCalc, occupationSkillLevel: e.target.value })}><option value="1">Skill level 1</option><option value="2">Skill level 2</option><option value="3">Skill level 3</option><option value="4">Skill level 4</option><option value="5">Skill level 5</option></select></CalculatorField>
+                      </div>
+                    </>
+                  )}
+
+                  {nzCalc.pathway === 'trades' && (
+                    <>
+                      <div className="calculator-section-heading"><span>02</span><div><strong>Trades & technicians pathway</strong><small>Complete the qualification and post-qualification experience checks.</small></div></div>
+                      <div className="calculator-form-grid">
+                        <CalculatorField label="Relevant Trade Qualification"><select className="calculator-select" value={nzCalc.relevantTradeQualification} onChange={(e) => setNzCalc({ ...nzCalc, relevantTradeQualification: e.target.value })}><option value="yes">Yes</option><option value="no">No</option></select></CalculatorField>
+                        <CalculatorField label="Post-Qualification Experience"><input className="calculator-input" type="number" min="0" step="0.5" inputMode="decimal" value={nzCalc.postQualificationExperienceYears} onChange={(e) => setNzCalc({ ...nzCalc, postQualificationExperienceYears: e.target.value })} placeholder="Years" /></CalculatorField>
+                        <CalculatorField label="NZ Skilled Work Experience"><input className="calculator-input" type="number" min="0" step="1" inputMode="numeric" value={nzCalc.nzSkilledWorkExperienceMonths} onChange={(e) => setNzCalc({ ...nzCalc, nzSkilledWorkExperienceMonths: e.target.value })} placeholder="Months" /></CalculatorField>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+
+              <div className="calculator-actions">
+                <button type="button" className="calculator-primary-btn" onClick={runCalculation}>
+                  Calculate My Result <ArrowRightIcon />
+                </button>
+                <button type="button" className="calculator-secondary-btn" onClick={() => setCalcResult(null)}>
+                  Clear
                 </button>
               </div>
-            )}
 
-            {/* STEP 2 */}
-            {calcStep === 2 && (
-              <div className="calc-step-content">
-                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)', marginBottom: '18px' }}>Basic Profile Details</h3>
-                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Age Group</label>
-                    <select
-                      className="select-control"
-                      value={calcData.age}
-                      onChange={(e) => setCalcData({ ...calcData, age: e.target.value })}
-                    >
-                      <option value="18-24">18 - 24 years</option>
-                      <option value="25-32">25 - 32 years</option>
-                      <option value="33-39">33 - 39 years</option>
-                      <option value="40+">40+ years</option>
-                    </select>
+              {calcResult && (
+                <div className={`calculator-result ${calcResult.eligible === true ? 'is-positive' : 'is-negative'}`}>
+                  <div className="calculator-result-top">
+                    <div>
+                      <span className="calculator-kicker">YOUR PRELIMINARY RESULT</span>
+                      <h3>{calcResult.program}</h3>
+                      <p>{calcResult.eligible ? 'The entered information meets the configured preliminary screening conditions.' : 'The entered information does not currently meet all configured screening conditions.'}</p>
+                    </div>
+                    {calcResult.score !== null && (
+                      <div className="calculator-score-display">
+                        <strong>{calcResult.score}{calcResult.max ? ` / ${calcResult.max}` : ''}</strong>
+                        <span>Calculated score</span>
+                      </div>
+                    )}
                   </div>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Highest Qualification</label>
-                    <select
-                      className="select-control"
-                      value={calcData.education}
-                      onChange={(e) => setCalcData({ ...calcData, education: e.target.value })}
-                    >
-                      <option value="phd">Doctorate / PhD</option>
-                      <option value="masters">Master's Degree</option>
-                      <option value="bachelors">Bachelor's Degree</option>
-                      <option value="diploma">2-Year Diploma / Cert</option>
-                    </select>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Back</button>
-                  <button className="btn btn-primary" onClick={() => setCalcStep(3)} style={{ background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                    Next Step <ArrowRightIcon />
-                  </button>
-                </div>
-              </div>
-            )}
 
-            {/* STEP 3 */}
-            {calcStep === 3 && (
-              <div className="calc-step-content">
-                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)', marginBottom: '18px' }}>{calcData.visaType === 'student' ? 'Study Profile & Language Ability' : 'Experience & Language Ability'}</h3>
-                <div className="calc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px' }}>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>{calcData.visaType === 'student' ? 'Work / Relevant Experience' : 'Work Experience'}</label>
-                    <select
-                      className="select-control"
-                      value={calcData.experience}
-                      onChange={(e) => setCalcData({ ...calcData, experience: e.target.value })}
-                    >
-                      <option value="6+">6+ Years</option>
-                      <option value="3-5">3 - 5 Years</option>
-                      <option value="1-2">1 - 2 Years</option>
-                      <option value="0">Less than 1 Year</option>
-                    </select>
+                  <div className="calculator-result-status">
+                    <span className={`result-status-dot ${calcResult.eligible ? 'positive' : 'negative'}`}></span>
+                    <strong>{calcResult.eligible ? 'Preliminary screening threshold / requirements met' : 'Preliminary screening threshold / requirements not met'}</strong>
                   </div>
-                  <div className="form-group">
-                    <label className="form-label" style={{ display: 'block', color: 'var(--text-secondary)', marginBottom: '6px', fontSize: '0.9rem' }}>Language Proficiency Score</label>
-                    <select
-                      className="select-control"
-                      value={calcData.englishScore}
-                      onChange={(e) => setCalcData({ ...calcData, englishScore: e.target.value })}
-                    >
-                      <option value="clb9">CLB 9+ / High Proficiency</option>
-                      <option value="clb8">CLB 8 / Moderate Proficiency</option>
-                      <option value="clb7">CLB 7 / Basic Qualification</option>
-                    </select>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(2)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Back</button>
-                  <button className="btn btn-primary" onClick={runCalculation} style={{ background: 'var(--accent-blue)', color: '#fff', border: 'none', padding: '10px 20px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                    Calculate Points <ArrowRightIcon />
-                  </button>
-                </div>
-              </div>
-            )}
 
-            {/* STEP 4: RESULTS */}
-            {calcStep === 4 && (
-              <div className="calc-step-content" style={{ textAlign: 'center' }}>
-                <h3 className="calc-step-title" style={{ color: 'var(--text-primary)' }}>Estimated Eligibility Score</h3>
-                <div style={{ fontSize: '3.5rem', fontWeight: '800', color: 'var(--accent-blue)', margin: '15px 0' }}>
-                  {calcScore} Points
+                  {calcResult.threshold !== null && (
+                    <div className="calculator-result-threshold">
+                      <span>Applicable threshold</span>
+                      <strong>{calcResult.threshold}{calcResult.max ? ` / ${calcResult.max}` : ' points'}</strong>
+                    </div>
+                  )}
+
+                  {calcResult.breakdown?.length > 0 && (
+                    <div className="calculator-breakdown">
+                      <div className="calculator-breakdown-title">Score breakdown</div>
+                      {calcResult.breakdown.map(([label, points]) => (
+                        <div className="calculator-breakdown-row" key={label}>
+                          <span>{label}</span>
+                          <strong>{points}</strong>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  <p className="calculator-result-note">{calcResult.note}</p>
+
+                  <div className="calculator-result-actions">
+                    <a href={sectionHref("#contact")} className="calculator-primary-btn">Book a Consultation <ArrowRightIcon /></a>
+                    <button type="button" className="calculator-secondary-btn" onClick={() => setCalcResult(null)}>Recalculate</button>
+                  </div>
                 </div>
-                <p style={{ color: 'var(--text-secondary)', marginBottom: '20px' }}>
-                  {calcScore >= 70
-                    ? "🎉 Strong Score! You meet the standard points benchmark for PR considerations."
-                    : "👍 Good Score! Regional nominations or specific PNP options can boost your profile."}
-                </p>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
-                  <button className="btn btn-secondary" onClick={() => setCalcStep(1)} style={{ background: 'var(--bg-main)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', padding: '10px 18px', borderRadius: '8px', cursor: 'pointer' }}>Recalculate</button>
-                  <a href={sectionHref("#contact")} className="btn btn-primary" style={{ background: 'var(--accent-blue)', color: '#fff', padding: '10px 18px', borderRadius: '8px', textDecoration: 'none', fontWeight: '600' }}>Book a Consultation</a>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
+          </div>
+
+          <div className="calculator-disclaimer">
+            <strong>Important:</strong> This calculator is a preliminary screening aid. It does not replace a full immigration assessment, document review, occupation assessment, invitation process or final decision by the relevant authority. Rules can change and eligibility depends on the applicant's complete evidence.
           </div>
         </div>
       </section>
