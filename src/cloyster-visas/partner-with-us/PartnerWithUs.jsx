@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import certificateImage from './cloyster-visa-certificate-1.png'
+import shivliImage from './partner-profile.jpeg'
+import aspirroLogo from './aspirro-logo.jpeg'
 
-const ArrowIcon = ({ direction = 'right', size = 16 }) => (
+const ArrowIcon = ({ size = 17 }) => (
   <svg
     width={size}
     height={size}
@@ -13,397 +15,563 @@ const ArrowIcon = ({ direction = 'right', size = 16 }) => (
     strokeLinejoin="round"
     aria-hidden="true"
   >
-    {direction === 'left' ? (
-      <>
-        <path d="M19 12H5" />
-        <path d="m11 18-6-6 6-6" />
-      </>
-    ) : (
-      <>
-        <path d="M5 12h14" />
-        <path d="m13 6 6 6-6 6" />
-      </>
-    )}
+    <path d="M5 12h14" />
+    <path d="m13 6 6 6-6 6" />
   </svg>
 )
 
-const PARTNERSHIP_SHOWCASE = [
-  {
-    id: 'partnership-01',
-    type: 'Partnership',
-    title: 'Partnership Agreement 01',
-    description: 'Official collaboration / partnership documentation.',
-    image: '',
-  },
-  {
-    id: 'partnership-02',
-    type: 'Partnership',
-    title: 'Partnership Agreement 02',
-    description: 'Official collaboration / partnership documentation.',
-    image: '',
-  },
-  {
-    id: 'partnership-03',
-    type: 'Partnership',
-    title: 'Partnership Agreement 03',
-    description: 'Official collaboration / partnership documentation.',
-    image: '',
-  },
-  {
-    id: 'certification-01',
-    type: 'Certification',
-    title: 'Authorized Partner — Russian Education Agency',
-    description: 'Official partnership certificate issued to Cloyster Visa.',
-    image: certificateImage,
-  },
-]
+const CloseIcon = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    aria-hidden="true"
+  >
+    <path d="m6 6 12 12M18 6 6 18" />
+  </svg>
+)
+
+const FeatureIcon = ({ type }) => {
+  if (type === 'resume') {
+    return (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="5" y="3" width="14" height="18" rx="2" />
+        <path d="M9 8h6M9 12h6M9 16h4" />
+      </svg>
+    )
+  }
+
+  if (type === 'linkedin') {
+    return (
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M6.7 8.5H3.4V20h3.3V8.5ZM5.05 3A2 2 0 1 0 5.03 7 2 2 0 0 0 5.05 3ZM20.6 13.35c0-3.4-1.82-4.98-4.25-4.98-1.95 0-2.82 1.06-3.31 1.82V8.5H9.75V20h3.29v-5.68c0-1.5.28-2.96 2.15-2.96 1.85 0 1.87 1.73 1.87 3.06V20h3.29l.25-6.65Z" />
+      </svg>
+    )
+  }
+
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 3c2.4 2.5 3.5 5.5 3.5 9S14.4 18.5 12 21c-2.4-2.5-3.5-5.5-3.5-9S9.6 5.5 12 3Z" />
+      <path d="M3 12h18" />
+    </svg>
+  )
+}
 
 const PartnerWithUs = () => {
-  const [activeIndex, setActiveIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
+  const [showAspirro, setShowAspirro] = useState(false)
   const [viewingImage, setViewingImage] = useState(null)
-  const touchStartX = useRef(null)
-  const total = PARTNERSHIP_SHOWCASE.length
 
   useEffect(() => {
-    if (!viewingImage) return undefined
-
-    const handleKeyDown = (event) => {
+    const closeOnEscape = (event) => {
       if (event.key === 'Escape') {
-        setViewingImage(null)
+        if (viewingImage) {
+          setViewingImage(null)
+          return
+        }
+
+        if (showAspirro) {
+          setShowAspirro(false)
+        }
       }
     }
 
-    document.body.style.overflow = 'hidden'
-    window.addEventListener('keydown', handleKeyDown)
+    if (showAspirro || viewingImage) {
+      window.addEventListener('keydown', closeOnEscape)
+    }
 
     return () => {
-      document.body.style.overflow = ''
-      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keydown', closeOnEscape)
+    }
+  }, [showAspirro, viewingImage])
+
+  useEffect(() => {
+    // Only lock page scrolling while the full-screen image viewer is open.
+    // The ASPIRRO details section must remain normally scrollable.
+    if (!viewingImage) return undefined
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+
+    return () => {
+      document.body.style.overflow = previousOverflow
     }
   }, [viewingImage])
 
-  const goToSlide = (index) => {
-    setActiveIndex((index + total) % total)
-  }
-
-  useEffect(() => {
-    if (isPaused) return undefined
-
-    const timer = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % total)
-    }, 6000)
-
-    return () => window.clearInterval(timer)
-  }, [isPaused, total])
-
-  const handleTouchStart = (event) => {
-    touchStartX.current = event.touches[0]?.clientX ?? null
-    setIsPaused(true)
-  }
-
-  const handleTouchEnd = (event) => {
-    if (touchStartX.current === null) {
-      setIsPaused(false)
-      return
-    }
-
-    const endX = event.changedTouches[0]?.clientX ?? touchStartX.current
-    const distance = touchStartX.current - endX
-
-    if (Math.abs(distance) > 45) {
-      if (distance > 0) {
-        goToSlide(activeIndex + 1)
-      } else {
-        goToSlide(activeIndex - 1)
-      }
-    }
-
-    touchStartX.current = null
-    setIsPaused(false)
+  const openAspirro = () => {
+    setShowAspirro(true)
+    window.setTimeout(() => {
+      document.getElementById('aspirro-details')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }, 30)
   }
 
   return (
     <>
       <style>{`
-        .partnership-section {
+        .partner-section {
           width: 100%;
-          padding: 70px 0 78px;
-          background: var(--bg-alt);
+          padding: 78px 0 86px;
+          background:
+            radial-gradient(circle at 12% 18%, rgba(37, 99, 235, .065), transparent 32%),
+            radial-gradient(circle at 88% 82%, rgba(16, 185, 129, .055), transparent 30%),
+            var(--bg-alt);
           border-top: 1px solid var(--border-color);
-          box-sizing: border-box;
           overflow: hidden;
         }
 
-        .partnership-section .partnership-container {
-          width: min(100% - 32px, 1080px);
+        .partner-container {
+          width: min(100% - 32px, 1120px);
           margin: 0 auto;
         }
 
-        .partnership-header {
+        .partner-header {
+          max-width: 760px;
+          margin: 0 auto 34px;
           text-align: center;
-          max-width: 700px;
-          margin: 0 auto 30px;
         }
 
-        .partnership-tag {
+        .partner-eyebrow {
           display: inline-flex;
-          align-items: center;
-          padding: 6px 12px;
+          padding: 7px 13px;
           border-radius: 999px;
-          background: rgba(37, 99, 235, 0.10);
+          background: rgba(37, 99, 235, .09);
+          border: 1px solid rgba(37, 99, 235, .16);
           color: var(--accent-blue);
-          font-size: 0.72rem;
-          font-weight: 800;
-          letter-spacing: 0.8px;
+          font-size: .67rem;
+          font-weight: 850;
+          letter-spacing: .9px;
           text-transform: uppercase;
         }
 
-        .partnership-title {
-          margin: 11px 0 8px;
+        .partner-header h2 {
+          margin: 13px 0 9px;
           color: var(--text-primary);
-          font-size: clamp(1.8rem, 4vw, 2.35rem);
-          line-height: 1.15;
-          font-weight: 800;
+          font-size: clamp(2rem, 4.5vw, 2.8rem);
+          line-height: 1.08;
+          font-weight: 850;
+          letter-spacing: -.035em;
         }
 
-        .partnership-description {
+        .partner-header p {
+          max-width: 690px;
           margin: 0 auto;
-          max-width: 620px;
           color: var(--text-secondary);
-          font-size: 0.9rem;
-          line-height: 1.6;
+          font-size: .9rem;
+          line-height: 1.7;
         }
 
-        .partnership-slider {
-          width: 100%;
-          max-width: 760px;
+        /* Featured ASPIRRO card */
+        .aspirro-card {
+          max-width: 920px;
           margin: 0 auto;
-        }
-
-        .partnership-viewport {
-          width: 100%;
-          overflow: hidden;
-          border-radius: 18px;
-          touch-action: pan-y;
-          cursor: grab;
-        }
-
-        .partnership-viewport:active {
-          cursor: grabbing;
-        }
-
-        .partnership-track {
-          display: flex;
-          will-change: transform;
-          transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-
-        .partnership-slide {
-          min-width: 100%;
-          padding: 2px;
-          box-sizing: border-box;
-        }
-
-        .partnership-card {
-          width: 100%;
-          box-sizing: border-box;
-          padding: 18px;
-          background: var(--bg-card);
           border: 1px solid var(--border-color);
-          border-radius: 18px;
+          border-radius: 26px;
+          background: var(--bg-card);
           box-shadow: var(--card-shadow);
           overflow: hidden;
         }
 
-        .partnership-media {
-          width: 100%;
-          height: clamp(220px, 34vw, 360px);
-          border-radius: 13px;
-          overflow: hidden;
-          background: var(--bg-main);
-          border: 1px solid var(--border-color);
+        .aspirro-card-top {
+          padding: 12px;
         }
 
-        .partnership-media img {
-          width: 100%;
-          height: 100%;
-          display: block;
-          object-fit: contain;
-        }
-
-        .partnership-placeholder {
-          width: 100%;
-          height: 100%;
+        .aspirro-logo-panel {
+          min-height: 235px;
           display: flex;
-          flex-direction: column;
           align-items: center;
           justify-content: center;
-          gap: 8px;
-          padding: 18px;
+          padding: 24px;
           box-sizing: border-box;
-          text-align: center;
-          background:
-            linear-gradient(
-              145deg,
-              rgba(37, 99, 235, 0.08),
-              rgba(34, 197, 94, 0.035)
-            );
+          border-radius: 19px;
+          background: #071f19;
+          border: 1px solid rgba(196, 164, 77, .22);
+          overflow: hidden;
         }
 
-        .partnership-placeholder-mark {
-          width: 66px;
-          height: 66px;
-          display: grid;
-          place-items: center;
-          border: 1px dashed var(--accent-blue);
-          border-radius: 15px;
+        .aspirro-logo {
+          width: min(100%, 560px);
+          max-height: 235px;
+          display: block;
+          object-fit: contain;
+          border-radius: 8px;
+        }
+
+        .aspirro-card-body {
+          padding: 25px 28px 29px;
+        }
+
+        .aspirro-kicker {
           color: var(--accent-blue);
-          font-size: 0.7rem;
-          font-weight: 900;
-          letter-spacing: 0.7px;
-        }
-
-        .partnership-placeholder-note {
-          color: var(--text-secondary);
-          font-size: 0.72rem;
-        }
-
-        .partnership-content {
-          padding: 16px 3px 2px;
-        }
-
-        .partnership-type {
-          display: inline-flex;
-          padding: 4px 9px;
-          border-radius: 999px;
-          background: rgba(37, 99, 235, 0.09);
-          color: var(--accent-blue);
-          font-size: 0.66rem;
-          font-weight: 800;
-          letter-spacing: 0.7px;
+          font-size: .66rem;
+          font-weight: 850;
+          letter-spacing: 1px;
           text-transform: uppercase;
         }
 
-        .partnership-content h3 {
-          margin: 8px 0 5px;
+        .aspirro-card-body h3 {
+          margin: 8px 0 7px;
           color: var(--text-primary);
-          font-size: 1.05rem;
-          line-height: 1.3;
-          font-weight: 800;
+          font-size: clamp(1.25rem, 3vw, 1.65rem);
+          line-height: 1.2;
+          font-weight: 830;
         }
 
-        .partnership-content p {
-          margin: 0;
+        .aspirro-role {
+          margin: 0 0 14px;
           color: var(--text-secondary);
-          font-size: 0.82rem;
+          font-size: .82rem;
           line-height: 1.55;
         }
 
-        .partnership-controls {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 10px;
-          margin-top: 14px;
+        .aspirro-card-body > p {
+          max-width: 780px;
+          margin: 0;
+          color: var(--text-secondary);
+          font-size: .84rem;
+          line-height: 1.68;
         }
 
-        .partnership-arrow {
-          width: 42px;
-          height: 42px;
-          padding: 0;
+        .aspirro-person {
+          display: flex;
+          align-items: center;
+          gap: 13px;
+          margin-top: 20px;
+          padding-top: 18px;
+          border-top: 1px solid var(--border-color);
+        }
+
+        .aspirro-person-avatar {
+          width: 58px;
+          height: 58px;
+          flex: 0 0 58px;
+          border-radius: 50%;
+          object-fit: cover;
+          object-position: center 25%;
+          border: 2px solid var(--bg-card);
+          box-shadow: 0 0 0 1px var(--border-color);
+        }
+
+        .aspirro-person strong {
+          display: block;
+          color: var(--text-primary);
+          font-size: .84rem;
+        }
+
+        .aspirro-person span {
+          display: block;
+          margin-top: 2px;
+          color: var(--text-secondary);
+          font-size: .72rem;
+          line-height: 1.45;
+        }
+
+        .aspirro-know-more {
+          margin-top: 22px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+          min-height: 44px;
+          padding: 0 18px;
+          border: 0;
+          border-radius: 11px;
+          background: var(--accent-blue);
+          color: #fff;
+          font: inherit;
+          font-size: .76rem;
+          font-weight: 800;
+          cursor: pointer;
+          transition: transform .2s ease, opacity .2s ease;
+        }
+
+        .aspirro-know-more:hover {
+          transform: translateY(-1px);
+          opacity: .93;
+        }
+
+        /* Expanded ASPIRRO detail */
+        .aspirro-details {
+          max-width: 920px;
+          margin: 22px auto 0;
+          scroll-margin-top: 100px;
+        }
+
+        .aspirro-detail-shell {
+          padding: 28px;
+          border: 1px solid var(--border-color);
+          border-radius: 26px;
+          background: var(--bg-card);
+          box-shadow: var(--card-shadow);
+        }
+
+        .aspirro-detail-header {
+          display: grid;
+          grid-template-columns: 190px 1fr;
+          gap: 26px;
+          align-items: center;
+        }
+
+        .aspirro-profile-image {
+          width: 190px;
+          height: 220px;
+          display: block;
+          object-fit: cover;
+          object-position: center 25%;
+          border-radius: 18px;
+          border: 1px solid var(--border-color);
+        }
+
+        .aspirro-detail-header h3 {
+          margin: 7px 0 6px;
+          color: var(--text-primary);
+          font-size: clamp(1.5rem, 3vw, 2rem);
+          line-height: 1.15;
+          font-weight: 850;
+        }
+
+        .aspirro-detail-subtitle {
+          margin: 0 0 13px;
+          color: var(--text-secondary);
+          font-size: .88rem;
+          line-height: 1.6;
+        }
+
+        .aspirro-detail-description {
+          margin: 0;
+          color: var(--text-secondary);
+          font-size: .83rem;
+          line-height: 1.7;
+        }
+
+        .aspirro-section-title {
+          margin: 31px 0 15px;
+          color: var(--text-primary);
+          font-size: 1.05rem;
+          font-weight: 820;
+        }
+
+        .aspirro-features {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 13px;
+        }
+
+        .aspirro-feature {
+          padding: 19px;
+          border: 1px solid var(--border-color);
+          border-radius: 16px;
+          background: var(--bg-main);
+        }
+
+        .aspirro-feature-icon {
+          width: 38px;
+          height: 38px;
           display: grid;
           place-items: center;
-          border: 1px solid var(--border-color);
-          border-radius: 50%;
-          background: var(--bg-card);
-          color: var(--text-primary);
-          cursor: pointer;
-          box-shadow: none;
-          transition: transform 0.2s ease, border-color 0.2s ease,
-            background 0.2s ease, color 0.2s ease;
-        }
-
-        .partnership-arrow:hover {
-          transform: translateY(-1px);
-          border-color: var(--accent-blue);
+          margin-bottom: 13px;
+          border-radius: 11px;
           color: var(--accent-blue);
+          background: rgba(37, 99, 235, .09);
         }
 
-        .partnership-arrow:active {
-          transform: scale(0.94);
+        .aspirro-feature-icon svg {
+          width: 19px;
+          height: 19px;
         }
 
-        .partnership-arrow:focus-visible {
-          outline: 2px solid var(--accent-blue);
-          outline-offset: 3px;
+        .aspirro-feature h4 {
+          margin: 0 0 6px;
+          color: var(--text-primary);
+          font-size: .82rem;
+          line-height: 1.35;
         }
 
-        .partnership-pagination {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 6px;
-          margin-top: 14px;
-        }
-
-        .partnership-dot {
-          width: 6px;
-          height: 6px;
-          padding: 0;
-          border: 0;
-          border-radius: 999px;
-          background: var(--border-color);
-          cursor: pointer;
-          transition: width 0.2s ease, background 0.2s ease;
-        }
-
-        .partnership-dot.active {
-          width: 20px;
-          background: var(--accent-blue);
-        }
-
-        .partnership-swipe-hint {
-          margin-top: 8px;
-          text-align: center;
+        .aspirro-feature p {
+          margin: 0;
           color: var(--text-secondary);
-          opacity: 0.7;
-          font-size: 0.67rem;
+          font-size: .72rem;
+          line-height: 1.58;
         }
 
-        .partnership-cta {
-          width: 100%;
-          max-width: 760px;
-          margin: 24px auto 0;
-          padding: 17px 19px;
-          box-sizing: border-box;
+        .aspirro-why {
+          padding: 20px 21px;
+          border: 1px solid var(--border-color);
+          border-radius: 17px;
+          background:
+            linear-gradient(135deg, rgba(37, 99, 235, .06), rgba(16, 185, 129, .035));
+        }
+
+        .aspirro-why-list {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 11px 22px;
+          margin: 0;
+          padding: 0;
+          list-style: none;
+        }
+
+        .aspirro-why-list li {
+          position: relative;
+          padding-left: 19px;
+          color: var(--text-secondary);
+          font-size: .76rem;
+          line-height: 1.55;
+        }
+
+        .aspirro-why-list li::before {
+          content: "✓";
+          position: absolute;
+          left: 0;
+          top: 0;
+          color: var(--accent-blue);
+          font-weight: 900;
+        }
+
+        .aspirro-disclaimer {
+          margin-top: 19px;
+          padding: 14px 16px;
+          border-left: 3px solid var(--accent-blue);
+          border-radius: 8px;
+          background: rgba(37, 99, 235, .055);
+          color: var(--text-secondary);
+          font-size: .7rem;
+          line-height: 1.6;
+        }
+
+        .aspirro-detail-cta {
+          margin-top: 22px;
+          padding: 19px 20px;
           display: flex;
           align-items: center;
           justify-content: space-between;
           gap: 18px;
+          border: 1px solid var(--border-color);
+          border-radius: 17px;
         }
 
-        .partnership-cta-kicker {
-          color: var(--accent-blue);
-          font-size: 0.64rem;
-          font-weight: 800;
-          letter-spacing: 0.8px;
-        }
-
-        .partnership-cta h3 {
-          margin: 5px 0 4px;
+        .aspirro-detail-cta strong {
+          display: block;
+          margin-bottom: 4px;
           color: var(--text-primary);
-          font-size: 0.98rem;
+          font-size: .88rem;
         }
 
-        .partnership-cta p {
-          margin: 0;
+        .aspirro-detail-cta span {
           color: var(--text-secondary);
-          font-size: 0.76rem;
+          font-size: .72rem;
           line-height: 1.5;
         }
 
-        .partnership-cta .btn {
+        .aspirro-close {
+          margin-top: 14px;
+          width: 100%;
+          min-height: 40px;
+          border: 1px solid var(--border-color);
+          border-radius: 10px;
+          background: transparent;
+          color: var(--text-secondary);
+          font: inherit;
+          font-size: .72rem;
+          font-weight: 750;
+          cursor: pointer;
+        }
+
+        .aspirro-close:hover {
+          color: var(--text-primary);
+          border-color: var(--accent-blue);
+        }
+
+        /* Existing certificate */
+        .certificate-card {
+          max-width: 920px;
+          margin: 25px auto 0;
+          padding: 12px;
+          border: 1px solid var(--border-color);
+          border-radius: 22px;
+          background: var(--bg-card);
+          box-shadow: var(--card-shadow);
+        }
+
+        .certificate-image-button {
+          width: 100%;
+          padding: 0;
+          border: 0;
+          background: var(--bg-main);
+          border-radius: 16px;
+          overflow: hidden;
+          cursor: zoom-in;
+        }
+
+        .certificate-image-button img {
+          width: 100%;
+          max-height: 430px;
+          display: block;
+          object-fit: contain;
+        }
+
+        .certificate-caption {
+          padding: 15px 8px 7px;
+        }
+
+        .certificate-caption span {
+          color: var(--accent-blue);
+          font-size: .63rem;
+          font-weight: 850;
+          letter-spacing: .8px;
+          text-transform: uppercase;
+        }
+
+        .certificate-caption h4 {
+          margin: 6px 0 3px;
+          color: var(--text-primary);
+          font-size: .95rem;
+        }
+
+        .certificate-caption p {
+          margin: 0;
+          color: var(--text-secondary);
+          font-size: .72rem;
+        }
+
+        .partner-bottom-cta {
+          max-width: 920px;
+          margin: 25px auto 0;
+          padding: 19px 21px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 18px;
+          box-sizing: border-box;
+        }
+
+        .partner-bottom-cta-kicker {
+          color: var(--accent-blue);
+          font-size: .62rem;
+          font-weight: 850;
+          letter-spacing: .9px;
+        }
+
+        .partner-bottom-cta h4 {
+          margin: 6px 0 3px;
+          color: var(--text-primary);
+          font-size: .98rem;
+        }
+
+        .partner-bottom-cta p {
+          margin: 0;
+          color: var(--text-secondary);
+          font-size: .72rem;
+          line-height: 1.5;
+        }
+
+        .partner-bottom-cta .btn {
           flex: 0 0 auto;
           display: inline-flex;
           align-items: center;
@@ -411,392 +579,377 @@ const PartnerWithUs = () => {
           white-space: nowrap;
         }
 
-        .partnership-media-button {
-          width: 100%;
-          height: 100%;
-          padding: 0;
-          display: block;
-          border: 0;
-          background: transparent;
-          cursor: zoom-in;
-        }
-
-        .partnership-media-button:focus-visible {
-          outline: 2px solid var(--accent-blue);
-          outline-offset: -3px;
-        }
-
-        .partnership-lightbox {
+        .partner-lightbox {
           position: fixed;
           inset: 0;
           z-index: 9999;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 24px;
-          box-sizing: border-box;
-          background: rgba(3, 8, 20, 0.92);
-          backdrop-filter: blur(8px);
-          -webkit-backdrop-filter: blur(8px);
+          padding: 20px;
+          background: rgba(3, 8, 20, .94);
+          backdrop-filter: blur(9px);
+          -webkit-backdrop-filter: blur(9px);
         }
 
-        .partnership-lightbox-close {
+        .partner-lightbox-close {
           position: fixed;
-          top: 18px;
-          right: 18px;
-          z-index: 2;
+          top: 17px;
+          right: 17px;
           width: 42px;
           height: 42px;
-          padding: 0;
           display: grid;
           place-items: center;
-          border: 1px solid rgba(255, 255, 255, 0.18);
+          border: 1px solid rgba(255,255,255,.18);
           border-radius: 50%;
-          background: rgba(15, 23, 42, 0.88);
-          color: #ffffff;
-          font-size: 25px;
-          line-height: 1;
+          background: rgba(15,23,42,.9);
+          color: #fff;
           cursor: pointer;
         }
 
-        .partnership-lightbox-close:hover {
-          border-color: var(--accent-blue);
-          color: var(--accent-blue);
-        }
-
-        .partnership-lightbox-image {
-          display: block;
-          max-width: min(94vw, 1400px);
-          max-height: 92vh;
+        .partner-lightbox-image {
+          max-width: 94vw;
+          max-height: 91vh;
           width: auto;
           height: auto;
           object-fit: contain;
-          border-radius: 8px;
-          box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
-          user-select: none;
-          -webkit-user-drag: none;
+          border-radius: 9px;
+          box-shadow: 0 25px 80px rgba(0,0,0,.5);
         }
 
-        @media (max-width: 700px) {
-          .partnership-lightbox {
-            padding: 14px;
+        @media (max-width: 760px) {
+          .partner-section {
+            padding: 61px 0 68px;
           }
 
-          .partnership-lightbox-close {
-            top: 12px;
-            right: 12px;
-            width: 38px;
-            height: 38px;
-            font-size: 22px;
-          }
-
-          .partnership-lightbox-image {
-            max-width: 96vw;
-            max-height: 88vh;
-            border-radius: 5px;
-          }
-
-        @media (max-width: 700px) {
-          .partnership-section {
-            padding: 54px 0 60px;
-          }
-
-          .partnership-section .partnership-container {
+          .partner-container {
             width: calc(100% - 24px);
           }
 
-          .partnership-header {
-            margin-bottom: 22px;
+          .aspirro-detail-header {
+            grid-template-columns: 1fr;
+            gap: 17px;
           }
 
-          .partnership-title {
-            font-size: 1.75rem;
-            margin-top: 9px;
-          }
-
-          .partnership-description {
-            max-width: 340px;
-            font-size: 0.78rem;
-            line-height: 1.5;
-          }
-
-          .partnership-slider {
+          .aspirro-profile-image {
             width: 100%;
+            height: 330px;
           }
 
-          .partnership-card {
-            padding: 12px;
-            border-radius: 15px;
+          .aspirro-features {
+            grid-template-columns: 1fr;
           }
 
-          .partnership-media {
-            height: 250px;
-            border-radius: 11px;
+          .aspirro-why-list {
+            grid-template-columns: 1fr;
           }
 
-          .partnership-placeholder-mark {
-            width: 56px;
-            height: 56px;
-            font-size: 0.63rem;
-          }
-
-          .partnership-content {
-            padding: 13px 2px 1px;
-          }
-
-          .partnership-content h3 {
-            font-size: 0.96rem;
-            margin-top: 7px;
-          }
-
-          .partnership-content p {
-            font-size: 0.76rem;
-          }
-
-          .partnership-arrow {
-            width: 38px;
-            height: 38px;
-          }
-
-          .partnership-swipe-hint {
-            font-size: 0.62rem;
-          }
-
-          .partnership-cta {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 15px;
+          .partner-bottom-cta,
+          .aspirro-detail-cta {
+            align-items: stretch;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 13px;
           }
 
-          .partnership-cta .btn {
+          .partner-bottom-cta .btn,
+          .aspirro-detail-cta .btn {
             width: 100%;
             justify-content: center;
           }
         }
 
-        @media (max-width: 420px) {
-          .partnership-section {
-            padding: 46px 0 52px;
+        @media (max-width: 520px) {
+          .partner-header {
+            margin-bottom: 25px;
           }
 
-          .partnership-section .partnership-container {
-            width: calc(100% - 20px);
+          .partner-header h2 {
+            font-size: 1.82rem;
           }
 
-          .partnership-header {
-            margin-bottom: 18px;
+          .partner-header p {
+            font-size: .78rem;
           }
 
-          .partnership-tag {
-            font-size: 0.63rem;
-            padding: 5px 10px;
+          .aspirro-logo-panel {
+            min-height: 185px;
+            padding: 17px;
           }
 
-          .partnership-title {
-            font-size: 1.55rem;
+          .aspirro-card-body,
+          .aspirro-detail-shell {
+            padding: 20px;
           }
 
-          .partnership-description {
-            font-size: 0.72rem;
+          .aspirro-person {
+            align-items: flex-start;
           }
 
-          .partnership-card {
-            padding: 10px;
+          .aspirro-profile-image {
+            height: 300px;
           }
 
-          .partnership-media {
-            height: 240px;
+          .aspirro-detail-shell {
+            border-radius: 19px;
           }
 
-          .partnership-content h3 {
-            font-size: 0.9rem;
-          }
-
-          .partnership-content p {
-            font-size: 0.71rem;
-          }
-
-          .partnership-cta {
-            padding: 14px;
-          }
-
-          .partnership-cta h3 {
-            font-size: 0.9rem;
-          }
-
-          .partnership-cta p {
-            font-size: 0.7rem;
+          .certificate-card {
+            padding: 9px;
           }
         }
 
-        [data-theme="light"] .partnership-section .partnership-card {
-          background: #ffffff !important;
+        [data-theme="light"] .aspirro-card,
+        [data-theme="light"] .aspirro-detail-shell,
+        [data-theme="light"] .certificate-card {
+          background: #fff !important;
         }
       `}</style>
 
-      <section
-        id="partner-with-us"
-        className="partnership-section"
-        onMouseEnter={() => setIsPaused(true)}
-        onMouseLeave={() => setIsPaused(false)}
-        onFocus={() => setIsPaused(true)}
-        onBlur={() => setIsPaused(false)}
-      >
-        <div className="partnership-container">
-          <div className="partnership-header">
-            <span className="partnership-tag">Trust &amp; Collaboration</span>
-
-            <h2 className="partnership-title text-gradient">
-              Partner With Us
-            </h2>
-
-            <p className="partnership-description">
-              A dedicated space to present CloysterVisa's professional
-              collaborations, partnership agreements and certifications.
+      <section id="partner-with-us" className="partner-section">
+        <div className="partner-container">
+          <header className="partner-header">
+            <span className="partner-eyebrow">Our Partners</span>
+            <h2 className="text-gradient">Professional Partnerships</h2>
+            <p>
+              We collaborate with specialised professionals and organisations
+              to support clients with complementary services beyond migration
+              advice.
             </p>
-          </div>
+          </header>
 
-          <div className="partnership-slider">
-            <div
-              className="partnership-viewport"
-              onTouchStart={handleTouchStart}
-              onTouchEnd={handleTouchEnd}
-            >
-              <div
-                className="partnership-track"
-                style={{
-                  transform: `translateX(-${activeIndex * 100}%)`,
-                }}
-              >
-                {PARTNERSHIP_SHOWCASE.map((item) => (
-                  <div className="partnership-slide" key={item.id}>
-                    <article className="partnership-card">
-                      <div className="partnership-media">
-                        {item.image ? (
-                          <button
-                            type="button"
-                            className="partnership-media-button"
-                            onClick={() =>
-                              setViewingImage({
-                                src: item.image,
-                                title: item.title,
-                              })
-                            }
-                            aria-label={`View ${item.title} full size`}
-                          >
-                            <img src={item.image} alt={item.title} />
-                          </button>
-                        ) : (
-                          <div
-                            className="partnership-placeholder"
-                            aria-label={`${item.title} image placeholder`}
-                          >
-                            <span className="partnership-placeholder-mark">
-                              {item.type === 'Certification'
-                                ? 'CERT'
-                                : 'PARTNER'}
-                            </span>
-
-                            <span className="partnership-placeholder-note">
-                              Add document / logo image
-                            </span>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="partnership-content">
-                        <span className="partnership-type">
-                          {item.type}
-                        </span>
-
-                        <h3>{item.title}</h3>
-
-                        <p>{item.description}</p>
-                      </div>
-                    </article>
-                  </div>
-                ))}
+          <article id="aspirro-partner-card" className="aspirro-card">
+            <div className="aspirro-card-top">
+              <div className="aspirro-logo-panel">
+                <img
+                  className="aspirro-logo"
+                  src={aspirroLogo}
+                  alt="ASPIRRO logo"
+                />
               </div>
             </div>
 
-            <div className="partnership-controls">
-              <button
-                type="button"
-                className="partnership-arrow"
-                onClick={() => goToSlide(activeIndex - 1)}
-                aria-label="Previous partnership"
-              >
-                <ArrowIcon direction="left" />
-              </button>
-
-              <div
-                className="partnership-pagination"
-                aria-label="Partnership slides"
-              >
-                {PARTNERSHIP_SHOWCASE.map((item, index) => (
-                  <button
-                    type="button"
-                    key={item.id}
-                    className={`partnership-dot ${
-                      index === activeIndex ? 'active' : ''
-                    }`}
-                    onClick={() => goToSlide(index)}
-                    aria-label={`Show ${item.title}`}
-                    aria-current={
-                      index === activeIndex ? 'true' : undefined
-                    }
-                  />
-                ))}
-              </div>
-
-              <button
-                type="button"
-                className="partnership-arrow"
-                onClick={() => goToSlide(activeIndex + 1)}
-                aria-label="Next partnership"
-              >
-                <ArrowIcon direction="right" />
-              </button>
-            </div>
-
-            <div className="partnership-swipe-hint">
-              Swipe to explore partnerships
-            </div>
-          </div>
-
-          <div className="partnership-cta glass-panel">
-            <div>
-              <span className="partnership-cta-kicker">
-                COLLABORATE WITH CLOYSTERVISA
+            <div className="aspirro-card-body">
+              <span className="aspirro-kicker">
+                Meet Our Australian Career Strategy Partner
               </span>
 
-              <h3>Interested in partnering with us?</h3>
+              <h3>ASPIRRO</h3>
+
+              <p className="aspirro-role">
+                Australia-Based Career Strategy &amp; Employment-Readiness Partner
+              </p>
 
               <p>
-                For partnership enquiries, institutional collaborations
-                or professional associations, get in touch with our team.
+                Supporting skilled professionals and international students
+                preparing for the Australian job market.
+              </p>
+
+              <div className="aspirro-person">
+                <img
+                  className="aspirro-person-avatar"
+                  src={shivliImage}
+                  alt="Shivli Bhatnagar"
+                  loading="lazy"
+                />
+                <div>
+                  <strong>Shivli Bhatnagar</strong>
+                  <span>Director &amp; Chief Career Strategist, ASPIRRO</span>
+                  <span>Sydney, Australia</span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                className="aspirro-know-more"
+                onClick={openAspirro}
+              >
+                Know More <ArrowIcon />
+              </button>
+            </div>
+          </article>
+
+          {showAspirro && (
+            <div id="aspirro-details" className="aspirro-details">
+              <div className="aspirro-detail-shell">
+                <div className="aspirro-detail-header">
+                  <button
+                    type="button"
+                    className="certificate-image-button"
+                    onClick={() =>
+                      setViewingImage({
+                        src: shivliImage,
+                        title: 'Shivli Bhatnagar — ASPIRRO',
+                      })
+                    }
+                    aria-label="View Shivli Bhatnagar photo"
+                  >
+                    <img
+                      className="aspirro-profile-image"
+                      src={shivliImage}
+                      alt="Shivli Bhatnagar, Director & Chief Career Strategist, ASPIRRO"
+                    />
+                  </button>
+
+                  <div>
+                    <span className="aspirro-kicker">ASPIRRO</span>
+                    <h3>Precision Career Strategy for Australia</h3>
+                    <p className="aspirro-detail-subtitle">
+                      Sydney-based career strategy and employment-readiness support
+                      for skilled professionals and international students.
+                    </p>
+                    <p className="aspirro-detail-description">
+                      ASPIRRO is a Sydney-based career strategy and
+                      employment-readiness firm supporting skilled professionals
+                      and international students preparing for the Australian
+                      job market.
+                    </p>
+                  </div>
+                </div>
+
+                <h4 className="aspirro-section-title">Career Strategy Services</h4>
+
+                <div className="aspirro-features">
+                  <article className="aspirro-feature">
+                    <div className="aspirro-feature-icon">
+                      <FeatureIcon type="resume" />
+                    </div>
+                    <h4>Resume Architecture</h4>
+                    <p>
+                      ATS-ready resume development aligned with Australian
+                      formatting and recruiter search conventions.
+                    </p>
+                  </article>
+
+                  <article className="aspirro-feature">
+                    <div className="aspirro-feature-icon">
+                      <FeatureIcon type="linkedin" />
+                    </div>
+                    <h4>LinkedIn Optimisation</h4>
+                    <p>
+                      Optimisation of your LinkedIn profile, headline, About
+                      and experience to strengthen your professional positioning.
+                    </p>
+                  </article>
+
+                  <article className="aspirro-feature">
+                    <div className="aspirro-feature-icon">
+                      <FeatureIcon type="culture" />
+                    </div>
+                    <h4>Culture &amp; Interview Readiness</h4>
+                    <p>
+                      Australian workplace culture alignment and structured
+                      interview preparation.
+                    </p>
+                  </article>
+                </div>
+
+                <h4 className="aspirro-section-title">Why ASPIRRO?</h4>
+
+                <div className="aspirro-why">
+                  <ul className="aspirro-why-list">
+                    <li>1-on-1 personalised career strategy</li>
+                    <li>Australian ATS and recruiter-search knowledge</li>
+                    <li>Live coaching and interview preparation</li>
+                    <li>Designed specifically for the Australian job market</li>
+                  </ul>
+                </div>
+
+                <div className="aspirro-disclaimer">
+                  <strong>Important:</strong> ASPIRRO is an independent career
+                  strategy and employment-readiness firm. It is not a migration
+                  or recruitment agency. Interview or employment outcomes are
+                  not guaranteed.
+                </div>
+
+                <div className="aspirro-detail-cta">
+                  <div>
+                    <strong>Ready to prepare for the Australian job market?</strong>
+                    <span>
+                      Explore ASPIRRO’s career strategy programs through the
+                      exclusive CloysterVisa partner offer.
+                    </span>
+                  </div>
+
+                  <a
+                    href="https://wa.me/919266515362?text=Hello%20CloysterVisa%2C%20I%E2%80%99m%20interested%20in%20the%20ASPIRRO%20partner%20offer."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-primary"
+                  >
+                    Explore Partner Offer <ArrowIcon size={15} />
+                  </a>
+                </div>
+
+                <button
+                  type="button"
+                  className="aspirro-close"
+                  onClick={() => {
+                    setShowAspirro(false)
+                    window.setTimeout(() => {
+                      document
+                        .getElementById('aspirro-partner-card')
+                        ?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+                    }, 30)
+                  }}
+                >
+                  ← Back to ASPIRRO Partner
+                </button>
+              </div>
+            </div>
+          )}
+
+          <article className="certificate-card">
+            <button
+              type="button"
+              className="certificate-image-button"
+              onClick={() =>
+                setViewingImage({
+                  src: certificateImage,
+                  title: 'CloysterVisa partnership certificate',
+                })
+              }
+              aria-label="View partnership certificate full size"
+            >
+              <img
+                src={certificateImage}
+                alt="CloysterVisa partnership certificate"
+                loading="lazy"
+              />
+            </button>
+
+            <div className="certificate-caption">
+              <span>Partnership Certification</span>
+              <h4>Authorized Partner Certificate</h4>
+              <p>Official partnership certification issued to Cloyster Visa.</p>
+            </div>
+          </article>
+
+          <div className="partner-bottom-cta glass-panel">
+            <div>
+              <span className="partner-bottom-cta-kicker">
+                COLLABORATE WITH CLOYSTERVISA
+              </span>
+              <h4>Interested in partnering with us?</h4>
+              <p>
+                For institutional collaborations, education partnerships or
+                professional associations, connect with our team.
               </p>
             </div>
 
             <a
-  href="https://wa.me/919266515362?text=Hello%20CloysterVisa%2C%20I%E2%80%99m%20interested%20in%20partnering%20with%20you."
-  target="_blank"
-  rel="noopener noreferrer"
-  className="btn btn-primary"
->
-  Partner With Us
-</a>
-        
+              href="https://wa.me/919266515362?text=Hello%20CloysterVisa%2C%20I%E2%80%99m%20interested%20in%20partnering%20with%20you."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-primary"
+            >
+              Partner With Us <ArrowIcon size={15} />
+            </a>
           </div>
         </div>
       </section>
 
       {viewingImage && (
         <div
-          className="partnership-lightbox"
+          className="partner-lightbox"
           role="dialog"
           aria-modal="true"
           aria-label={`${viewingImage.title} full-size view`}
@@ -804,15 +957,15 @@ const PartnerWithUs = () => {
         >
           <button
             type="button"
-            className="partnership-lightbox-close"
+            className="partner-lightbox-close"
             onClick={() => setViewingImage(null)}
-            aria-label="Close certificate viewer"
+            aria-label="Close image viewer"
           >
-            ×
+            <CloseIcon />
           </button>
 
           <img
-            className="partnership-lightbox-image"
+            className="partner-lightbox-image"
             src={viewingImage.src}
             alt={viewingImage.title}
             onClick={(event) => event.stopPropagation()}
